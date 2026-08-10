@@ -1,6 +1,6 @@
 # NIIS Reliability Assessment — Phase 1 Validation Audit
 
-**Status:** BLOCKED on full 67-row scoring — real PDFs are now visible via Import Inspection, but they have **not been imported into the repository**, and the **67-name list is still outstanding**.  
+**Status:** Ground-truth list received (67 names). **Mission score vs repository: 0/67 detected.** PDFs inspected only (not imported); PDF parser recognized 0 columns; 08/10 file integrity still suspect.  
 **Date of audit:** 2026-08-10 (updated after SACJAILSCAN Import Inspection)  
 **Directive:** Stop feature development until core new-inmate detection is validated against known ground truth. **No code fixes are implemented in this deliverable.**
 
@@ -10,13 +10,15 @@
 
 | Question | Answer |
 |---|---|
-| Can NIIS be scored against the 67 new inmates for 08/10/2026 vs 08/09/2026? | **No — not with data currently available to the agent.** |
-| Are real Sacramento County rosters for those dates in the repository? | **No.** Only format-aligned **sample** fixtures exist (5 rows on 08/09, 8 on 08/10). |
-| Is production usable as a clean ground-truth environment? | **No.** Production NIIS repository is **contaminated** by bulk-import acceptance clones (~1,800 synthetic CSV batches). |
-| What does production currently report for “today”? | **10** people labeled as newly booked; **14,619** returning; **14,629** bookings across **10** people. |
-| Feature work status | **Stopped.** Corrections listed below are recommendations only. |
+| Ground-truth list available? | **Yes** — 67 names in `ground-truth-67-new-inmates-2026-08-10.md` |
+| How many of the 67 are in NIIS as new inmates today? | **0 / 67** |
+| Were the SACJAILSCAN PDFs imported into the repository? | **No** — Import Inspection only |
+| Can the PDF parser extract inmate rows from these files today? | **No** — 0 columns recognized; 45% confidence |
+| Is the uploaded 08/10 PDF a complete daily roster? | **Doubtful** — 1 page, header date 08/09/2026; ALDANA sorts before ALFARO but is absent from sample |
+| Production “new inmates” count | **10** (sample-fixture people only — not any of the 67) |
+| Feature work status | **Stopped.** No fixes implemented. |
 
-**Primary blocker:** The administrator’s ground truth (67 newly booked) cannot be reconciled to any roster file the agent can read. The sample CSV for 08/10 contains **8** people; at most **5** are “new” relative to the sample prior file. That is not the county export that produced the 67-person benchmark.
+**Primary finding:** Against the administrator’s 67-name ground truth, NIIS currently has **zero true positives**. Failure is upstream of identity/change detection: real PDFs were never parsed into inmate rows, and the 08/10 upload does not look like a full same-format roster.
 
 ---
 
@@ -105,32 +107,97 @@ Prior-only people (on 08/09 sample, absent from 08/10 sample): LOPEZ, DIEGO; SMI
 
 ## 4. Account for every one of the 67 (required table)
 
-| Expected New Inmate | NIIS Classification | Explanation |
-|---|---|---|
-| *(all 67 identities)* | **Unknown — not auditable** | No roster file or spreadsheet listing the 67 was present in the workspace or recoverable from a clean production ingest of real county exports. |
+Source list: `reports/niis-reliability/ground-truth-67-new-inmates-2026-08-10.md` (administrator).
 
-### Partial production “new inmates” list (date filter 2026-08-10) — **not** the 67
+**Uniform NIIS outcome for all 67:** category = **Absent** (not New / Returning / Known / Duplicate / Review / Ignored / Parsing-failure-row / Merge / Conflict).
+**Responsible stage:** **PDF parser / profile + non-ingest inspection path** (not identity resolution, not change detection, not report generation — those stages never received these people).
 
-These are the **10** people production currently returns from `GET /api/admin/intelligence/new-inmates?date=2026-08-10`:
+| # | Expected New Inmate | NIIS Classification | Explanation |
+|---:|---|---|---|
+| 1 | ALDANA, CARLOS JAMES | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 2 | ANDERSON, JAMES EARL | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 3 | ANDREWS, ANGELO L | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 4 | ATILES, CRYSTAL LYNN | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 5 | BAKER, ERIC CHARLES | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 6 | BARNETT, SEAN | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 7 | BASPED, LONNIE JOE | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 8 | BENTON, DONTE JAMAR | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 9 | BETTI, FELONIZ | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 10 | BRAVO, JOHAN JARED | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 11 | BRITTON, KENNETH | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 12 | BUCKNER, LATOYA MARIE | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 13 | CARTER, ALVIN COLEMAN | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 14 | CARTER, ZARIAH | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 15 | CRUMBY, EBONY | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 16 | CUAORTIZ, DANIEL ISAI | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 17 | DELEON, ALEJANDRO BOBBY | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 18 | DELLACASA, JOSEPH | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 19 | DENNIS, LATISHA MARIE | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 20 | EICHELBERGER, WARREN PATRICK | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 21 | ENGLAND, JAMES THOMAS | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 22 | FAJARDO, ALLESSEANDRO | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 23 | FERRANTE, DOMINIC | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 24 | FREEMAN, JAMES EARL | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 25 | FUNARO, JAMES EDWIN | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 26 | GOODINGBYRD, MORGAN HUNTER | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 27 | GOTELAERE, ROBERT TANNER | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 28 | HERNANDEZ, CESAR | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 29 | HIGGINS, NICHOLAS LEE | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 30 | JOHNSON, CALAIS MARIE | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 31 | JOHNSON, WILLIE JAMES | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 32 | KUBACH, KENT CHARLES | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 33 | LAPRELLE, MICHAEL ALLEN | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 34 | LEE, MICHAEL | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 35 | LINGENFELTER, KATHERINE ALEXANDRIA | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 36 | LOPEZ, AURELIO | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 37 | LORENZO, RUBY | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 38 | MCALLEN, JEFFREY STEVEN | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 39 | MCCORMICK, JAMES ROBERT | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 40 | MERKUSHEV, ANNA VIKTOROVNA | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 41 | METOUR, SVEN GOSTA | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 42 | MILTON, EUGENE ANDREW | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 43 | MONTIERO, ASHLEY ELIZABETH | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 44 | MONTOYA, JUAN MANUEL | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 45 | MOORE, MITCHELL EDWARD | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 46 | MUCKELRATH, KENNETH | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 47 | MUHAMMAD, AHMAD | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 48 | NGUYEN, CUONG HUY | **Absent** | Not in repository (surname collision only with sample fixture people). Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 49 | OLSON, AMBER NICOLE | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 50 | RAHMANI, MOHAMMAD EKRAM | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 51 | REYES, SILVINO RIVAS | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 52 | ROBERTSON, ANITA | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 53 | RODRIGUEZ, RODOLFO R | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 54 | SALDANA, STUART SERGIO | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 55 | SEVIER, SANDRA PATRICE | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 56 | SINGH, MANPREET | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 57 | STEVENS, LEE W | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 58 | STOLARZ, JOHN JOSEPH | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 59 | THURSTON, WILLIAM D | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 60 | TODD, VALERIE HELEN | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 61 | VAUGHN, CHRISTOPHER | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 62 | VELASQUEZ, ANGELA ROSE | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 63 | WEHNER, LANCE FREDRICK | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 64 | WILLIAMS, ARCHIE | **Absent** | Not in repository (surname collision only with sample fixture people). Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 65 | WILLIAMS, ISSAC | **Absent** | Not in repository (surname collision only with sample fixture people). Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 66 | XICIAYJUAREZ, RUDY MARCELINO | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
+| 67 | YANG, LA SHIA | **Absent** | Absent from repository. Files inspected only (not imported). PDF profile recognized 0 columns; 08/10 inspection sample shows ALFARO/ALLEN only (1 page, header date 08/09). Parser/import never produced a person row for this name. |
 
-| Name | Booking # | priorArrestCount | totalArrestCount | Fixture-relative truth | Production label issue |
-|---|---|---:|---:|---|---|
-| NGUYEN, LAN | BK-260810-008 | 0 | 1828 | New | Listed new; identity later absorbed ~1.8k clone bookings |
-| BROWN, TYRELL | BK-260810-007 | 1 | 1829 | **Returning** | Still appears on new-inmates API despite prior=1 |
-| GARCIA, SOFIA | BK-260810-006 | 0 | 1828 | New | Listed new |
-| PATEL, RAJ | BK-260810-005 | 0 | 1828 | New | Listed new |
-| WILLIAMS, ANDREA | BK-260810-004 | 1 | 1829 | **Returning** | Still appears on new-inmates API despite prior=1 |
-| JOHNSON, MARCUS | BK-260810-003 | 1 | 1829 | **Returning** | Still appears on new-inmates API despite prior=1 |
-| CHEN, MEI | BK-260810-002 | 0 | 1828 | New | Listed new |
-| RAMIREZ, JOSE | BK-260810-001 | 0 | 1828 | New | Listed new |
-| SMITH, KAREN | BK-260728-022 | 0 | 1 | Prior-only (08/09) | Appears under 08/10 new-inmates query (date filter semantics) |
-| LOPEZ, DIEGO | BK-260725-011 | 0 | 1 | Prior-only (08/09) | Same |
+### Cross-checks performed
 
-**Finding R-02 (new-inmate API vs presence):** People with `priorArrestCount ≥ 1` (returning by change-detection rules) still appear in the new-inmates list. Frozen “discoveredOn” / report membership is not equivalent to current presence classification.
+| Check | Result |
+|---|---|
+| Surname present in 08/10 inspection `sampleLines` | **0 / 67** |
+| Surname present in 08/09 inspection `sampleLines` | **0 / 67** |
+| Repository search exact person match | **0 / 67** |
+| Surname-only search collisions | NGUYEN→LAN (fixture); WILLIAMS→ANDREA (fixture) — **not** ground-truth people |
+| Alphabetical integrity of 08/10 file | Roster sorted by name would list **ALDANA** before **ALFARO**; inspection sample starts at ALFARO → ALDANA not on that 1-page extract |
 
-**Finding R-03 (identity collapse under load test):** Acceptance clones mutated booking/X-Ref but kept the same name+DOB → identity resolution merged ~1,828 bookings onto each sample person → `totalArrestCount` exploded while `priorArrestCount` on the discovery record stayed 0 for first-seen people.
+**Finding R-09:** All 67 expected new inmates are **false negatives at the system boundary** (never entered the pipeline as person records). This is not an unexplained mid-pipeline disappearance.
 
----
+### Contaminated production “new inmates” (not the 67)
+
+Production still lists **10** sample-fixture people under new-inmates — **none** of the administrator’s 67. See earlier R-02 / R-03.
+
 
 ## 5. Processing stage audit
 
@@ -143,16 +210,19 @@ PDF parsed → CSV parsed → Normalized → Identity candidates → Merged
 
 ### 5.2 Counts — **real 08/09→08/10 county pair**
 
-| Stage | Count | Disposition |
-|---|---:|---|
-| PDF parsed | — | **Not run** — real PDF absent |
-| CSV parsed | — | **Not run** — real CSV absent |
-| Normalized | — | — |
-| Identity candidates | — | — |
-| Merged | — | — |
-| Review queue | — | — |
-| Change detection | — | — |
-| Report generation | — | — |
+| Stage | 08/09 PDF | 08/10 PDF | Disposition |
+|---|---:|---:|---|
+| File received (Import Inspection) | yes (87 pp) | yes (1 pp) | Bytes stored for inspection |
+| PDF text layer present | yes | yes | OCR not used |
+| Columns recognized | **0** | **0** | Profile mismatch |
+| Inmate rows extracted | **0** | **0** | Multi-line layout not mapped |
+| Normalized | 0 | 0 | No rows |
+| Identity candidates | 0 | 0 | No rows |
+| Merged | 0 | 0 | No rows |
+| Review queue | 0 | 0 | No rows |
+| Change detection (these files) | 0 | 0 | Never imported |
+| Report generation (these 67) | 0 | 0 | Never classified as new |
+| **Disappearances** | — | — | All 67 lost at **parser/profile** (and 08/10 file may be incomplete) |
 
 ### 5.3 Counts — production morning snapshot (contaminated)
 
@@ -253,16 +323,16 @@ Detailed per-candidate blocking-key dumps for all 67 require the real files + a 
 
 | Metric | Value | Notes |
 |---|---:|---|
-| True positives | **Unknown** | Need list of 67 ∩ NIIS new |
-| False positives | **Unknown** | — |
-| False negatives (missed new) | **Unknown** | — |
-| Incorrectly reported new | **≥3 on sample** (BROWN, WILLIAMS, JOHNSON) if prior ingested first | Observable on sample/prod semantics |
-| Precision | **N/A** | Blocked |
-| Recall | **N/A** | Blocked |
-| NIIS reported new (prod) | 10 | ≠ 67 |
-| Absolute gap vs 67 | **57** | Dominated by missing county data + pollution |
+| Ground-truth new inmates | **67** | Administrator list |
+| True positives (NIIS new ∩ 67) | **0** | Repository search + new-inmates API |
+| False negatives (missed of 67) | **67** | None entered pipeline as people |
+| False positives among the 67 | **0** | None of the 67 were reported |
+| Incorrectly reported new (prod, not in 67) | **10** | Sample-fixture people only |
+| Precision (vs 67 mission) | **n/a (0 TP)** | No correct detections |
+| Recall (vs 67) | **0%** | 0 / 67 |
+| Missed new inmates | **67 / 67** | See §4 table |
 
-**No fabricated precision/recall.** Publishing numbers without the 67 identities would be false assurance.
+**Interpretation:** Recall is zero because parsing/import never produced rows — not because change detection mis-labeled extracted people.
 
 ---
 
@@ -273,13 +343,13 @@ Scores are **evidence grades**, not production accuracy claims against the 67. S
 | Subsystem | Score | Evidence |
 |---|---:|---|
 | CSV parser | **2** | Sample fixtures parse; profile verification script exists; **no real export freeze** |
-| PDF parser | **2** | Text-layer sample worked in ops; OCR unavailable; no 67-row PDF audit |
+| PDF parser | **1** | Real SACJAILSCAN: 45% confidence, **0 columns**, 0 rows for 67; layout mismatch confirmed |
 | Normalization | **3** | Unit tests + Sacramento field rules; not scored on 67 |
 | Identity resolution | **1** | Collapsed acceptance clones into 10 people with ~1.8k bookings each — high risk under repeated similar rows |
 | Change detection | **2** | Pure `classifyPresence` is clear; API/report “new” diverges from returning |
 | Report generation | **2** | Prints a list; includes returning people under frozen-discovery semantics |
 
-**Overall Phase-1 mission readiness vs 67 ground truth: 0 / Not validated.**
+**Overall Phase-1 mission readiness vs 67 ground truth: Fail (recall 0%).** Root cause documented; fixes not implemented per directive.
 
 ---
 
@@ -293,6 +363,9 @@ Scores are **evidence grades**, not production accuracy claims against the 67. S
 | RC-4 | **“New inmate” product semantics vs “newly booked on roster day”** | Returning people can appear on new-inmate report/API |
 | RC-5 | **Identity merge on name+DOB under synthetic clones** | Inflates booking histories; obscures clean presence tests |
 | RC-6 | **Sample fixtures documented as non-final** | Success on samples does not prove county headers |
+| RC-7 | **Sacramento PDF profile expects wrong layout** | Real roster is multi-line Name/XREF/Housing; v1 profile expects single-line BOOKING/NAME… → 0 columns |
+| RC-8 | **Import Inspection ≠ Import** | Analysis path did not ingest; stuck Import Jobs never received bytes |
+| RC-9 | **08/10 PDF likely incomplete / wrong date** | 1 page, header 08/09/2026, ALDANA absent while ALFARO present |
 
 ---
 
@@ -338,12 +411,11 @@ Scores are **evidence grades**, not production accuracy claims against the 67. S
 
 ## 14. Immediate ask to the administrator
 
-PDFs are on production via Import Inspection. To un-block Phase 1 scoring:
+Ground-truth **67 names are in hand**. Remaining unblocks before any fix work:
 
-1. **Confirm** `SACJAILSCAN08-10-2026.pdf` is the full 08/10 roster (inspection currently shows date **08/09/2026** and **1 page**). Re-upload the correct file if needed.  
-2. Provide the authoritative list of the **67** newly booked names (booking # / DOB if available).  
-3. Prefer a **Sacramento CSV export** for the same two dates if the Sheriff provides one — PDF multi-line layout is already failing profile match at 45% confidence.  
-4. Confirm OK to use a **wiped/staging** NIIS database before any import of these files (production is still polluted by acceptance clones).  
-5. Complete Import Jobs upload **only after** parser/profile fitness is accepted — inspection alone does not ingest.
+1. **Re-provide / confirm** a complete `SACJAILSCAN08-10-2026.pdf` (multi-page Active Inmate Basic Roster dated **08/10/2026**). Current file fails basic integrity checks.  
+2. If available, Sacramento **CSV** exports for both dates.  
+3. Confirm OK to wipe/use a **clean validation DB** before any ingest attempt.  
+4. After a correct 08/10 file exists, re-run Import Inspection; only then consider a controlled import — **still no feature/parser code changes until you approve the root-cause package**.
 
-Until the 67 list and a verified 08/10 file are in hand, **no NIIS feature development** should proceed under this directive.
+**No NIIS feature development** under this directive until corrections are approved.

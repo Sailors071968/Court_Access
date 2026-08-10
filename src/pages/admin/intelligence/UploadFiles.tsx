@@ -141,7 +141,9 @@ export function UploadFiles() {
     }
   };
 
-  const waiting = uploads.filter((u) => u.status === 'uploaded');
+  // Prefer the dedicated waiting total: the list page can omit older uploaded rows.
+  const waitingOnPage = uploads.filter((u) => u.status === 'uploaded').length;
+  const waiting = waitingCount > 0 ? waitingCount : waitingOnPage;
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
@@ -152,12 +154,12 @@ export function UploadFiles() {
           <Button
             variant="primary"
             onClick={() => void process()}
-            disabled={processing || waiting.length === 0}
+            disabled={processing || waiting === 0}
             testId="process-import"
-            title={waiting.length === 0 ? 'Upload a roster first' : `Process ${waiting.length} waiting file(s)`}
+            title={waiting === 0 ? 'Upload a roster first' : `Process ${waiting} waiting file(s)`}
           >
             <Play className="h-3.5 w-3.5" />
-            {processing ? 'Starting…' : `Process Import${waiting.length > 0 ? ` (${waiting.length})` : ''}`}
+            {processing ? 'Starting…' : `Process Import${waiting > 0 ? ` (${waiting})` : ''}`}
           </Button>
         }
       />
@@ -230,7 +232,7 @@ export function UploadFiles() {
               {uploading ? (uploadProgress ?? 'Uploading…') : 'Choose files'}
             </Button>
           </div>
-          {waiting.length === 0 && !uploading ? (
+          {waiting === 0 && !uploading ? (
             <p className="mt-3 text-xs text-gray-500">
               Process Import stays disabled until at least one file reaches status “uploaded”.
               If a large drop never appears in the list, the browser request was rejected before storage —

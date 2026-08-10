@@ -10,6 +10,7 @@ import {
   ChevronLeft, ChevronRight, ChevronDown,
   FileText, Tag, Upload, BarChart3, Globe, Activity, Server, BookOpen, CheckSquare, FileQuestion,
   ShieldCheck, LayoutList, Scale,
+  Users, History, ListChecks, Cog, Gauge, UserSearch, FileSearch, Columns3, FileCheck2,
 } from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
 import { ROLE_PERMISSIONS } from '../../constants';
@@ -31,6 +32,14 @@ interface NavChild {
   path: string;
   icon: React.ReactNode;
   permission?: keyof RolePermissions;
+  /**
+   * A nested group, for a subsystem with several screens of its own.
+   *
+   * One level only. Deeper nesting in a sidebar this long stops being navigation and
+   * starts being a filing system, and the group's own `path` is still a real
+   * destination so the header is never a dead click.
+   */
+  children?: NavChild[];
 }
 
 interface NavItem {
@@ -67,12 +76,33 @@ const navItems: NavItem[] = [
   },
   {
     id: 'admin',
-    label: 'Admin',
+    label: 'Administration',
     path: '/admin',
     icon: 'Shield',
     permission: 'canViewAdmin',
     children: [
       { id: 'admin-dashboard', label: 'Admin Dashboard', path: '/admin', icon: <LayoutList size={16} />, permission: 'canViewAdmin' },
+      {
+        id: 'niis',
+        label: 'New Inmate Intelligence',
+        path: '/admin/intelligence',
+        icon: <UserSearch size={16} />,
+        permission: 'canViewAdmin',
+        children: [
+          { id: 'niis-ops', label: 'Morning Operations', path: '/admin/intelligence', icon: <Gauge size={14} /> },
+          { id: 'niis-dashboard', label: 'Import Summary', path: '/admin/intelligence/import-summary', icon: <LayoutList size={14} /> },
+          { id: 'niis-upload', label: 'Upload Files', path: '/admin/intelligence/upload', icon: <Upload size={14} /> },
+          { id: 'niis-queue', label: 'Processing Queue', path: '/admin/intelligence/queue', icon: <Activity size={14} /> },
+          { id: 'niis-inspect', label: 'Import Inspection', path: '/admin/intelligence/inspect', icon: <FileSearch size={14} /> },
+          { id: 'niis-mappings', label: 'Parser Mapping', path: '/admin/intelligence/mappings', icon: <Columns3 size={14} /> },
+          { id: 'niis-new', label: "Today's New Inmates", path: '/admin/intelligence/new-inmates', icon: <Users size={14} /> },
+          { id: 'niis-search', label: 'Historical Search', path: '/admin/intelligence/search', icon: <Search size={14} /> },
+          { id: 'niis-imports', label: 'Import History', path: '/admin/intelligence/import-history', icon: <History size={14} /> },
+          { id: 'niis-reports', label: 'Reports', path: '/admin/intelligence/reports', icon: <FileCheck2 size={14} /> },
+          { id: 'niis-review', label: 'Review Queue', path: '/admin/intelligence/review', icon: <ListChecks size={14} /> },
+          { id: 'niis-settings', label: 'Settings', path: '/admin/intelligence/settings', icon: <Cog size={14} /> },
+        ],
+      },
       { id: 'gold-standard', label: 'Gold Standard Certification', path: '/admin/gold-standard', icon: <ShieldCheck size={16} />, permission: 'canViewAdmin' },
       { id: 'statutory', label: 'Statutory Intelligence', path: '/admin/statutory-intelligence', icon: <Scale size={16} />, permission: 'canViewAdmin' },
       { id: 'readiness', label: 'Production Readiness', path: '/admin/readiness', icon: <BarChart3 size={16} />, permission: 'canViewAdmin' },
@@ -157,7 +187,10 @@ export function Sidebar() {
           const isExpanded = expandedSections[item.id] ?? false;
           // Filter children by permission
           const visibleChildren = item.children?.filter((c) => !c.permission || permissions[c.permission]);
-          const childActive = hasChildren && visibleChildren?.some((c) => location.pathname === c.path);
+          const childActive = hasChildren && visibleChildren?.some(
+            (c) => location.pathname === c.path
+              || (c.children?.length ? location.pathname.startsWith(c.path) : false),
+          );
 
           return (
             <div key={item.id}>
@@ -186,6 +219,57 @@ export function Sidebar() {
                   {!collapsed && isExpanded && (
                     <div className="ml-4 mt-1 space-y-0.5 border-l border-slate-700 pl-3">
                       {visibleChildren?.map((child) => {
+                        // A child with its own children is a subsystem group. It
+                        // expands when the operator is anywhere inside it, so
+                        // arriving by link never leaves the section looking closed.
+                        if (child.children && child.children.length > 0) {
+                          const insideGroup = location.pathname.startsWith(child.path);
+                          const groupOpen = expandedSections[child.id] ?? insideGroup;
+                          return (
+                            <div key={child.id}>
+                              <button
+                                onClick={() => toggleSection(child.id)}
+                                className={`flex items-center gap-2.5 px-2.5 py-2 rounded-md text-xs font-semibold transition-colors w-full ${
+                                  insideGroup
+                                    ? 'bg-slate-700/60 text-white'
+                                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                                }`}
+                              >
+                                <span className="flex-shrink-0">{child.icon}</span>
+                                <span className="flex-1 text-left">{child.label}</span>
+                                <ChevronDown
+                                  size={12}
+                                  className={`transition-transform ${groupOpen ? 'rotate-180' : ''}`}
+                                />
+                              </button>
+                              {groupOpen && (
+                                <div className="ml-3 mt-0.5 space-y-0.5 border-l border-slate-700 pl-2.5">
+                                  {child.children.map((leaf) => (
+                                    <NavLink
+                                      key={leaf.id}
+                                      to={leaf.path}
+                                      // `end` on the group's own path, or the
+                                      // dashboard link would stay highlighted on
+                                      // every page beneath it.
+                                      end={leaf.path === child.path}
+                                      className={({ isActive: leafActive }) =>
+                                        `flex items-center gap-2 px-2.5 py-1.5 rounded-md text-xs transition-colors ${
+                                          leafActive
+                                            ? 'bg-slate-700 text-white font-medium'
+                                            : 'text-slate-400 hover:bg-slate-700/50 hover:text-white'
+                                        }`
+                                      }
+                                    >
+                                      <span className="flex-shrink-0">{leaf.icon}</span>
+                                      <span>{leaf.label}</span>
+                                    </NavLink>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        }
+
                         const isChildActive = location.pathname === child.path;
                         return (
                           <NavLink

@@ -49,14 +49,18 @@ echo "PGURL=$(echo "${PGURL:-<unset>}" | sed -E 's#(//[^:]+):[^@]*@#\1:***@#')"
 psql "$PGURL" -tAc "select 1" >/dev/null 2>&1 && echo "psql connects OK" || echo "psql cannot connect — resolve before continuing"
 ```
 
-**One caution about the line above.** Sourcing `.env` here is for `psql` and
-`pg_dump` only. Do **not** rely on it for the PM2 reload: `--update-env`
-replaces the process environment with this shell's, so Stage F3 re-sources it
-deliberately and checks `PORT` immediately before reloading.
+**One caution about the line above.** It leaves `DATABASE_URL` and every secret
+in this shell, and PM2 snapshots the environment of whatever shell runs
+`pm2 start` — after which the snapshot outranks `.env` permanently, because
+Node's `--env-file` does not replace a variable that is already set. Read the
+file in a subshell instead, so only `PGURL` escapes:
 
-Do **not** source `.env` here. Stage D4 explains why the shell environment at
-the moment of `pm2 reload` decides what the application actually runs with, and
-sourcing it early makes that easy to get wrong by accident.
+```bash
+export PGURL="$(set -a; . "$APP/.env"; set +a; echo "${DATABASE_URL%%\?*}")"
+```
+
+If you have already sourced `.env` into this shell, do not run a PM2 command
+from it. Open a new one.
 
 ---
 
@@ -518,12 +522,18 @@ now-migrated database before anything is switched.
 
 ```bash
 cd "$BUILD/out"
-set -a; . "$APP/.env"; set +a
-PORT=3399 node dist/index.js > /tmp/smoke.log 2>&1 &
+# Started the way PM2 will start it, with an emptied environment, so this also
+# proves .env alone is a sufficient configuration. PORT is overridden to keep off
+# the live port: an already-set variable wins over --env-file.
+(exec env -i PATH="$PATH" HOME="$HOME" PORT=3399 HOST=127.0.0.1 \
+   "$NODE22" --env-file="$APP/.env" dist/index.js) > /tmp/smoke.log 2>&1 &
 SMOKE=$!
 sleep 5
 curl -s http://127.0.0.1:3399/api/health
 ```
+
+`deploy/stages/standalone-check.sh` does this and the checks below in one step,
+including a negative control and a guarantee that the probe is cleaned up.
 
 **Expected**, within about 1.3 seconds — measured, not estimated:
 
@@ -656,28 +666,39 @@ cat "$APP/dist.new/index.js" > /dev/null
 ### The swap — four renames, then one reload
 
 ```bash
-set -a; . "$APP/.env"; set +a
-echo "PORT=$PORT"          # MUST print 3000 before you continue
+# Read the file the way Node will, in a subshell, so nothing lands in this
+# shell's environment. MUST print 3000 before you continue.
+(env -i "$NODE22" --env-file="$APP/.env" -p '"PORT="+process.env.PORT')
 
 sudo mv "$APP/dist" "$APP/dist.previous" && sudo mv "$APP/dist.new" "$APP/dist"
 sudo mv "$APP/node_modules" "$APP/node_modules.previous" && sudo mv "$APP/node_modules.new" "$APP/node_modules"
 
-pm2 reload "$PM2_NAME" --update-env
+pm2 reload "$PM2_NAME"
 ```
 
-**`echo "PORT=$PORT"` is not decoration.** `--update-env` takes the environment
-from *this shell*. If it prints anything but 3000, stop and fix `.env` — the
-application would come up on the wrong port and nginx would return 502 while
-the process looked perfectly healthy.
+**Checking `PORT` is not decoration.** If it prints anything but 3000, stop and
+fix `.env` — the application would come up on the wrong port and nginx would
+return 502 while the process looked perfectly healthy.
+
+**No `--update-env`, and `.env` is not sourced into this shell.** Both of those
+were here before, and together they are what caused the 578-restart crash loop.
+`--update-env` copies this shell's environment onto the process, and PM2 keeps
+that copy in its live definition and in `dump.pm2`. Node's `--env-file` cannot
+override a variable that is already set, so from that moment the snapshot
+outranks the file: editing `.env` changes nothing, and a reboot restores
+whatever was captured — or nothing at all, if it was captured from a shell that
+had not sourced the file. Reading `PORT` in a subshell gives the same
+confirmation without creating the snapshot.
 
 ### Verify immediately
 
 ```bash
 sleep 5
 curl -s https://courtaccess.net/api/health
-PID=$(pm2 jlist | python3 -c 'import json,sys;print([p["pid"] for p in json.load(sys.stdin) if p["name"]=="'"$PM2_NAME"'"][0])')
-sudo tr '\0' '\n' < /proc/$PID/environ | grep -E '^(PORT|NODE_ENV|DISABLE_WORKERS|EVIDENCE_UPLOAD_DIR)='
-sudo tr '\0' '\n' < /proc/$PID/environ | grep -c '^JWT_SECRET='
+pm2 jlist | python3 -c 'import json,sys;a=[p for p in json.load(sys.stdin) if p["name"]=="'"$PM2_NAME"'"][0];print(a["pm2_env"].get("node_args"))'
+(env -i "$NODE22" --env-file="$APP/.env" -p '["PORT","NODE_ENV","DISABLE_WORKERS","EVIDENCE_UPLOAD_DIR"].map(k=>k+"="+process.env[k]).join("\n")')
+(env -i "$NODE22" --env-file="$APP/.env" -p 'process.env.JWT_SECRET ? "JWT_SECRET set" : "JWT_SECRET MISSING"')
+pm2 logs "$PM2_NAME" --lines 200 --nostream | grep -c 'generating an ephemeral key'
 sudo ss -lntp | grep ':3000'
 cat "$APP/dist/build-info.json"
 pm2 logs "$PM2_NAME" --lines 40 --nostream | grep -A3 'Schema Assert'
@@ -690,17 +711,31 @@ pm2 list
   either worked or did not**
 - health reports `"environment":"production"`; anything else means cookies are
   being set without the `secure` flag
-- the running environment shows `PORT=3000`, `DISABLE_WORKERS=true`, and
+- `node_args` is `['--env-file=/var/www/courtaccess/.env']`
+- the file supplies `PORT=3000`, `DISABLE_WORKERS=true`, and
   `EVIDENCE_UPLOAD_DIR` pointing outside `$APP`
-- **the `JWT_SECRET` count is `1`**
+- **`JWT_SECRET set`, and the ephemeral-key count is `0`**
 - something is listening on 3000
 - `build-info.json` names the commit you built
 - `pm2 list` shows `online`
 
-**The `JWT_SECRET` count is not optional.** If it is `0`, the application
-generated a random signing key at startup and every user will be signed out on
-the next restart — with no error, no warning, and a perfectly healthy-looking
-service. It is the only symptom this failure has. See
+**These read the file, not `/proc/<pid>/environ`.** They used to read `/proc`,
+which no longer works and gives a false alarm: `--env-file` values are loaded
+inside the process, so `/proc` — which shows only the environment handed over at
+exec — reports none of them. On a correct deployment the old
+`grep -c '^JWT_SECRET='` returns `0`, which this runbook used to say meant every
+user was about to be signed out. Verified: `0` there while the secret was set
+and no ephemeral-key warning was logged. Worse, the obvious way to make that
+check pass again is to export `.env` into the shell before starting PM2, which
+reintroduces the snapshot that outranks the file.
+
+`/proc` is still the right place to check that PM2 is **not** holding a copy of
+a secret — see `verify-restart-survival.sh`.
+
+**The ephemeral-key check is not optional.** The application logs
+`generating an ephemeral key` when `JWT_SECRET` is absent, and then signs tokens
+with a random value, so every user is signed out on the next restart — with no
+error and a perfectly healthy-looking service. That log line is the symptom. See
 [`ENV_TRACE.md`](ENV_TRACE.md).
 
 **On the Schema Assert lines**, expect `Migrations: 30/30 applied`. If they
@@ -958,16 +993,21 @@ cold-cache figure is why F3 warms the page cache before swapping.
 Both were found by rehearsing the in-place model, and both would have hit the
 symlink version too. They are the reason this revision exists.
 
-### 1 · The application never reads `.env`
+### 1 · The bundle contains no `dotenv`
 
 ```
 $ grep -c "dotenv" dist/index.js
 0
 ```
 
-Zero occurrences in the 2 MB bundle. Writing `PORT=3000` into `.env` does
-nothing on its own. Environment variables reach the application only through
-the process PM2 starts it with.
+Zero occurrences in the 2 MB bundle. Writing `PORT=3000` into `.env` therefore
+did nothing on its own: the environment reached the application only through the
+process PM2 started it with.
+
+**Since resolved,** by having Node read the file itself:
+`--node-args="--env-file=$APP/.env"`. No `dotenv`, no second copy of the
+secrets, and the file is re-read on every spawn, including the ones PM2 performs
+by itself after a crash or a resurrect.
 
 ### 2 · `pm2 reload --update-env` takes the *shell's* environment
 
@@ -980,7 +1020,8 @@ PORT in the running process: 3200
 PORT in .env:                3510
 ```
 
-Sourcing the file into the shell first produced the correct result:
+Sourcing the file into the shell first produced the correct result, and that was
+the fix this runbook carried for a while:
 
 ```
 $ set -a; . "$APP/.env"; set +a
@@ -988,8 +1029,38 @@ $ pm2 reload courtaccess --update-env
 PORT in the running process: 3510      health: 200
 ```
 
-This is why D4 captures the current process environment before writing the new
-file, and why F3 echoes `PORT` immediately before the reload.
+### 3 · That fix was the cause of the next outage
+
+Making the shell the source of truth put the environment in PM2's memory, where
+nothing about `.env` can tell you what it contains. A definition holding none of
+it produced a 578-restart crash loop — the process reached `enforceSchemaOnBoot`
+with no `DATABASE_URL` and exited 1 on every respawn — hours after a deployment
+that had passed a 30-minute observation window with zero restarts.
+
+Note what is *not* established: that some PM2 operation erased it. On PM2 7.0.3,
+`restart`, `restart --update-env`, `reload --update-env`, `save`/`kill`/
+`resurrect` and `pm2 update` all preserve the captured environment, including
+into `dump.pm2` [measured]. A snapshot does not decay. It is either never taken,
+or a boot-time resurrect reads a different `dump.pm2` than the one `pm2 save`
+wrote — which is what happens when the `pm2 startup` unit runs as a different
+user. `ROOT_CAUSE_CRASH_LOOP.md` §6 has the measurements and §8 the read-only
+commands that tell you which occurred.
+
+Adding `--env-file` was not sufficient by itself, because Node's `--env-file`
+does not replace a variable that is already set — the inherited value wins.
+While `.env` was still sourced before `pm2 start`, PM2 snapshotted it and the
+flag was inert. Measured: editing `.env` and restarting left the old value in
+the process, and it survived `pm2 save`, a daemon kill and a resurrect.
+
+So both halves are required, and both are now in `stage3-start.sh`: Node reads
+the file, **and** the variables the file defines are withheld from the
+environment PM2 snapshots. `verify-restart-survival.sh` asserts the result —
+that `dump.pm2` carries `--env-file` and holds no copy of the application's own
+variables, and that the process comes back healthy from a resurrect performed
+with those variables stripped from the shell.
+
+This is why F3 no longer sources `.env` and no longer passes `--update-env`, and
+why the verification reads the file instead of `/proc/<pid>/environ`.
 
 ## The three things most likely to go wrong
 

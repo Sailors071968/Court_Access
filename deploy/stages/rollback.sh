@@ -52,14 +52,38 @@ else
   finish; exit 1
 fi
 
-sudo systemctl reload nginx && ok "nginx reloaded" || bad "nginx reload failed"
+# systemctl is how nginx is managed on the production host, but a rollback is
+# the last thing that should fail for want of an init system. If systemd is not
+# managing it, ask nginx directly rather than stopping here.
+if sudo systemctl reload nginx 2>/dev/null; then
+  ok "nginx reloaded (systemd)"
+elif sudo nginx -s reload 2>/dev/null; then
+  ok "nginx reloaded (signalled directly — systemd did not answer)"
+else
+  bad "nginx reload failed — the restored configuration is on disk but not live"
+fi
 sleep 3
 
 say "VERIFY THE PREVIOUS APPLICATION IS SERVING AGAIN"
+BODY="$(curl -s --max-time 20 "https://$SITE/api/health")"
 CODE="$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "https://$SITE/api/health")"
 check "https://$SITE/api/health responds" "200" "$CODE"
-kv "health body" "$(curl -s --max-time 20 "https://$SITE/api/health" | head -c 200)"
-info "the previous application returns no 'commit' field — that is how you know it is back"
+kv "health body" "$(printf '%s' "$BODY" | head -c 200)"
+
+# A 200 alone proves nothing here: the application being rolled back answers
+# this URL too, so a reload that silently did not take still returns 200 and the
+# rollback would report success while the new release kept serving. Observed
+# exactly that during a rehearsal where the reload failed. The releases are
+# distinguishable because only the new one stamps its commit into /api/health.
+if printf '%s' "$BODY" | grep -q '"commit"'; then
+  bad "the NEW release is still serving — this rollback has not taken effect"
+  info "  commit still reported: $(printf '%s' "$BODY" | grep -o '"commit":"[^\"]*"' | head -1)"
+  info "  The configuration was restored on disk, so the reload is what to check:"
+  info "    sudo nginx -t && sudo systemctl reload nginx"
+  info "  Until that succeeds, traffic is still going to the release you are rolling back."
+elif [ "$CODE" = "200" ]; then
+  ok "the previous application is serving again — no commit field in /api/health"
+fi
 
 say "PROCESS STATE"
 pm2 list 2>/dev/null | sed 's/^/    /' | head -12

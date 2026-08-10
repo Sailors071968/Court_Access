@@ -85,6 +85,20 @@ import { SharedAccessPage } from './pages/membership/SharedAccessPage';
 import { AdminPage } from './pages/admin/AdminPage';
 import { OperationsCommandCenter } from './pages/admin/OperationsCommandCenter';
 import { ProductionReadiness } from './pages/admin/ProductionReadiness';
+// New Inmate Intelligence System — administrator only
+import { IntelligenceDashboard } from './pages/admin/intelligence/IntelligenceDashboard';
+import { UploadFiles } from './pages/admin/intelligence/UploadFiles';
+import { ProcessingQueue } from './pages/admin/intelligence/ProcessingQueue';
+import { NewInmates } from './pages/admin/intelligence/NewInmates';
+import { PersonDetailPage } from './pages/admin/intelligence/PersonDetail';
+import { HistoricalSearch } from './pages/admin/intelligence/HistoricalSearch';
+import { ImportHistory } from './pages/admin/intelligence/ImportHistory';
+import { ReviewQueue } from './pages/admin/intelligence/ReviewQueue';
+import { IntelligenceSettings } from './pages/admin/intelligence/IntelligenceSettings';
+import { ImportInspection } from './pages/admin/intelligence/ImportInspection';
+import { MappingEditor } from './pages/admin/intelligence/MappingEditor';
+import { OperationsConsole } from './pages/admin/intelligence/OperationsConsole';
+import { Reports } from './pages/admin/intelligence/Reports';
 import { StatutoryIntelligence } from './pages/admin/StatutoryIntelligence';
 import { GoldStandardCertification } from './pages/admin/GoldStandardCertification';
 
@@ -468,6 +482,114 @@ function App() {
               </ProtectedRoute>
             }
           />
+          {/* New Inmate Intelligence — administrator only, isolated from public features */}
+          {/* The operations console is the home screen: an operator opening the
+              subsystem should see what to do next, not a summary of yesterday. */}
+          <Route
+            path="admin/intelligence"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <OperationsConsole />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/intelligence/import-summary"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <IntelligenceDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/intelligence/reports"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <Reports />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/intelligence/upload"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <UploadFiles />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/intelligence/queue"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <ProcessingQueue />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/intelligence/new-inmates"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <NewInmates />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/intelligence/persons/:inmateId"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <PersonDetailPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/intelligence/search"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <HistoricalSearch />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/intelligence/import-history"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <ImportHistory />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/intelligence/review"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <ReviewQueue />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/intelligence/settings"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <IntelligenceSettings />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/intelligence/inspect"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <ImportInspection />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/intelligence/mappings"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <MappingEditor />
+              </ProtectedRoute>
+            }
+          />
+
 
           {/* Case Routes — deterministic tab structure */}
           <Route path="cases/:caseId" element={<CaseLayout />}>

@@ -16,6 +16,10 @@ import { readFile } from 'node:fs/promises';
 import type { ColumnMap, IngestionIssue, ParseResult, RawRecord } from '../types.js';
 import { inspectHeaders } from './columnMaps.js';
 import { splitCsvLine } from './csvParser.js';
+import {
+  isActiveInmateBasicRoster,
+  parseActiveInmateBasicRoster,
+} from './sacramentoJailScan.js';
 
 /** Below this many characters, a page is treated as having no text layer. */
 const MIN_CHARS_PER_PAGE = 40;
@@ -25,6 +29,11 @@ export interface PdfParseOptions {
   forceOcr?: boolean;
   /** Cap OCR pages. OCR is CPU-bound and runs on the host that serves requests. */
   maxOcrPages?: number;
+  /**
+   * Operator / filename roster date (ISO or MM/DD/YYYY). Used by layouts that have
+   * no per-row booking date (Sacramento Active Inmate Basic Roster).
+   */
+  rosterDate?: string;
 }
 
 export async function parsePdfRoster(
@@ -91,7 +100,28 @@ export async function parsePdfRoster(
     };
   }
 
-  const { records, unparseableLines, issues: rowIssues } = rowsFromText(pageTexts.join('\n'), map);
+  const joined = pageTexts.join('\n');
+
+  // Sacramento SACJAILSCAN / Active Inmate Basic Roster — multi-token layout.
+  // Tried before the generic delimited-table path because pdf-parse fragments
+  // those pages so no line looks like a table row.
+  if (isActiveInmateBasicRoster(joined)) {
+    const jail = parseActiveInmateBasicRoster(joined, options.rosterDate);
+    issues.push(...jail.issues);
+    return {
+      records: jail.records,
+      stats: {
+        pageCount: pageTexts.length,
+        charactersPerPage: finalCounts,
+        emptyPages,
+        ocrUsed,
+        unparseableLines: 0,
+      },
+      issues,
+    };
+  }
+
+  const { records, unparseableLines, issues: rowIssues } = rowsFromText(joined, map);
   issues.push(...rowIssues);
 
   return {

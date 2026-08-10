@@ -42,31 +42,39 @@ if (repair.repaired > 0) {
 const existing = await listProfiles(FACILITY);
 
 for (const profile of SACRAMENTO_PROFILES) {
-  const already = existing.filter((p) => p.sourceType === profile.sourceType);
-  if (already.length > 0) {
-    console.log(`profile: ${FACILITY}/${profile.sourceType} already at v${already[0].version} — left alone`);
+  // publishProfile always assigns version = max+1. Loop until the DB version
+  // reaches the code profile version (e.g. PDF v2 for Active Inmate Basic Roster).
+  let currentVersion = existing
+    .filter((p) => p.sourceType === profile.sourceType)
+    .reduce((max, p) => Math.max(max, p.version ?? 0), 0);
+
+  if (currentVersion >= profile.version) {
+    console.log(`profile: ${FACILITY}/${profile.sourceType} already at v${currentVersion} — left alone`);
     continue;
   }
 
-  const created = await publishProfile({
-    facility: profile.facility,
-    sourceType: profile.sourceType,
-    label: profile.label,
-    columnMap: profile.columnMap,
-    normalizationVersion: NORMALIZATION_VERSION,
-    expectedHeaders: profile.expectedHeaders,
-    normalizationRules: profile.normalizationRules,
-    validationRules: profile.validation,
-    effectiveFrom: new Date(profile.effectiveFrom),
-    changeNote: profile.changeNote,
-  });
-
-  console.log(
-    `profile: ${FACILITY}/${profile.sourceType} published as v${created.version}` +
-    ` — ${profile.expectedHeaders.length} expected headers,` +
-    ` ${profile.validation.requiredFields.length} required field(s),` +
-    ` ${profile.validation.expectedCoverage.length} coverage rule(s)`,
-  );
+  while (currentVersion < profile.version) {
+    const created = await publishProfile({
+      facility: profile.facility,
+      sourceType: profile.sourceType,
+      label: profile.label,
+      columnMap: profile.columnMap,
+      normalizationVersion: NORMALIZATION_VERSION,
+      expectedHeaders: profile.expectedHeaders,
+      normalizationRules: profile.normalizationRules,
+      validationRules: profile.validation,
+      effectiveFrom: new Date(profile.effectiveFrom),
+      changeNote: profile.changeNote,
+    });
+    currentVersion = created.version;
+    console.log(
+      `profile: ${FACILITY}/${profile.sourceType} published as v${created.version}` +
+      ` (target code v${profile.version})` +
+      ` — ${profile.expectedHeaders.length} expected headers,` +
+      ` ${profile.validation.requiredFields.length} required field(s),` +
+      ` ${profile.validation.expectedCoverage.length} coverage rule(s)`,
+    );
+  }
 }
 
 await prisma.$disconnect();

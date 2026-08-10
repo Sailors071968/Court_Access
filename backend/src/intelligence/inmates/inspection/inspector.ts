@@ -230,7 +230,7 @@ export async function inspectFile(args: {
   }
 
   if (kind === 'pdf') {
-    await inspectPdf(report, args.filePath, resolved.columnMap);
+    await inspectPdf(report, args.filePath, resolved.columnMap, args.rosterDate);
     return persistIfAsked(report, args);
   }
 
@@ -343,7 +343,12 @@ function endsInsideQuotedField(text: string): boolean {
  * and either has a layout this parser can reassemble into rows or does not. Saying
  * which, with sample lines, is what lets a person write the profile.
  */
-async function inspectPdf(report: InspectionReport, filePath: string, map: ColumnMap | undefined): Promise<void> {
+async function inspectPdf(
+  report: InspectionReport,
+  filePath: string,
+  map: ColumnMap | undefined,
+  rosterDate?: string,
+): Promise<void> {
   let text = '';
   let pageCount = 0;
   let extractionError: string | null = null;
@@ -395,6 +400,36 @@ async function inspectPdf(report: InspectionReport, filePath: string, map: Colum
     );
   } else {
     reasons.push(`${pageCount} page(s) with a usable text layer, about ${Math.round(charsPerPage)} characters per page. No OCR needed.`);
+  }
+
+  // Sacramento Active Inmate Basic Roster: fields are fragmented across lines.
+  // Prefer the dedicated reassembling parser over the "date+name on one line" heuristic.
+  const { isActiveInmateBasicRoster, parseActiveInmateBasicRoster } = await import('../parsers/sacramentoJailScan.js');
+  if (isActiveInmateBasicRoster(text)) {
+    const jail = parseActiveInmateBasicRoster(text, rosterDate);
+    reasons.push(
+      `Active Inmate Basic Roster layout detected; reassembled ${jail.records.length} inmate row(s)` +
+      (jail.rosterDate ? ` (roster date ${jail.rosterDate})` : '') + '.',
+    );
+    if (jail.records.length > 0) {
+      const headers = ['Name', 'XREF', 'Booking Number', 'DOB', 'Gender', 'Housing', 'Booked'];
+      const sampleRows = jail.records.slice(0, SAMPLE_ROWS).map((r) =>
+        headers.map((h) => String(r[h] ?? '')),
+      );
+      report.structure.headerRow = headers;
+      report.structure.rowsSampled = jail.records.length;
+      report.columns = describeColumns(headers, sampleRows, map);
+      report.compatibility = {
+        verdict: 'would_import',
+        reasons,
+        parserConfidence: Math.min(95, 55 + Math.floor(Math.min(jail.records.length, 400) / 20)),
+      };
+      // Populate summary from the mapped columns so the UI does not look empty.
+      report.summary.recognized = report.columns.filter((c) => c.mappedTo).map((c) => c.header);
+      report.summary.missingRequired = [];
+      return;
+    }
+    reasons.push(...jail.issues.map((i) => i.message));
   }
 
   // Does any line look like a roster row? A date and a name on the same line is the

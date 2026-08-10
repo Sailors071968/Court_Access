@@ -136,7 +136,7 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
   const sourceType = extension === '.pdf' ? 'pdf_text' : 'csv';
   try {
     parsed = extension === '.pdf'
-      ? await parsePdfRoster(request.filePath, map)
+      ? await parsePdfRoster(request.filePath, map, { rosterDate: request.rosterDate })
       : await parseCsvRoster(request.filePath, map);
   } catch (err) {
     return failed(request, startedAt, `Parsing failed: ${err instanceof Error ? err.message : String(err)}`, issues);

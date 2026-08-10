@@ -175,17 +175,19 @@ export const SACRAMENTO_CSV: SacramentoProfile = {
 export const SACRAMENTO_PDF: SacramentoProfile = {
   facility: 'sacramento',
   sourceType: 'pdf_text',
-  version: 1,
-  label: 'Sacramento County Main Jail — PDF roster',
+  version: 2,
+  label: 'Sacramento County Main Jail — Active Inmate Basic Roster (PDF)',
   effectiveFrom: '2020-01-01',
   changeNote:
-    'Initial profile. The PDF is a paginated listing, not a table; layout is inferred per page. Expect to publish v2 once a real roster is available.',
+    'v2: matched to real SACJAILSCAN / Active Inmate Basic Roster layout (Name, XREF, Housing, Classification, Gender, DOB). ' +
+    'No per-row booking date — Booked is the roster header date. Booking Number is synthesized as XREF@rosterDate. ' +
+    'v1 expected a pipe-delimited table that real county exports do not use.',
   expectedHeaders: [
-    'Booking Number', 'Name', 'DOB', 'Sex', 'Booked', 'Housing', 'Charges', 'Bail',
+    'Name', 'XREF', 'Booking Number', 'DOB', 'Gender', 'Housing', 'Booked',
   ],
   columnMap: {
     facility: 'sacramento',
-    label: 'Sacramento County Main Jail — PDF roster',
+    label: 'Sacramento County Main Jail — Active Inmate Basic Roster (PDF)',
     dateFormats: ['mm/dd/yyyy', 'iso'],
     nameOrder: 'last_first',
     chargeSeparator: ';',
@@ -193,17 +195,18 @@ export const SACRAMENTO_PDF: SacramentoProfile = {
   },
   normalizationRules: [
     'Same rules as the CSV profile — normalization is a property of the field, not the document.',
-    'Page and row are recorded on every observation, so a value traces to a place in the PDF.',
+    'Active Inmate Basic Roster: reassembled from fragmented text layer; XREF is the person key.',
+    'Booked date is the roster header date (point-in-time population), not an intake timestamp.',
     'OCR is used only when the page has no text layer, and the source type is recorded as pdf_ocr so the weaker provenance is visible.',
   ],
   validation: {
     requiredFields: ['bookedAt'],
     expectedCoverage: [
-      // Lower than the CSV throughout: a PDF row that failed to reassemble loses
-      // fields, and holding it to the CSV's standard would fail real rosters.
+      // Real jail-scan PDFs have strong name/XREF/DOB coverage; no charges/bail columns.
       { field: 'last', minimumPercent: 85 },
-      { field: 'externalBookingId', minimumPercent: 60 },
-      { field: 'dateOfBirth', minimumPercent: 50 },
+      { field: 'externalPersonId', minimumPercent: 85 },
+      { field: 'externalBookingId', minimumPercent: 85 },
+      { field: 'dateOfBirth', minimumPercent: 85 },
     ],
     minimumRows: 5,
     maximumRowFailurePercent: 25,

@@ -123,7 +123,7 @@ async function runCount(token, n) {
 
   const byHash = new Map(files.map((f) => [f.sha256, f]));
   const CHUNK = 25;
-  const MAX_RETRIES = 3;
+  const MAX_RETRIES = 8;
 
   for (let i = 0; i < toUpload.length; i += CHUNK) {
     const slice = toUpload.slice(i, i + CHUNK);
@@ -152,8 +152,13 @@ async function runCount(token, n) {
         break;
       } catch (err) {
         if (attempt >= MAX_RETRIES) throw err;
-        console.warn(`  batch retry ${attempt}: ${err.message}`);
-        await new Promise((r) => setTimeout(r, 500 * attempt));
+        const retryAfterSec = Number(err.body?.retryAfter) || 0;
+        // Production upload limiter is ~10/min; honor retryAfter instead of burning attempts.
+        const waitMs = err.status === 429
+          ? Math.max(1000, (retryAfterSec + 2) * 1000)
+          : 500 * attempt;
+        console.warn(`  batch retry ${attempt}: ${err.message} (waiting ${Math.round(waitMs / 1000)}s)`);
+        await new Promise((r) => setTimeout(r, waitMs));
       }
     }
   }

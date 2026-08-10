@@ -115,9 +115,24 @@ let monitorInterval: ReturnType<typeof setInterval> | null = null;
 /**
  * Start a periodic Redis memory monitor.
  * Logs warnings at the configured thresholds.
+ *
+ * Does nothing when the workers are disabled. What this monitor exists to catch
+ * is Redis running out of memory under queue load, and with DISABLE_WORKERS=true
+ * there are no queues — so the only thing it can produce on a host without Redis
+ * is noise. The guard lives here rather than at the call site because the
+ * connection is lazy: this monitor's first INFO is what opens the socket, so
+ * starting it is what makes Redis mandatory again. Measured on a host with no
+ * Redis and workers disabled: it logged an unbroken stream of contentless
+ * `[Redis] Connection error:` lines, ~2 a minute at the default interval, which
+ * is exactly the noise lazyConnect was introduced to remove.
  */
 export function startRedisMemoryMonitor(config: RedisMemoryConfig = DEFAULT_CONFIG): void {
   if (monitorInterval) return;
+
+  if (process.env.DISABLE_WORKERS === 'true') {
+    console.log('[RedisMemoryAlert] Monitor not started — no queues to watch (DISABLE_WORKERS=true)');
+    return;
+  }
 
   monitorInterval = setInterval(async () => {
     const snapshot = await getRedisMemorySnapshot(config);

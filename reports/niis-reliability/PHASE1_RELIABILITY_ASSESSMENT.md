@@ -51,7 +51,15 @@ These were uploaded through **Import Inspection** (analysis only — **nothing w
 
 **Finding R-07 (parser / profile):** Real Sacramento PDF layout does not match the v1 PDF profile. Import Inspection correctly warns at 45% confidence; a successful “Would import with warnings” is **not** evidence that 67 new inmates can be extracted.
 
-**Finding R-08 (08/10 file integrity):** Before scoring the 67, confirm `SACJAILSCAN08-10-2026.pdf` is the complete 08/10 Active Inmate Basic Roster (expected: multi-page, date line 08/10/2026). Current inspection text says **08/09/2026** on a **1-page** file.
+**Finding R-08 (08/10 file integrity) — CONFIRMED:** Administrator re-attached `SACJAILSCAN08-10-2026.pdf` to the agent (saved under `fixtures/sacramento/real/`). SHA-256 **`47f0955b913e0edf…`** is **identical** to the Import Inspection file. Local extract shows:
+
+- **1 page** only  
+- Header: `Active Inmate Basic Roster **08/09/2026** 06:20` (not 08/10)  
+- Footer: `Page **2 of 86**`  
+- Names begin at ALFARO… (ALDANA absent)  
+- **0 / 67** ground-truth names appear on this fragment  
+
+This is a **single-page export of page 2 of an 86-page roster dated 08/09**, not a complete 08/10 daily roster.
 
 ### 2.3 Sample fixtures still in git (not the ground-truth pair)
 

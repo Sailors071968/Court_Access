@@ -841,4 +841,145 @@ export const intelligenceApi = {
     if (!res.ok) throw new Error(await describeFailure(res, body));
     return body;
   },
+
+  // -------------------------------------------------------------------------
+  // Bulk Import Jobs
+  // -------------------------------------------------------------------------
+
+  createImportJob: (body: {
+    facility?: string;
+    rosterDate?: string;
+    label?: string;
+    autoProcess?: boolean;
+    files: { name: string; sizeBytes: number; sha256: string }[];
+  }) =>
+    call<{ job: ImportJob; decisions: ImportJobDecision[] }>('/import-jobs', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    }),
+
+  listImportJobs: (params: { limit?: number; offset?: number; status?: string } = {}) =>
+    call<{ total: number; jobs: ImportJob[] }>(`/import-jobs${query(params)}`),
+
+  importJob: (jobId: string) => call<ImportJob>(`/import-jobs/${jobId}`),
+
+  importJobFiles: (jobId: string, params: { status?: string; limit?: number; offset?: number } = {}) =>
+    call<{ total: number; files: ImportJobFile[] }>(`/import-jobs/${jobId}/files${query(params)}`),
+
+  importJobPending: (jobId: string) =>
+    call<{ files: ImportJobFile[] }>(`/import-jobs/${jobId}/pending`),
+
+  processImportJob: (jobId: string) =>
+    call<{ started: string[]; skipped: { uploadId: string; reason: string }[] }>(
+      `/import-jobs/${jobId}/process`,
+      { method: 'POST', body: '{}' },
+    ),
+
+  cancelImportJob: (jobId: string, reason?: string) =>
+    call<ImportJob>(`/import-jobs/${jobId}/cancel`, {
+      method: 'POST',
+      body: JSON.stringify({ reason }),
+    }),
+
+  /**
+   * Upload one chunk of an import job. Each file must be paired with its jobFileId.
+   */
+  async uploadImportJobBatch(
+    jobId: string,
+    items: { jobFileId: string; file: File }[],
+    batchIndex: number,
+  ): Promise<{
+    accepted: unknown[];
+    rejected: { jobFileId?: string; filename: string; reason: string }[];
+    autoProcessStarted: boolean;
+    job: ImportJob;
+  }> {
+    const form = new FormData();
+    form.append('batchIndex', String(batchIndex));
+    for (const item of items) {
+      form.append('jobFileId', item.jobFileId);
+      form.append('files', item.file, item.file.name);
+    }
+    const res = await authorizedFetch(`${API_BASE}/import-jobs/${jobId}/uploads`, {
+      method: 'POST',
+      body: form,
+    });
+    const body = await res.text();
+    if (!res.ok) {
+      if (res.status === 413) {
+        throw new Error('Upload batch rejected as too large (HTTP 413).');
+      }
+      throw new Error(await describeFailure(res, body));
+    }
+    return JSON.parse(body) as {
+      accepted: unknown[];
+      rejected: { jobFileId?: string; filename: string; reason: string }[];
+      autoProcessStarted: boolean;
+      job: ImportJob;
+    };
+  },
 };
+
+export interface ImportJobMetrics {
+  uploadDurationMs: number | null;
+  processingDurationMs: number | null;
+  filesPerMinute: number | null;
+  rowsPerSecond: number | null;
+  parserThroughputRowsPerSec: number | null;
+  importQueueDepth: number;
+  averageFileSizeBytes: number | null;
+  totalRowsRead: number;
+  lastUpdatedAt: string;
+}
+
+export interface ImportJob {
+  jobId: string;
+  facility: string;
+  rosterDate: string | null;
+  label: string | null;
+  status: string;
+  autoProcess: boolean;
+  createdByName: string | null;
+  createdAt: string;
+  updatedAt: string;
+  totalFiles: number;
+  filesPending: number;
+  filesUploading: number;
+  filesUploaded: number;
+  filesSkippedDuplicate: number;
+  filesFailedUpload: number;
+  filesQueued: number;
+  filesProcessing: number;
+  filesCompleted: number;
+  filesFailedProcessing: number;
+  totalBytes: number;
+  uploadedBytes: number;
+  currentFilename: string | null;
+  progressPercent: number;
+  metrics: ImportJobMetrics | null;
+  failureReason: string | null;
+}
+
+export interface ImportJobDecision {
+  name: string;
+  sha256: string;
+  action: 'upload' | 'skip_duplicate';
+  existingUploadId?: string;
+  jobFileId: string;
+}
+
+export interface ImportJobFile {
+  jobFileId: string;
+  originalName: string;
+  sizeBytes: number;
+  sha256: string;
+  fileKind: string;
+  status: string;
+  uploadId: string | null;
+  batchIndex: number | null;
+  error: string | null;
+  duplicateOfUploadId: string | null;
+  uploadDurationMs: number | null;
+  processDurationMs: number | null;
+  rowsRead: number | null;
+}

@@ -65,6 +65,10 @@ export interface StoreUploadArgs {
   uploadedByName?: string;
   rosterDate?: string;
   rosterKind?: 'full_population' | 'incremental';
+  jobId?: string;
+  jobFileId?: string;
+  /** When set, the digested hash must match or the upload is refused. */
+  expectedSha256?: string;
 }
 
 export interface StoredUpload {
@@ -139,6 +143,15 @@ export async function storeUpload(args: StoreUploadArgs): Promise<StoredUpload |
   const sha256 = hash.digest('hex');
   const fileKind = extension === '.pdf' ? 'pdf' : 'csv';
 
+  if (args.expectedSha256 && args.expectedSha256.toLowerCase() !== sha256) {
+    await unlink(storedPath).catch(() => undefined);
+    return {
+      error:
+        `Fingerprint mismatch for "${args.originalName}": ` +
+        `expected ${args.expectedSha256.slice(0, 12)}…, received ${sha256.slice(0, 12)}….`,
+    };
+  }
+
   const priorUpload = await prisma.inmateRosterUpload.findFirst({
     where: { sha256, facility: args.facility },
     orderBy: { uploadedAt: 'desc' },
@@ -159,6 +172,8 @@ export async function storeUpload(args: StoreUploadArgs): Promise<StoredUpload |
       uploadedById: args.uploadedById,
       uploadedByName: args.uploadedByName ?? null,
       status: 'uploaded',
+      jobId: args.jobId ?? null,
+      jobFileId: args.jobFileId ?? null,
     },
   });
 
@@ -187,9 +202,18 @@ export async function storeUpload(args: StoreUploadArgs): Promise<StoredUpload |
  * disagreement would be recorded as a change from the OCR value to the real one,
  * which reads as though the jail changed something when only the source did.
  */
+export type UploadSettledResult = {
+  ok: boolean;
+  reason?: string;
+  startedAt: Date;
+  durationMs: number;
+  rowsRead?: number;
+};
+
 export async function startProcessing(args: {
   uploadIds: string[];
   userId: string;
+  onUploadSettled?: (uploadId: string, result: UploadSettledResult) => Promise<void> | void;
 }): Promise<{ started: string[]; skipped: { uploadId: string; reason: string }[] }> {
   const started: string[] = [];
   const skipped: { uploadId: string; reason: string }[] = [];
@@ -240,32 +264,50 @@ export async function startProcessing(args: {
   // Sequentially in the background. Concurrent imports of the same facility would
   // interleave observations of the same bookings and produce conflicts that are an
   // artefact of the scheduling rather than of the sources.
-  void processSequentially(started, args.userId);
+  void processSequentially(started, args.userId, args.onUploadSettled);
 
   return { started, skipped };
 }
 
-async function processSequentially(uploadIds: string[], userId: string): Promise<void> {
+async function processSequentially(
+  uploadIds: string[],
+  userId: string,
+  onUploadSettled?: (uploadId: string, result: UploadSettledResult) => Promise<void> | void,
+): Promise<void> {
   for (const uploadId of uploadIds) {
+    const startedAt = new Date();
     try {
-      await processOne(uploadId, userId);
+      const settled = await processOne(uploadId, userId);
+      if (onUploadSettled) await onUploadSettled(uploadId, settled);
     } catch (err) {
+      const reason = err instanceof Error ? err.message : String(err);
       await prisma.inmateRosterUpload.update({
         where: { uploadId },
         data: {
           status: 'failed',
           stage: null,
-          failureReason: err instanceof Error ? err.message : String(err),
+          failureReason: reason,
           processedAt: new Date(),
         },
       }).catch(() => undefined);
+      if (onUploadSettled) {
+        await onUploadSettled(uploadId, {
+          ok: false,
+          reason,
+          startedAt,
+          durationMs: Date.now() - startedAt.getTime(),
+        });
+      }
     }
   }
 }
 
-async function processOne(uploadId: string, userId: string): Promise<void> {
+async function processOne(uploadId: string, userId: string): Promise<UploadSettledResult> {
   const upload = await prisma.inmateRosterUpload.findUnique({ where: { uploadId } });
-  if (!upload) return;
+  const wallStart = new Date();
+  if (!upload) {
+    return { ok: false, reason: 'Upload disappeared before processing.', startedAt: wallStart, durationMs: 0 };
+  }
 
   const startedAt = Date.now();
   await prisma.inmateRosterUpload.update({
@@ -302,6 +344,7 @@ async function processOne(uploadId: string, userId: string): Promise<void> {
     onStage: writeStage,
   });
 
+  const durationMs = Date.now() - startedAt;
   await prisma.inmateRosterUpload.update({
     where: { uploadId },
     data: {
@@ -309,13 +352,21 @@ async function processOne(uploadId: string, userId: string): Promise<void> {
       stage: outcome.status === 'completed' ? 'complete' : null,
       batchId: outcome.batchId,
       processedAt: new Date(),
-      durationMs: Date.now() - startedAt,
+      durationMs,
       failureReason: outcome.failureReason ?? null,
       resultCounts: outcome.counts as unknown as object,
       progressDone: outcome.counts.total,
       progressTotal: outcome.counts.total,
     },
   });
+
+  return {
+    ok: outcome.status === 'completed',
+    reason: outcome.failureReason ?? undefined,
+    startedAt: wallStart,
+    durationMs,
+    rowsRead: outcome.counts.total,
+  };
 }
 
 // ---------------------------------------------------------------------------

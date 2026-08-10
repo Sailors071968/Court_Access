@@ -339,6 +339,8 @@ async function startServer() {
   await registerIntelligencePlatformRoutes(app);
   const { registerInmateOperationsRoutes } = await import('./intelligence/inmates/operationsRoutes.js');
   await registerInmateOperationsRoutes(app);
+  const { registerImportJobRoutes } = await import('./intelligence/inmates/importJobRoutes.js');
+  await registerImportJobRoutes(app);
   const { registerInspectionRoutes } = await import('./intelligence/inmates/inspection/inspectionRoutes.js');
   await registerInspectionRoutes(app);
 

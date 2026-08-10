@@ -10,7 +10,7 @@ import {
   ChevronLeft, ChevronRight, ChevronDown,
   FileText, Tag, Upload, BarChart3, Globe, Activity, Server, BookOpen, CheckSquare, FileQuestion,
   ShieldCheck, LayoutList, Scale,
-  Users, History, ListChecks, Cog, Gauge, UserSearch, FileSearch, Columns3, FileCheck2,
+  Users, History, ListChecks, Cog, Gauge, UserSearch, FileSearch, Columns3, FileCheck2, ListOrdered,
 } from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
 import { ROLE_PERMISSIONS } from '../../constants';
@@ -92,6 +92,7 @@ const navItems: NavItem[] = [
           { id: 'niis-ops', label: 'Morning Operations', path: '/admin/intelligence', icon: <Gauge size={14} /> },
           { id: 'niis-dashboard', label: 'Import Summary', path: '/admin/intelligence/import-summary', icon: <LayoutList size={14} /> },
           { id: 'niis-upload', label: 'Upload Files', path: '/admin/intelligence/upload', icon: <Upload size={14} /> },
+          { id: 'niis-import-jobs', label: 'Import Jobs', path: '/admin/intelligence/import-jobs', icon: <ListOrdered size={14} /> },
           { id: 'niis-queue', label: 'Processing Queue', path: '/admin/intelligence/queue', icon: <Activity size={14} /> },
           { id: 'niis-inspect', label: 'Import Inspection', path: '/admin/intelligence/inspect', icon: <FileSearch size={14} /> },
           { id: 'niis-mappings', label: 'Parser Mapping', path: '/admin/intelligence/mappings', icon: <Columns3 size={14} /> },

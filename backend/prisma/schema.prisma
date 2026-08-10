@@ -4228,10 +4228,102 @@ model InmateRosterUpload {
    *  did processing this file do" without joining. */
   resultCounts  Json?
 
+  /** Optional link to a bulk Import Job (historical / multi-file imports). */
+  jobId         String?
+  jobFileId     String?
+
   @@index([facility, uploadedAt])
   @@index([status, uploadedAt])
   @@index([batchId])
+  @@index([jobId])
   @@map("inmate_roster_uploads")
+}
+
+/**
+ * A bulk Import Job: one operator action that may cover hundreds or thousands of
+ * roster files. Survives browser close; the client resumes by re-selecting the
+ * folder and matching sha256 fingerprints to pending job files.
+ */
+model InmateImportJob {
+  jobId                   String   @id @default(uuid())
+  facility                String
+  rosterDate              DateTime?
+  label                   String?
+  /** pending | uploading | queued | processing | completed | failed | cancelled */
+  status                  String   @default("pending")
+  autoProcess             Boolean  @default(true)
+
+  createdById             String
+  createdByName           String?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  uploadStartedAt         DateTime?
+  uploadFinishedAt        DateTime?
+  processStartedAt        DateTime?
+  processFinishedAt       DateTime?
+  cancelledAt             DateTime?
+  cancelReason            String?
+
+  totalFiles              Int      @default(0)
+  filesPending            Int      @default(0)
+  filesUploading          Int      @default(0)
+  filesUploaded           Int      @default(0)
+  filesSkippedDuplicate   Int      @default(0)
+  filesFailedUpload       Int      @default(0)
+  filesQueued             Int      @default(0)
+  filesProcessing         Int      @default(0)
+  filesCompleted          Int      @default(0)
+  filesFailedProcessing   Int      @default(0)
+
+  totalBytes              BigInt   @default(0)
+  uploadedBytes           BigInt   @default(0)
+  currentFilename         String?
+  failureReason           String?
+
+  /** Operational metrics snapshot (durations, throughput, queue depth). */
+  metrics                 Json?
+
+  files                   InmateImportJobFile[]
+
+  @@index([status, createdAt])
+  @@index([facility, createdAt])
+  @@index([createdById, createdAt])
+  @@map("inmate_import_jobs")
+}
+
+model InmateImportJobFile {
+  jobFileId             String   @id @default(uuid())
+  jobId                 String
+  job                   InmateImportJob @relation(fields: [jobId], references: [jobId], onDelete: Cascade)
+
+  originalName          String
+  sizeBytes             Int
+  sha256                String
+  fileKind              String
+
+  /** pending | uploading | uploaded | skipped_duplicate | failed_upload | queued | processing | completed | failed_processing | cancelled */
+  status                String   @default("pending")
+  uploadId              String?
+  batchIndex            Int?
+  error                 String?
+  duplicateOfUploadId   String?
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  uploadStartedAt       DateTime?
+  uploadFinishedAt      DateTime?
+  processStartedAt      DateTime?
+  processFinishedAt     DateTime?
+  uploadDurationMs      Int?
+  processDurationMs     Int?
+  rowsRead              Int?
+
+  @@unique([jobId, sha256])
+  @@index([jobId, status])
+  @@index([sha256])
+  @@index([uploadId])
+  @@map("inmate_import_job_files")
 }
 
 /**

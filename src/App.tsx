@@ -88,6 +88,7 @@ import { ProductionReadiness } from './pages/admin/ProductionReadiness';
 // New Inmate Intelligence System — administrator only
 import { IntelligenceDashboard } from './pages/admin/intelligence/IntelligenceDashboard';
 import { UploadFiles } from './pages/admin/intelligence/UploadFiles';
+import { ImportJobs, ImportJobDetail } from './pages/admin/intelligence/ImportJobs';
 import { ProcessingQueue } from './pages/admin/intelligence/ProcessingQueue';
 import { NewInmates } from './pages/admin/intelligence/NewInmates';
 import { PersonDetailPage } from './pages/admin/intelligence/PersonDetail';
@@ -514,6 +515,22 @@ function App() {
             element={
               <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
                 <UploadFiles />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/intelligence/import-jobs"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <ImportJobs />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/intelligence/import-jobs/:jobId"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <ImportJobDetail />
               </ProtectedRoute>
             }
           />

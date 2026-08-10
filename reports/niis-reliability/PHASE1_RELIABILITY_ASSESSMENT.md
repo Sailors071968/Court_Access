@@ -1,7 +1,7 @@
 # NIIS Reliability Assessment — Phase 1 Validation Audit
 
-**Status:** Ground-truth list received (67 names). **Mission score vs repository: 0/67 detected.** PDFs inspected only (not imported); PDF parser recognized 0 columns; 08/10 file integrity still suspect.  
-**Date of audit:** 2026-08-10 (updated after SACJAILSCAN Import Inspection)  
+**Status:** Ground-truth list received (67 names). **Mission score vs repository: 0/67 detected.** PDFs inspected only (not imported); PDF parser recognized 0 columns. **EC2 disk search confirmed: neither target PDF remains on production** (inspect stages under tmpfs and deletes). Full 67-name text match **blocked** until durable copies are re-provided.  
+**Date of audit:** 2026-08-10 (updated after EC2 fetch confirmation)  
 **Directive:** Stop feature development until core new-inmate detection is validated against known ground truth. **No code fixes are implemented in this deliverable.**
 
 ---
@@ -13,12 +13,13 @@
 | Ground-truth list available? | **Yes** — 67 names in `ground-truth-67-new-inmates-2026-08-10.md` |
 | How many of the 67 are in NIIS as new inmates today? | **0 / 67** |
 | Were the SACJAILSCAN PDFs imported into the repository? | **No** — Import Inspection only |
-| Can the PDF parser extract inmate rows from these files today? | **No** — 0 columns recognized; 45% confidence |
-| Is the uploaded 08/10 PDF a complete daily roster? | **Doubtful** — 1 page, header date 08/09/2026; ALDANA sorts before ALFARO but is absent from sample |
+| Can the PDF parser extract inmate rows from these files today? | **No** — 0 columns recognized (45% on 08/09 & truncated 08/10; 75% on compressed 08/10) |
+| Durable PDF bytes on EC2 after inspect? | **No** — confirmed absent from `/var/lib/courtaccess/niis-uploads` and inspect tmp |
+| Is the compressed 08/10 PDF a complete daily roster? | **Unconfirmed** — 59 pages vs 87 on 08/09; roster date not in stored sample lines |
 | Production “new inmates” count | **10** (sample-fixture people only — not any of the 67) |
 | Feature work status | **Stopped.** No fixes implemented. |
 
-**Primary finding:** Against the administrator’s 67-name ground truth, NIIS currently has **zero true positives**. Failure is upstream of identity/change detection: real PDFs were never parsed into inmate rows, and the 08/10 upload does not look like a full same-format roster.
+**Primary finding:** Against the administrator’s 67-name ground truth, NIIS currently has **zero true positives**. Failure is upstream of identity/change detection: real PDFs were never ingested as person rows (inspect-only + profile mismatch), and the PDF bytes needed for a full offline name match are gone from production after inspect.
 
 ---
 
@@ -218,19 +219,21 @@ PDF parsed → CSV parsed → Normalized → Identity candidates → Merged
 
 ### 5.2 Counts — **real 08/09→08/10 county pair**
 
-| Stage | 08/09 PDF | 08/10 PDF | Disposition |
-|---|---:|---:|---|
-| File received (Import Inspection) | yes (87 pp) | yes (1 pp) | Bytes stored for inspection |
-| PDF text layer present | yes | yes | OCR not used |
-| Columns recognized | **0** | **0** | Profile mismatch |
-| Inmate rows extracted | **0** | **0** | Multi-line layout not mapped |
-| Normalized | 0 | 0 | No rows |
-| Identity candidates | 0 | 0 | No rows |
-| Merged | 0 | 0 | No rows |
-| Review queue | 0 | 0 | No rows |
-| Change detection (these files) | 0 | 0 | Never imported |
-| Report generation (these 67) | 0 | 0 | Never classified as new |
-| **Disappearances** | — | — | All 67 lost at **parser/profile** (and 08/10 file may be incomplete) |
+| Stage | 08/09 PDF | 08/10 truncated | 08/10 compressed | Disposition |
+|---|---:|---:|---:|---|
+| File received (Import Inspection) | yes (87 pp) | yes (1 pp) | yes (59 pp) | Staged under `/tmp/niis-inspection` then **deleted** |
+| Bytes durable on EC2 after inspect | **no** | **no** | **no** | Confirmed by production disk search |
+| PDF text layer present | yes | yes | yes | OCR not used |
+| Columns recognized | **0** | **0** | **0** | Profile mismatch |
+| Inmate rows extracted | **0** | **0** | **0** | Multi-line layout not mapped |
+| Normalized | 0 | 0 | 0 | No rows |
+| Identity candidates | 0 | 0 | 0 | No rows |
+| Merged | 0 | 0 | 0 | No rows |
+| Review queue | 0 | 0 | 0 | No rows |
+| Change detection (these files) | 0 | 0 | 0 | Never imported |
+| Report generation (these 67) | 0 | 0 | 0 | Never classified as new |
+| Full-text match of 67 names | — | 0/67 on local fixture only | **not run** | Target PDF bytes unavailable |
+| **Disappearances** | — | — | — | All 67 lost at **parser/profile + non-persist inspect**; 08/10 completeness unconfirmed |
 
 ### 5.3 Counts — production morning snapshot (contaminated)
 
@@ -351,7 +354,7 @@ Scores are **evidence grades**, not production accuracy claims against the 67. S
 | Subsystem | Score | Evidence |
 |---|---:|---|
 | CSV parser | **2** | Sample fixtures parse; profile verification script exists; **no real export freeze** |
-| PDF parser | **1** | Real SACJAILSCAN: 45% confidence, **0 columns**, 0 rows for 67; layout mismatch confirmed |
+| PDF parser | **1** | Real SACJAILSCAN: 0 columns / 0 rows for 67; layout mismatch confirmed (45–75% confidence depending on file) |
 | Normalization | **3** | Unit tests + Sacramento field rules; not scored on 67 |
 | Identity resolution | **1** | Collapsed acceptance clones into 10 people with ~1.8k bookings each — high risk under repeated similar rows |
 | Change detection | **2** | Pure `classifyPresence` is clear; API/report “new” diverges from returning |
@@ -365,41 +368,40 @@ Scores are **evidence grades**, not production accuracy claims against the 67. S
 
 | ID | Root cause | Effect on 67 audit |
 |---|---|---|
-| RC-1 | **Real 08/09 and 08/10 county rosters not in workspace** | Cannot enumerate 67 or attribute misses |
-| RC-2 | **No administrator spreadsheet of the 67** attached to the run | Cannot build Expected→NIIS table |
+| RC-1 | **Target PDF bytes not durable after Import Inspection** | Full-text match of 67 names against 08/10 compressed roster **cannot run** until files are re-provided via a persisting path |
+| RC-2 | *(resolved)* Administrator 67-name list attached | Expected→NIIS table built; all Absent in repository |
 | RC-3 | **Production DB polluted by bulk acceptance** | Morning counts (10 / 14,619) are meaningless for county validation |
 | RC-4 | **“New inmate” product semantics vs “newly booked on roster day”** | Returning people can appear on new-inmate report/API |
 | RC-5 | **Identity merge on name+DOB under synthetic clones** | Inflates booking histories; obscures clean presence tests |
 | RC-6 | **Sample fixtures documented as non-final** | Success on samples does not prove county headers |
 | RC-7 | **Sacramento PDF profile expects wrong layout** | Real roster is multi-line Name/XREF/Housing; v1 profile expects single-line BOOKING/NAME… → 0 columns |
-| RC-8 | **Import Inspection ≠ Import** | Analysis path did not ingest; stuck Import Jobs never received bytes |
-| RC-9 | **08/10 PDF likely incomplete / wrong date** | 1 page, header 08/09/2026, ALDANA absent while ALFARO present |
+| RC-8 | **Import Inspection ≠ Import** | Analysis path did not ingest; stuck Import Jobs never received bytes (08/09 nginx 504) |
+| RC-9 | **08/10 file integrity / completeness** | Truncated upload was wrong date (1 pp / 08/09 header). Compressed replacement is 59 pp vs 87 on 08/09 — completeness unconfirmed |
+| RC-10 | **Inspect temp deleted after analysis** | EC2 confirmed: no matching SHA/size under `niis-uploads`; only DB inspection metadata remains |
 
 ---
 
 ## 12. Recommended corrections (do not implement until approved)
 
-1. **C-1 Provide ground-truth inputs**  
-   - Real Sacramento CSV (and PDF if used) for **2026-08-09** and **2026-08-10**.  
-   - Spreadsheet/list of the **67** expected newly booked (name, DOB, booking #, X-Ref if available).
+1. **C-1 Re-provide durable PDFs (blocker)**  
+   - Place complete `SACJAILSCAN08-09-2026.pdf` and `SACJAILSCAN08-10-2026 (1)_compressed.pdf` (or full 08/10) onto the agent under `/tmp/sacjail/` **or** upload via NIIS **Upload Files** so bytes persist under `/var/lib/courtaccess/niis-uploads`.  
+   - Confirm 08/10 roster header date is **08/10/2026** and the file is complete (59 vs 87 pages).  
+   - Optional: Sacramento CSV exports for both dates; DOB / booking # / X-Ref for the 67 if available.
 
 2. **C-2 Isolate a clean validation environment**  
    - Fresh database **or** wipe Sacramento NIIS tables on a staging clone.  
    - Do **not** run acceptance clone jobs into the validation DB.
 
-3. **C-3 Re-run the audit protocol**  
-   - Ingest 08/09 → ingest 08/10 (CSV; then PDF if dual-source).  
-   - Export stage counts after each pipeline stage.  
-   - Classify every 08/10 inmate into exactly one category.  
-   - Fill the 67-row Expected→NIIS table with zero unexplained blanks.  
-   - Compute precision / recall / FP / FN.
+3. **C-3 Finish offline text match, then re-run audit protocol**  
+   - Extract full text; produce found/missing lists for all 67 against 08/10 (and presence on 08/09).  
+   - Only after that: controlled ingest 08/09 → 08/10 on a clean DB; stage counts; reclassify; recompute precision / recall.
 
 4. **C-4 Resolve product definition of “new”**  
    - Administrator confirms: first-ever in repository **vs** newly booked on this roster day **vs** not on prior full roster.  
    - Align `classifyPresence`, new-inmates API, and daily report to that definition **after** the audit documents the mismatch (no silent fix before measurement).
 
 5. **C-5 Only then implement code fixes**  
-   - Targeting root causes measured in the completed 67-row table.
+   - Targeting root causes measured in the completed 67-row table (likely PDF multi-line profile + persist path).
 
 ---
 
@@ -408,10 +410,10 @@ Scores are **evidence grades**, not production accuracy claims against the 67. S
 | Deliverable | Status |
 |---|---|
 | Complete Reliability Assessment | **This document** (blocked sections explicit) |
-| Processing Statistics | Partial (prod contaminated + sample file stats); county pair **N/A** |
-| Missing Inmate Analysis | **All 67 missing as inputs** — see §4 |
-| False Positive Analysis | Sample/prod semantic FPs noted (returning-as-new); full FP list **blocked** |
-| False Negative Analysis | **Blocked** — need 67 list |
+| Processing Statistics | Partial (prod contaminated + inspection metadata); county ingest **N/A** |
+| Missing Inmate Analysis | **All 67 Absent in repository** — see §4; full PDF text match **blocked** (bytes gone) |
+| False Positive Analysis | Sample/prod semantic FPs noted (returning-as-new); county FP list **blocked** until ingest |
+| False Negative Analysis | **67 / 67** vs repository; text-layer presence on compressed 08/10 **not yet measured** |
 | Root Cause Analysis | §11 |
 | Recommended Corrections | §12 — **no fixes implemented** |
 
@@ -419,11 +421,12 @@ Scores are **evidence grades**, not production accuracy claims against the 67. S
 
 ## 14. Immediate ask to the administrator
 
-Ground-truth **67 names are in hand**. Remaining unblocks before any fix work:
+Ground-truth **67 names are in hand**. Production disk search confirmed both SACJAILSCAN PDFs are **gone** after Import Inspection. Remaining unblocks before any fix work:
 
-1. **Re-provide / confirm** a complete `SACJAILSCAN08-10-2026.pdf` (multi-page Active Inmate Basic Roster dated **08/10/2026**). Current file fails basic integrity checks.  
-2. If available, Sacramento **CSV** exports for both dates.  
-3. Confirm OK to wipe/use a **clean validation DB** before any ingest attempt.  
-4. After a correct 08/10 file exists, re-run Import Inspection; only then consider a controlled import — **still no feature/parser code changes until you approve the root-cause package**.
+1. **Re-attach durable copies** of `SACJAILSCAN08-09-2026.pdf` and the full 08/10 roster (compressed or original) — prefer NIIS **Upload Files** (persist) over Inspect-only, or drop onto the agent at `/tmp/sacjail/`.  
+2. Confirm the 08/10 file is dated **08/10/2026** and is complete (page count vs 08/09).  
+3. If available, Sacramento **CSV** exports for both dates.  
+4. Confirm OK to wipe/use a **clean validation DB** before any ingest attempt.  
+5. After durable files exist: extract text → match all 67 → only then consider controlled import — **still no feature/parser code changes until you approve the root-cause package**.
 
 **No NIIS feature development** under this directive until corrections are approved.

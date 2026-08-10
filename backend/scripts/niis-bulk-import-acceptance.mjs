@@ -49,38 +49,59 @@ function sha256(buf) {
   return createHash('sha256').update(buf).digest('hex');
 }
 
+let activeToken = null;
+
 async function login() {
-  const res = await fetch(`${base}/api/auth/login`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ email, password }),
-  });
-  const body = await res.json();
-  if (!res.ok) throw new Error(`login failed: ${res.status} ${JSON.stringify(body)}`);
-  const token = body.token || body.accessToken || body.access_token;
-  if (!token) throw new Error(`login response missing token: ${JSON.stringify(body)}`);
-  return token;
+  for (let attempt = 1; attempt <= 6; attempt += 1) {
+    const res = await fetch(`${base}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+    const body = await res.json();
+    if (res.status === 429) {
+      const wait = (Number(body.retryAfter) || 30) + 2;
+      console.warn(`login rate-limited; waiting ${wait}s`);
+      await new Promise((r) => setTimeout(r, wait * 1000));
+      continue;
+    }
+    if (!res.ok) throw new Error(`login failed: ${res.status} ${JSON.stringify(body)}`);
+    const token = body.token || body.accessToken || body.access_token;
+    if (!token) throw new Error(`login response missing token: ${JSON.stringify(body)}`);
+    activeToken = token;
+    return token;
+  }
+  throw new Error('login failed after rate-limit retries');
 }
 
-async function api(token, path, init = {}) {
-  const res = await fetch(`${base}${path}`, {
-    ...init,
-    headers: {
-      ...(init.body instanceof FormData ? {} : { 'content-type': 'application/json' }),
-      authorization: `Bearer ${token}`,
-      ...(init.headers || {}),
-    },
-  });
-  const text = await res.text();
-  let json;
-  try { json = text ? JSON.parse(text) : null; } catch { json = { raw: text }; }
-  if (!res.ok) {
-    const err = new Error(`${init.method || 'GET'} ${path} → ${res.status}: ${text.slice(0, 400)}`);
-    err.status = res.status;
-    err.body = json;
-    throw err;
+async function api(path, init = {}) {
+  if (!activeToken) await login();
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    const res = await fetch(`${base}${path}`, {
+      ...init,
+      headers: {
+        ...(init.body instanceof FormData ? {} : { 'content-type': 'application/json' }),
+        authorization: `Bearer ${activeToken}`,
+        ...(init.headers || {}),
+      },
+    });
+    const text = await res.text();
+    let json;
+    try { json = text ? JSON.parse(text) : null; } catch { json = { raw: text }; }
+    if (res.status === 401 && attempt < 3) {
+      console.warn('token expired; re-logging in');
+      await login();
+      continue;
+    }
+    if (!res.ok) {
+      const err = new Error(`${init.method || 'GET'} ${path} → ${res.status}: ${text.slice(0, 400)}`);
+      err.status = res.status;
+      err.body = json;
+      throw err;
+    }
+    return json;
   }
-  return json;
+  throw new Error(`api failed for ${path}`);
 }
 
 /**
@@ -112,12 +133,12 @@ function makeFiles(n) {
   return files;
 }
 
-async function runCount(token, n) {
+async function runCount(n) {
   const started = Date.now();
   console.log(`\n=== Acceptance: ${n} file(s) ===`);
   const files = makeFiles(n);
 
-  const created = await api(token, '/api/admin/intelligence/import-jobs', {
+  const created = await api('/api/admin/intelligence/import-jobs', {
     method: 'POST',
     body: JSON.stringify({
       facility: 'sacramento',
@@ -150,7 +171,7 @@ async function runCount(token, n) {
         form.append('files', new Blob([f.bytes], { type: 'text/csv' }), f.name);
       }
       try {
-        const result = await api(token, `/api/admin/intelligence/import-jobs/${jobId}/uploads`, {
+        const result = await api(`/api/admin/intelligence/import-jobs/${jobId}/uploads`, {
           method: 'POST',
           body: form,
           headers: {},
@@ -175,15 +196,15 @@ async function runCount(token, n) {
     }
   }
 
-  // Poll until terminal.
+  // Poll until terminal (re-auth on JWT expiry for long 500/1200 runs).
   let job;
   const pollLimit = Math.max(180, n * 3);
   for (let t = 0; t < pollLimit; t += 1) {
-    job = await api(token, `/api/admin/intelligence/import-jobs/${jobId}`);
+    job = await api(`/api/admin/intelligence/import-jobs/${jobId}`);
     if (['completed', 'failed', 'cancelled'].includes(job.status)) break;
     if (job.status === 'queued' || (job.filesUploaded > 0 && job.filesProcessing === 0 && job.filesCompleted === 0 && job.filesPending === 0)) {
       try {
-        await api(token, `/api/admin/intelligence/import-jobs/${jobId}/process`, {
+        await api(`/api/admin/intelligence/import-jobs/${jobId}/process`, {
           method: 'POST',
           body: '{}',
         });

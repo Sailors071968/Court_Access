@@ -40,7 +40,8 @@
     "phase103-108:acquire": "tsx src/policy/pipeline/phase103_108_realDataAcquisition.ts",
     "phase109-114:repair": "tsx src/policy/pipeline/phase109_114_ingestionRepair.ts",
     "phase121-128:operations": "tsx src/policy/pipeline/phase121_128_operationsConsole.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "admin:reset-password": "node ../deploy/admin-reset-password.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1004.0",

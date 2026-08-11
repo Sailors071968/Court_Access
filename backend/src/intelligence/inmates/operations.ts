@@ -303,6 +303,7 @@ export interface MorningOperationsBoard {
     review: string;
     reports: string;
     learningQueue: string;
+    dailyDifference: string;
   };
 }
 
@@ -515,6 +516,7 @@ export async function getMorningOperationsBoard(
       review: '/admin/intelligence/review',
       reports: '/admin/intelligence/reports',
       learningQueue: '/admin/intelligence/learning-queue',
+      dailyDifference: '/admin/intelligence/daily-difference',
     },
   };
 }

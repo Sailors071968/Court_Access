@@ -535,7 +535,90 @@ export interface MorningOperationsBoard {
     review: string;
     reports: string;
     learningQueue: string;
+    dailyDifference: string;
   };
+}
+
+export type DifferenceColor = 'green' | 'blue' | 'yellow' | 'gray' | 'red';
+export type DifferenceClass =
+  | 'new'
+  | 'returning'
+  | 'changed'
+  | 'unchanged'
+  | 'review'
+  | 'departed'
+  | 'unclassified'
+  | 'failed';
+
+export interface DailyDifferenceRow {
+  key: string;
+  name: string;
+  color: DifferenceColor;
+  classification: DifferenceClass;
+  onPrior: boolean;
+  onCurrent: boolean;
+  inmateId: string | null;
+  bookingId: string | null;
+  prior: {
+    recordId: string;
+    lineNumber: number;
+    name: string;
+    bookingNumber: string | null;
+    housing: string | null;
+    bail: string | null;
+    charges: string | null;
+    bookedAt: string | null;
+    resolution: string;
+    confidence: number | null;
+    matchTier: string | null;
+    sourcePage: number | null;
+    inmateId: string | null;
+    bookingId: string | null;
+  } | null;
+  current: DailyDifferenceRow['prior'];
+  why: {
+    summary: string;
+    rules: string[];
+    presence: string | null;
+    identity: string | null;
+    attributeChanges: { field: string; from: string | null; to: string | null }[];
+  };
+  evidence: {
+    uploadId: string | null;
+    filename: string;
+    sha256: string | null;
+    page: number | null;
+    row: number | null;
+    side: 'prior' | 'current';
+    href: string | null;
+  }[];
+}
+
+export interface DailyDifferenceView {
+  facility: string;
+  opsDate: string;
+  priorDate: string;
+  caseId: string | null;
+  status: string | null;
+  reportCertification: 'certified' | 'provisional' | 'missing' | 'failed';
+  prior: {
+    batchId: string;
+    uploadId: string | null;
+    filename: string | null;
+    rosterDate: string | null;
+    count: number;
+  };
+  current: {
+    batchId: string;
+    uploadId: string | null;
+    filename: string | null;
+    rosterDate: string | null;
+    count: number;
+  };
+  counts: Record<DifferenceClass, number>;
+  rows: DailyDifferenceRow[];
+  unclassifiedCount: number;
+  reconcileOk: boolean;
 }
 
 export interface LearningQueueItem {
@@ -847,6 +930,15 @@ export const intelligenceApi = {
 
   morningBoard: (facility = 'sacramento') =>
     call<MorningOperationsBoard>(`/morning-board${query({ facility })}`),
+
+  dailyDifference: (params: {
+    facility?: string;
+    opsDate?: string;
+    caseId?: string;
+    priorBatchId?: string;
+    currentBatchId?: string;
+  } = {}) =>
+    call<DailyDifferenceView>(`/daily-difference${query(params)}`),
 
   learningQueue: (params: { facility?: string; status?: string; limit?: number; offset?: number } = {}) =>
     call<{ total: number; items: LearningQueueItem[] }>(`/learning-queue${query(params)}`),

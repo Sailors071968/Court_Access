@@ -3,13 +3,15 @@
 **One job:** the exact list of every newly booked Sacramento inmate, every morning.  
 **Architecture frozen.** Historical 08/09→08/10 remains the benchmark — but **do not wait** on it; every live day is a validation dataset.
 
+→ **[DAILY_INTELLIGENCE_OPERATIONS_DIRECTIVE.md](./DAILY_INTELLIGENCE_OPERATIONS_DIRECTIVE.md)** — final daily ops phases  
 → **[OPERATIONAL_EXCELLENCE_DIRECTIVE_V1.md](./OPERATIONAL_EXCELLENCE_DIRECTIVE_V1.md)** — governing mission & priority order  
 → **[CONTINUOUS_OPERATIONAL_VALIDATION.md](./CONTINUOUS_OPERATIONAL_VALIDATION.md)**  
 → **[OPERATIONAL_VALIDATION_MODE.md](./OPERATIONAL_VALIDATION_MODE.md)**  
 → **[NIIS_ACCURACY_CERTIFICATION.md](./NIIS_ACCURACY_CERTIFICATION.md)**  
 → **[DAILY_PDF_PRIMARY_WORKFLOW.md](./DAILY_PDF_PRIMARY_WORKFLOW.md)**
 
-**Morning command center:** `/admin/intelligence` → `GET /api/admin/intelligence/morning-board`
+**Morning command center:** `/admin/intelligence` → `GET /api/admin/intelligence/morning-board`  
+**Daily Difference Viewer:** `/admin/intelligence/daily-difference` → `GET /api/admin/intelligence/daily-difference`
 
 ## Gold standard
 

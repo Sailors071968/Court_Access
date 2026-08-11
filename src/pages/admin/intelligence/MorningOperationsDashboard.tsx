@@ -162,7 +162,7 @@ export function MorningOperationsDashboard() {
         </ol>
       </Panel>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatusCard
           label="Certification streak"
           value={`${readiness.consecutivePassStreak} / ${readiness.required}`}
@@ -185,6 +185,13 @@ export function MorningOperationsDashboard() {
           value={board.priorDate}
           hint="Baseline for today's new-inmate detection"
           tone="neutral"
+        />
+        <StatusCard
+          label="Daily Difference Viewer"
+          value={q.comparisonCompleted.answer ? 'Open' : 'Waiting'}
+          hint="Side-by-side prior vs today with why + evidence"
+          tone={q.comparisonCompleted.answer ? 'good' : 'neutral'}
+          to={links.dailyDifference ?? '/admin/intelligence/daily-difference'}
         />
       </div>
 

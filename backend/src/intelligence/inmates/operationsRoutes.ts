@@ -10,6 +10,8 @@
 // it into the main scope changes body parsing for every other route in the file.
 // ============================================================================
 
+import { createReadStream } from 'node:fs';
+import { access } from 'node:fs/promises';
 import type { FastifyInstance, FastifyReply } from 'fastify';
 import multipart from '@fastify/multipart';
 
@@ -147,6 +149,31 @@ export async function registerInmateOperationsRoutes(app: FastifyInstance): Prom
     const upload = await getUpload(uploadId);
     if (!upload) return reply.code(404).send({ error: 'Not found', message: 'No such upload.' });
     return reply.send(upload);
+  });
+
+  /**
+   * Stream immutable upload bytes for evidence review (admin only).
+   * Original evidence is never modified; this is read-only.
+   */
+  app.get('/api/admin/intelligence/uploads/:uploadId/file', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!requireAdministrator(request, reply)) return;
+    const { uploadId } = request.params as { uploadId: string };
+    const row = await prisma.inmateRosterUpload.findUnique({
+      where: { uploadId },
+      select: { storedPath: true, originalName: true, fileKind: true },
+    });
+    if (!row) return reply.code(404).send({ error: 'Not found', message: 'No such upload.' });
+    try {
+      await access(row.storedPath);
+    } catch {
+      return reply.code(404).send({ error: 'Not found', message: 'Stored evidence file is missing from disk.' });
+    }
+    const type = row.fileKind === 'pdf' ? 'application/pdf' : 'text/csv; charset=utf-8';
+    void reply
+      .header('Content-Type', type)
+      .header('Content-Disposition', `inline; filename="${row.originalName.replace(/"/g, '')}"`)
+      .header('Cache-Control', 'private, no-store');
+    return reply.send(createReadStream(row.storedPath));
   });
 
   app.delete('/api/admin/intelligence/uploads/:uploadId', async (request: AuthenticatedRequest, reply: FastifyReply) => {
@@ -303,6 +330,37 @@ export async function registerInmateOperationsRoutes(app: FastifyInstance): Prom
     const query = request.query as { facility?: string };
     const { getMorningOperationsBoard } = await import('./operations.js');
     return reply.send(await getMorningOperationsBoard(query.facility ?? 'sacramento'));
+  });
+
+  /**
+   * Daily Difference Viewer — prior vs current roster with classification colors
+   * and per-inmate "why" + evidence links. Operator verification / diagnostics only.
+   */
+  app.get('/api/admin/intelligence/daily-difference', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!requireAdministrator(request, reply)) return;
+    const query = request.query as {
+      facility?: string;
+      opsDate?: string;
+      caseId?: string;
+      priorBatchId?: string;
+      currentBatchId?: string;
+    };
+    try {
+      const { buildDailyDifferenceView } = await import('./dailyDifferenceViewer.js');
+      return reply.send(await buildDailyDifferenceView({
+        facility: query.facility ?? 'sacramento',
+        opsDate: query.opsDate,
+        caseId: query.caseId,
+        priorBatchId: query.priorBatchId,
+        currentBatchId: query.currentBatchId,
+      }));
+    } catch (err) {
+      const status = (err as { statusCode?: number }).statusCode ?? 500;
+      return reply.code(status).send({
+        error: status === 409 ? 'Not ready' : 'Difference view failed',
+        message: err instanceof Error ? err.message : String(err),
+      });
+    }
   });
 
   // -------------------------------------------------------------------------

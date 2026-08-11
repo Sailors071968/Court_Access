@@ -100,6 +100,7 @@ import { ImportInspection } from './pages/admin/intelligence/ImportInspection';
 import { MappingEditor } from './pages/admin/intelligence/MappingEditor';
 import { OperationsConsole } from './pages/admin/intelligence/OperationsConsole';
 import { MorningOperationsDashboard } from './pages/admin/intelligence/MorningOperationsDashboard';
+import { DailyDifferenceViewer } from './pages/admin/intelligence/DailyDifferenceViewer';
 import { LearningQueue } from './pages/admin/intelligence/LearningQueue';
 import { Reports } from './pages/admin/intelligence/Reports';
 import { StatutoryIntelligence } from './pages/admin/StatutoryIntelligence';
@@ -508,6 +509,14 @@ function App() {
             element={
               <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
                 <LearningQueue />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/intelligence/daily-difference"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <DailyDifferenceViewer />
               </ProtectedRoute>
             }
           />

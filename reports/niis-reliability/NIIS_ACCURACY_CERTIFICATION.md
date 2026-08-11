@@ -1,7 +1,7 @@
 # NIIS Accuracy Certification — Engineering Directive
 
 **Effective:** 2026-08-11  
-**Status:** Binding. Supersedes feature development, architecture work, and unrelated enhancements.
+**Status:** Binding. **Architecture frozen** — see `OPERATIONAL_VALIDATION_MODE.md`.
 
 ## Sole objective
 
@@ -11,8 +11,10 @@ Operational accuracy for Sacramento County Jail rosters:
 |---|---|
 | Recall (never miss a new inmate) | **100%** |
 | Precision (never report a non-new inmate as new) | **100%** |
+| Potential New Clients Found | = ground-truth new count |
+| Potential New Clients Missed | **0** |
 
-No other development task outranks this.
+No other development task outranks this. No architectural changes, new engines, UI work, watch-list work, or API integrations until certified.
 
 ## Gold-standard principle
 

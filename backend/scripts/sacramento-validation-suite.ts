@@ -436,9 +436,76 @@ async function dispositionAccounting(batchId: string): Promise<{
   return { byName, counts };
 }
 
+function writeDailyCertificationSummary(args: {
+  status: 'PASS' | 'FAIL' | 'BLOCKED';
+  priorDate: string;
+  currentDate: string;
+  priorInmateCount: number | null;
+  currentInmateCount: number | null;
+  newInmates: number | null;
+  existingInmates: number | null;
+  returningInmates: number | null;
+  reviewRequired: number | null;
+  reconciliationOk: boolean | null;
+  processingTimeMs: number;
+  potentialClientsFound: number | null;
+  potentialClientsMissed: number | null;
+  precision: number | null;
+  recall: number | null;
+  note?: string;
+}) {
+  const reconSum =
+    args.newInmates != null && args.existingInmates != null
+    && args.returningInmates != null && args.reviewRequired != null
+      ? args.newInmates + args.existingInmates + args.returningInmates + args.reviewRequired
+      : null;
+  const md = [
+    '# Daily Certification Summary',
+    '',
+    `**Certification status:** ${args.status}`,
+    `**Generated:** ${new Date().toISOString()}`,
+    '',
+    '| Field | Value |',
+    '|---|---|',
+    `| Previous roster date | ${args.priorDate} |`,
+    `| Current roster date | ${args.currentDate} |`,
+    `| Previous inmate count | ${args.priorInmateCount ?? '—'} |`,
+    `| Current inmate count (N) | ${args.currentInmateCount ?? '—'} |`,
+    `| New inmates | ${args.newInmates ?? '—'} |`,
+    `| Existing inmates | ${args.existingInmates ?? '—'} |`,
+    `| Returning inmates | ${args.returningInmates ?? '—'} |`,
+    `| Review required | ${args.reviewRequired ?? '—'} |`,
+    `| Total reconciliation (New+Existing+Returning+Review) | ${reconSum ?? '—'} |`,
+    `| Reconciliation = N | ${args.reconciliationOk == null ? '—' : args.reconciliationOk ? 'YES' : 'NO'} |`,
+    `| Processing time | ${(args.processingTimeMs / 1000).toFixed(1)}s |`,
+    '',
+    '## Technical metrics',
+    '',
+    `| Metric | Value |`,
+    `|---|---:|`,
+    `| Precision | ${args.precision == null ? '—' : `${(args.precision * 100).toFixed(1)}%`} |`,
+    `| Recall | ${args.recall == null ? '—' : `${(args.recall * 100).toFixed(1)}%`} |`,
+    '',
+    '## Business metrics',
+    '',
+    `| Metric | Value |`,
+    `|---|---:|`,
+    `| Potential New Clients Found | ${args.potentialClientsFound ?? '—'} |`,
+    `| Potential New Clients Missed | ${args.potentialClientsMissed ?? '—'} |`,
+    '',
+    args.note ? `> ${args.note}\n` : '',
+    'A missed new inmate is a potentially missed business opportunity.',
+    '',
+  ].join('\n');
+  writeFileSync(join(REPORT_DIR, 'DAILY_CERTIFICATION_SUMMARY.md'), md);
+  writeFileSync(join(REPORT_DIR, 'DAILY_CERTIFICATION_SUMMARY.json'), JSON.stringify(args, null, 2));
+}
+
 async function main() {
+  const runStartedAt = Date.now();
   mkdirSync(REPORT_DIR, { recursive: true });
-  console.log('=== Sacramento Validation Suite (Accuracy Certification) ===');
+  console.log('=== Sacramento Validation Suite (Operational Validation Mode) ===');
+  console.log('Architecture frozen. Sole objective: 100% PDF-comparison accuracy.');
   console.log('Gold standard: manual investigator comparison — not the software.');
   console.log(`prior:   ${PRIOR_PDF} (${PRIOR_DATE})`);
   console.log(`current: ${CURRENT_PDF} (${CURRENT_DATE})`);
@@ -462,6 +529,24 @@ async function main() {
       join(REPORT_DIR, 'SACRAMENTO_VALIDATION_RESULT.md'),
       `# Sacramento Validation Suite — BLOCKED\n\n${msg}\n`,
     );
+    writeDailyCertificationSummary({
+      status: 'BLOCKED',
+      priorDate: PRIOR_DATE,
+      currentDate: CURRENT_DATE,
+      priorInmateCount: null,
+      currentInmateCount: null,
+      newInmates: null,
+      existingInmates: null,
+      returningInmates: null,
+      reviewRequired: null,
+      reconciliationOk: null,
+      processingTimeMs: Date.now() - runStartedAt,
+      potentialClientsFound: null,
+      potentialClientsMissed: null,
+      precision: null,
+      recall: null,
+      note: 'Durable prior/current PDFs not available. Architecture frozen pending certification inputs.',
+    });
     process.exit(2);
   }
 
@@ -508,6 +593,7 @@ async function main() {
 
   const priorNames = new Set(priorParse.records.map((r) => normalizeName(String(r.Name ?? ''))));
   const currentNames = new Set(currentParse.records.map((r) => normalizeName(String(r.Name ?? ''))));
+  const priorInmateCount = priorNames.size;
   const rosterN = currentNames.size;
 
   if (process.env.SAC_WIPE === '1') await wipeSacramento();
@@ -616,6 +702,32 @@ async function main() {
 
   const accuracyOk = tp === EXPECTED_NEW && fp === 0 && fn === 0 && precision === 1 && recall === 1;
   const pass = accuracyOk && reconcileOk && stageGaps.length === 0;
+  const processingTimeMs = Date.now() - runStartedAt;
+  // Business metrics: each true positive is a potential new client found;
+  // each false negative is a potentially missed business opportunity.
+  const potentialClientsFound = tp;
+  const potentialClientsMissed = fn;
+
+  writeDailyCertificationSummary({
+    status: pass ? 'PASS' : 'FAIL',
+    priorDate: PRIOR_DATE,
+    currentDate: CURRENT_DATE,
+    priorInmateCount,
+    currentInmateCount: rosterN,
+    newInmates: dispCounts.new,
+    existingInmates: dispCounts.existing,
+    returningInmates: dispCounts.returning,
+    reviewRequired: dispCounts.review,
+    reconciliationOk: reconcileOk,
+    processingTimeMs,
+    potentialClientsFound,
+    potentialClientsMissed,
+    precision,
+    recall,
+    note: pass
+      ? 'Certified against manual gold standard for this pair.'
+      : 'Not certified — fix root causes; do not paper over the report.',
+  });
 
   const md = [
     '# Sacramento Validation Suite — Accuracy Certification Result',
@@ -623,10 +735,28 @@ async function main() {
     `**Status:** ${pass ? 'PASS' : 'FAIL'}`,
     `**Run at:** ${new Date().toISOString()}`,
     `**Pair:** ${PRIOR_DATE} → ${CURRENT_DATE}`,
+    `**Processing time:** ${(processingTimeMs / 1000).toFixed(1)}s`,
     '',
     '> Gold standard: manual investigator comparison — not the software.',
+    '> Architecture frozen — Operational Validation Mode.',
     '',
-    '## Metrics vs ground truth',
+    '## Daily certification summary',
+    '',
+    `| Field | Value |`,
+    `|---|---:|`,
+    `| Previous roster date | ${PRIOR_DATE} |`,
+    `| Current roster date | ${CURRENT_DATE} |`,
+    `| Previous inmate count | ${priorInmateCount} |`,
+    `| Current inmate count (N) | ${rosterN} |`,
+    `| New inmates | ${dispCounts.new} |`,
+    `| Existing inmates | ${dispCounts.existing} |`,
+    `| Returning inmates | ${dispCounts.returning} |`,
+    `| Review required | ${dispCounts.review} |`,
+    `| Total reconciliation | ${classified} |`,
+    `| Reconciliation = N | ${reconcileOk ? 'YES' : 'NO'} |`,
+    `| Certification status | ${pass ? 'PASS' : 'FAIL'} |`,
+    '',
+    '## Technical metrics vs ground truth',
     '',
     `| Metric | Value | Required |`,
     `|---|---:|---:|`,
@@ -637,6 +767,15 @@ async function main() {
     `| False negatives | ${fn} | 0 |`,
     `| Precision | ${(precision * 100).toFixed(1)}% | 100% |`,
     `| Recall | ${(recall * 100).toFixed(1)}% | 100% |`,
+    '',
+    '## Business metrics',
+    '',
+    `| Metric | Value |`,
+    `|---|---:|`,
+    `| Potential New Clients Found | ${potentialClientsFound} |`,
+    `| Potential New Clients Missed | ${potentialClientsMissed} |`,
+    '',
+    '> A miss is a potentially missed business opportunity — not only a false negative.',
     '',
     '## Full roster disposition accounting',
     '',
@@ -663,7 +802,7 @@ async function main() {
       ? `### Stage continuity failures\n\n${stageGaps.map((g) => `- ${g}`).join('\n')}`
       : '### Stage continuity\n\nNo unexplained silent losses between annotated stages.',
     '',
-    '## False negatives — explain every miss',
+    '## False negatives — explain every miss (Potential New Clients Missed)',
     '',
     ...(missExplanations.length === 0
       ? ['*(none)*']
@@ -706,10 +845,15 @@ async function main() {
   writeFileSync(out, md);
   writeFileSync(join(REPORT_DIR, 'SACRAMENTO_VALIDATION_RESULT.json'), JSON.stringify({
     pass,
+    mode: 'operational_validation',
     priorDate: PRIOR_DATE,
     currentDate: CURRENT_DATE,
     expectedNew: EXPECTED_NEW,
+    priorInmateCount,
+    currentInmateCount: rosterN,
+    processingTimeMs,
     metrics: { tp, fp, fn, precision, recall, reported: reported.length },
+    business: { potentialClientsFound, potentialClientsMissed },
     dispositions: dispCounts,
     rosterN,
     ingestTotal,
@@ -725,6 +869,7 @@ async function main() {
 
   console.log(`\n${md}`);
   console.log(`Wrote ${out}`);
+  console.log(`Wrote ${join(REPORT_DIR, 'DAILY_CERTIFICATION_SUMMARY.md')}`);
 
   await prisma.$disconnect();
   process.exit(pass ? 0 : 1);

@@ -1,0 +1,316 @@
+// Morning Operations Dashboard — the daily command center.
+//
+// Answers seven questions in under ten seconds so an operator knows whether
+// today's New Inmate Report is ready to act on. Detection semantics live
+// elsewhere; this screen only surfaces operational state.
+
+import { useCallback, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import {
+  ArrowRight, CheckCircle2, Clock, Printer, RefreshCw, Upload, XCircle,
+} from 'lucide-react';
+
+import {
+  intelligenceApi,
+  type MorningOperationsBoard,
+} from '@/services/inmateIntelligenceApi';
+import {
+  Badge, Button, ErrorNotice, Loading, PageHeader, Panel,
+} from './shared';
+
+export function MorningOperationsDashboard() {
+  const [board, setBoard] = useState<MorningOperationsBoard | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [refreshedAt, setRefreshedAt] = useState<Date | null>(null);
+
+  const load = useCallback(async (showSpinner: boolean) => {
+    if (showSpinner) setLoading(true);
+    try {
+      const next = await intelligenceApi.morningBoard('sacramento');
+      setBoard(next);
+      setRefreshedAt(new Date());
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Morning board could not be loaded.');
+    } finally {
+      if (showSpinner) setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void load(true);
+  }, [load]);
+
+  // Poll while comparison is incomplete so upload → process → ready stays live.
+  useEffect(() => {
+    if (!board) return;
+    const q = board.questions;
+    const inFlight = q.todaysPdfUploaded.answer && !q.comparisonCompleted.answer;
+    if (!inFlight) return;
+    const timer = window.setTimeout(() => void load(false), 4000);
+    return () => window.clearTimeout(timer);
+  }, [board, load]);
+
+  if (loading) return <Loading label="Loading morning operations" />;
+  if (error) return <ErrorNotice message={error} onRetry={() => void load(true)} />;
+  if (!board) return null;
+
+  const { questions: q, readiness, links } = board;
+  const printHref = q.canPrintReport.reportId
+    ? `${links.reports}?reportId=${encodeURIComponent(q.canPrintReport.reportId)}`
+    : links.reports;
+
+  return (
+    <div className="mx-auto max-w-[72rem] space-y-5" data-testid="morning-ops-dashboard">
+      <PageHeader
+        title="Morning Operations"
+        subtitle={
+          refreshedAt
+            ? `Sacramento · ${board.opsDate} · refreshed ${refreshedAt.toLocaleTimeString()}`
+            : `Sacramento · ${board.opsDate}`
+        }
+        actions={
+          <>
+            <Button variant="secondary" onClick={() => void load(true)}>
+              <RefreshCw className="h-3.5 w-3.5" /> Refresh
+            </Button>
+            <Link to={links.upload}>
+              <Button variant="primary" testId="morning-upload">
+                <Upload className="h-3.5 w-3.5" /> Upload PDFs
+              </Button>
+            </Link>
+            {q.canPrintReport.answer ? (
+              <Link to={printHref}>
+                <Button variant="primary" testId="morning-print">
+                  <Printer className="h-3.5 w-3.5" /> Print report
+                </Button>
+              </Link>
+            ) : (
+              <Button variant="secondary" disabled testId="morning-print">
+                <Printer className="h-3.5 w-3.5" /> Print report
+              </Button>
+            )}
+          </>
+        }
+      />
+
+      <Headline board={board} />
+
+      <Panel
+        title="Today's checklist"
+        description="Seven answers for the New Inmate Report cycle."
+      >
+        <ol className="divide-y divide-gray-100">
+          <QuestionRow
+            n={1}
+            question="Was today's PDF uploaded?"
+            ok={q.todaysPdfUploaded.answer}
+            value={q.todaysPdfUploaded.answer ? 'Yes' : 'No'}
+            detail={q.todaysPdfUploaded.detail}
+            action={!q.todaysPdfUploaded.answer ? { to: links.upload, label: 'Upload today' } : undefined}
+          />
+          <QuestionRow
+            n={2}
+            question="Has yesterday's roster been identified?"
+            ok={q.yesterdaysRosterIdentified.answer}
+            value={q.yesterdaysRosterIdentified.answer ? 'Yes' : 'No'}
+            detail={q.yesterdaysRosterIdentified.detail}
+            action={!q.yesterdaysRosterIdentified.answer ? { to: links.upload, label: 'Upload yesterday' } : undefined}
+          />
+          <QuestionRow
+            n={3}
+            question="Has comparison completed?"
+            ok={q.comparisonCompleted.answer}
+            value={q.comparisonCompleted.answer ? 'Yes' : 'No'}
+            detail={q.comparisonCompleted.detail}
+          />
+          <QuestionRow
+            n={4}
+            question="How many new inmates were found?"
+            ok={q.comparisonCompleted.answer}
+            value={String(q.newInmatesFound.answer)}
+            detail={q.newInmatesFound.detail}
+            action={q.comparisonCompleted.answer ? { to: links.newInmates, label: 'Open list' } : undefined}
+            emphasize
+          />
+          <QuestionRow
+            n={5}
+            question="How many require manual review?"
+            ok={q.requireManualReview.answer === 0}
+            value={String(q.requireManualReview.answer)}
+            detail={q.requireManualReview.detail}
+            warn={q.requireManualReview.answer > 0}
+            action={q.requireManualReview.answer > 0 ? { to: links.review, label: 'Review queue' } : undefined}
+          />
+          <QuestionRow
+            n={6}
+            question="Is today's report certified or provisional?"
+            ok={q.reportCertification.answer === 'certified'}
+            warn={q.reportCertification.answer === 'provisional' || q.reportCertification.answer === 'failed'}
+            value={labelCertification(q.reportCertification.answer)}
+            detail={q.reportCertification.detail}
+          />
+          <QuestionRow
+            n={7}
+            question="Can I print the report now?"
+            ok={q.canPrintReport.answer}
+            value={q.canPrintReport.answer ? 'Yes' : 'Not yet'}
+            detail={q.canPrintReport.detail}
+            action={q.canPrintReport.answer ? { to: printHref, label: 'Print' } : undefined}
+          />
+        </ol>
+      </Panel>
+
+      <div className="grid gap-4 sm:grid-cols-3">
+        <StatusCard
+          label="Certification streak"
+          value={`${readiness.consecutivePassStreak} / ${readiness.required}`}
+          hint={
+            readiness.productionReady
+              ? 'Production-ready streak met'
+              : `${Math.max(0, readiness.required - readiness.consecutivePassStreak)} consecutive PASS days remaining`
+          }
+          tone={readiness.productionReady ? 'good' : 'neutral'}
+        />
+        <StatusCard
+          label="Open Learning Queue defects"
+          value={String(board.openLearningQueueItems)}
+          hint="Every discrepancy stays open until reproduced"
+          tone={board.openLearningQueueItems > 0 ? 'warn' : 'good'}
+          to={links.learningQueue}
+        />
+        <StatusCard
+          label="Prior roster date"
+          value={board.priorDate}
+          hint="Baseline for today's new-inmate detection"
+          tone="neutral"
+        />
+      </div>
+
+      <p className="text-xs text-gray-500">
+        Need import health, parser warnings, or batch comparison detail?{' '}
+        <Link to="/admin/intelligence/console" className="font-medium text-blue-600 hover:underline">
+          Open full operations console
+        </Link>
+        .
+      </p>
+    </div>
+  );
+}
+
+function Headline({ board }: { board: MorningOperationsBoard }) {
+  const tones = {
+    ok: 'border-emerald-200 bg-emerald-50 text-emerald-950',
+    attention: 'border-amber-200 bg-amber-50 text-amber-950',
+    action_required: 'border-red-200 bg-red-50 text-red-950',
+  } as const;
+  const Icon = board.posture === 'ok' ? CheckCircle2 : board.posture === 'attention' ? Clock : XCircle;
+  return (
+    <div className={`flex items-start gap-3 rounded-xl border px-4 py-3 ${tones[board.posture]}`}>
+      <Icon className="mt-0.5 h-5 w-5 shrink-0" />
+      <div>
+        <p className="text-xs font-medium uppercase tracking-wide opacity-70">What to do next</p>
+        <p className="mt-0.5 text-base font-semibold leading-snug">{board.headline}</p>
+      </div>
+    </div>
+  );
+}
+
+function QuestionRow({
+  n,
+  question,
+  value,
+  detail,
+  ok,
+  warn,
+  emphasize,
+  action,
+}: {
+  n: number;
+  question: string;
+  value: string;
+  detail: string;
+  ok: boolean;
+  warn?: boolean;
+  emphasize?: boolean;
+  action?: { to: string; label: string };
+}) {
+  const tone = warn ? 'warn' : ok ? 'good' : 'bad';
+  return (
+    <li className="flex flex-wrap items-start justify-between gap-3 py-3 first:pt-0 last:pb-0">
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-medium text-gray-400">{n}</span>
+          <p className="text-sm font-medium text-gray-900">{question}</p>
+        </div>
+        <p className="mt-1 pl-5 text-xs text-gray-500">{detail}</p>
+      </div>
+      <div className="flex items-center gap-2 pl-5 sm:pl-0">
+        <span
+          className={`tabular-nums text-sm font-semibold ${
+            emphasize ? 'text-lg text-blue-700' : 'text-gray-900'
+          }`}
+        >
+          {value}
+        </span>
+        <Badge tone={tone}>{warn ? 'review' : ok ? 'ready' : 'needed'}</Badge>
+        {action ? (
+          <Link
+            to={action.to}
+            className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:underline"
+          >
+            {action.label} <ArrowRight className="h-3 w-3" />
+          </Link>
+        ) : null}
+      </div>
+    </li>
+  );
+}
+
+function StatusCard({
+  label,
+  value,
+  hint,
+  tone,
+  to,
+}: {
+  label: string;
+  value: string;
+  hint: string;
+  tone: 'neutral' | 'good' | 'warn';
+  to?: string;
+}) {
+  const tones = {
+    neutral: 'text-gray-900',
+    good: 'text-emerald-700',
+    warn: 'text-amber-700',
+  };
+  const body = (
+    <div className="rounded-xl border border-gray-200 bg-white px-4 py-3">
+      <p className="text-xs font-medium uppercase tracking-wide text-gray-500">{label}</p>
+      <p className={`mt-1 text-2xl font-semibold tabular-nums ${tones[tone]}`}>{value}</p>
+      <p className="mt-1 text-xs text-gray-500">{hint}</p>
+    </div>
+  );
+  return to ? (
+    <Link to={to} className="block transition hover:border-blue-300">
+      {body}
+    </Link>
+  ) : (
+    body
+  );
+}
+
+function labelCertification(answer: MorningOperationsBoard['questions']['reportCertification']['answer']): string {
+  switch (answer) {
+    case 'certified':
+      return 'Certified';
+    case 'provisional':
+      return 'Provisional';
+    case 'failed':
+      return 'Failed cert';
+    default:
+      return 'Missing';
+  }
+}

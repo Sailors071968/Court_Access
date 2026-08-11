@@ -293,6 +293,18 @@ export async function registerInmateOperationsRoutes(app: FastifyInstance): Prom
     return reply.send(await getMorningSummary());
   });
 
+  /**
+   * Morning Operations Dashboard — seven yes/no (or count) answers for the
+   * daily New Inmate Report cycle. Priority-4 operator experience; does not
+   * change detection semantics.
+   */
+  app.get('/api/admin/intelligence/morning-board', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!requireAdministrator(request, reply)) return;
+    const query = request.query as { facility?: string };
+    const { getMorningOperationsBoard } = await import('./operations.js');
+    return reply.send(await getMorningOperationsBoard(query.facility ?? 'sacramento'));
+  });
+
   // -------------------------------------------------------------------------
   // Batch lifecycle
   // -------------------------------------------------------------------------

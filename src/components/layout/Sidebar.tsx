@@ -11,6 +11,7 @@ import {
   FileText, Tag, Upload, BarChart3, Globe, Activity, Server, BookOpen, CheckSquare, FileQuestion,
   ShieldCheck, LayoutList, Scale,
   Users, History, ListChecks, Cog, Gauge, UserSearch, FileSearch, Columns3, FileCheck2, ListOrdered,
+  ClipboardList,
 } from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
 import { ROLE_PERMISSIONS } from '../../constants';
@@ -90,6 +91,8 @@ const navItems: NavItem[] = [
         permission: 'canViewAdmin',
         children: [
           { id: 'niis-ops', label: 'Morning Operations', path: '/admin/intelligence', icon: <Gauge size={14} /> },
+          { id: 'niis-console', label: 'Operations Console', path: '/admin/intelligence/console', icon: <Activity size={14} /> },
+          { id: 'niis-learning', label: 'Learning Queue', path: '/admin/intelligence/learning-queue', icon: <ClipboardList size={14} /> },
           { id: 'niis-dashboard', label: 'Import Summary', path: '/admin/intelligence/import-summary', icon: <LayoutList size={14} /> },
           { id: 'niis-upload', label: 'Upload Files', path: '/admin/intelligence/upload', icon: <Upload size={14} /> },
           { id: 'niis-import-jobs', label: 'Import Jobs', path: '/admin/intelligence/import-jobs', icon: <ListOrdered size={14} /> },

@@ -74,10 +74,13 @@ export function OperationsConsole() {
   return (
     <div className="mx-auto max-w-[100rem] space-y-5">
       <PageHeader
-        title="Morning operations"
+        title="Operations console"
         subtitle={refreshedAt ? `Last refreshed ${refreshedAt.toLocaleTimeString()}` : undefined}
         actions={
           <>
+            <Link to="/admin/intelligence">
+              <Button variant="secondary">Morning board</Button>
+            </Link>
             <Button variant="secondary" onClick={() => void load(true)}>
               <RefreshCw className="h-3.5 w-3.5" /> Refresh
             </Button>

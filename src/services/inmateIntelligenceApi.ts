@@ -504,6 +504,59 @@ export interface MorningSummary {
   reports: { draft: number; reviewed: number; approvedNotPrinted: number };
 }
 
+/** Seven morning questions for the operational command center. */
+export interface MorningOperationsBoard {
+  opsDate: string;
+  priorDate: string;
+  facility: string;
+  headline: string;
+  posture: 'ok' | 'attention' | 'action_required';
+  questions: {
+    todaysPdfUploaded: { answer: boolean; detail: string };
+    yesterdaysRosterIdentified: { answer: boolean; detail: string };
+    comparisonCompleted: { answer: boolean; detail: string };
+    newInmatesFound: { answer: number; detail: string };
+    requireManualReview: { answer: number; detail: string };
+    reportCertification: {
+      answer: 'certified' | 'provisional' | 'missing' | 'failed';
+      detail: string;
+    };
+    canPrintReport: { answer: boolean; detail: string; reportId: string | null };
+  };
+  readiness: {
+    consecutivePassStreak: number;
+    required: number;
+    productionReady: boolean;
+  };
+  openLearningQueueItems: number;
+  links: {
+    upload: string;
+    newInmates: string;
+    review: string;
+    reports: string;
+    learningQueue: string;
+  };
+}
+
+export interface LearningQueueItem {
+  itemId: string;
+  date: string;
+  facility: string;
+  inmate: string;
+  errorType: string;
+  rootCause: string;
+  status: string;
+  stage: string | null;
+  rule: string | null;
+  evidence: string | null;
+  why: string | null;
+  regressionPath: string | null;
+  openedAt: string;
+  fixedAt: string | null;
+  verifiedAt: string | null;
+  note: string | null;
+}
+
 export interface BatchLifecycle {
   batchId: string;
   facility: string;
@@ -791,6 +844,30 @@ export const intelligenceApi = {
 
 
   morning: () => call<MorningSummary>('/morning'),
+
+  morningBoard: (facility = 'sacramento') =>
+    call<MorningOperationsBoard>(`/morning-board${query({ facility })}`),
+
+  learningQueue: (params: { facility?: string; status?: string; limit?: number; offset?: number } = {}) =>
+    call<{ total: number; items: LearningQueueItem[] }>(`/learning-queue${query(params)}`),
+
+  updateLearningQueueItem: (
+    itemId: string,
+    body: {
+      status?: 'open' | 'in_progress' | 'fixed' | 'verified_regression';
+      rootCause?: 'parser' | 'normalization' | 'identity' | 'classification' | 'report' | 'unknown';
+      note?: string;
+      regressionPath?: string;
+    },
+  ) =>
+    call<{
+      itemId: string;
+      status: string;
+      rootCause: string;
+      regressionPath: string | null;
+      fixedAt: string | null;
+      verifiedAt: string | null;
+    }>(`/learning-queue/${itemId}`, { method: 'PATCH', body: JSON.stringify(body) }),
 
   batchLifecycle: (batchId: string) => call<BatchLifecycle>(`/batches/${batchId}/lifecycle`),
 

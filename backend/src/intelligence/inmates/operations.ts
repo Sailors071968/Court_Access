@@ -269,6 +269,257 @@ export async function getMorningSummary(): Promise<MorningSummary> {
 }
 
 // ---------------------------------------------------------------------------
+// Morning Operations Board — seven questions, answered in one payload
+// ---------------------------------------------------------------------------
+
+export interface MorningOperationsBoard {
+  opsDate: string;
+  priorDate: string;
+  facility: string;
+  /** One sentence: what to do next. */
+  headline: string;
+  posture: 'ok' | 'attention' | 'action_required';
+  questions: {
+    todaysPdfUploaded: { answer: boolean; detail: string };
+    yesterdaysRosterIdentified: { answer: boolean; detail: string };
+    comparisonCompleted: { answer: boolean; detail: string };
+    newInmatesFound: { answer: number; detail: string };
+    requireManualReview: { answer: number; detail: string };
+    reportCertification: {
+      answer: 'certified' | 'provisional' | 'missing' | 'failed';
+      detail: string;
+    };
+    canPrintReport: { answer: boolean; detail: string; reportId: string | null };
+  };
+  readiness: {
+    consecutivePassStreak: number;
+    required: number;
+    productionReady: boolean;
+  };
+  openLearningQueueItems: number;
+  links: {
+    upload: string;
+    newInmates: string;
+    review: string;
+    reports: string;
+    learningQueue: string;
+  };
+}
+
+/**
+ * Command-center payload for the morning dashboard.
+ * Answers the seven operator questions without requiring a page hunt.
+ */
+export async function getMorningOperationsBoard(
+  facility = 'sacramento',
+): Promise<MorningOperationsBoard> {
+  const now = new Date();
+  const opsDate = now.toISOString().slice(0, 10);
+  const dayStart = new Date(`${opsDate}T00:00:00.000Z`);
+  const dayEnd = new Date(dayStart.getTime() + 86_400_000);
+  const prior = new Date(dayStart);
+  prior.setUTCDate(prior.getUTCDate() - 1);
+  const priorDate = prior.toISOString().slice(0, 10);
+  const priorEnd = dayStart;
+
+  const [
+    todayPdfUpload,
+    todayPdfBatch,
+    yesterdayPdfBatch,
+    dailyCase,
+    certification,
+    newBookings,
+    reviewPending,
+    printableReport,
+    openLearning,
+  ] = await Promise.all([
+    prisma.inmateRosterUpload.findFirst({
+      where: {
+        facility,
+        fileKind: 'pdf',
+        rosterDate: { gte: dayStart, lt: dayEnd },
+      },
+      orderBy: { uploadedAt: 'desc' },
+      select: { uploadId: true, status: true, originalName: true, uploadedAt: true, batchId: true },
+    }),
+    prisma.inmateIngestionBatch.findFirst({
+      where: {
+        facility,
+        status: 'completed',
+        sourceType: { in: ['pdf_text', 'pdf_ocr'] },
+        rosterDate: { gte: dayStart, lt: dayEnd },
+      },
+      orderBy: { finishedAt: 'desc' },
+      select: { batchId: true, finishedAt: true, recordsNew: true, recordsForReview: true },
+    }),
+    prisma.inmateIngestionBatch.findFirst({
+      where: {
+        facility,
+        status: 'completed',
+        sourceType: { in: ['pdf_text', 'pdf_ocr'] },
+        rosterDate: { gte: prior, lt: priorEnd },
+      },
+      orderBy: { finishedAt: 'desc' },
+      select: { batchId: true, sourceFilename: true, rosterDate: true },
+    }),
+    prisma.inmateDailyCase.findUnique({
+      where: { facility_opsDate: { facility, opsDate: dayStart } },
+    }).catch(() => null),
+    prisma.inmateDailyCertification.findUnique({
+      where: { facility_opsDate: { facility, opsDate: dayStart } },
+    }).catch(() => null),
+    prisma.inmateBooking.count({
+      where: {
+        facility,
+        isFirstAppearance: true,
+        bookedAt: { gte: dayStart, lt: dayEnd },
+      },
+    }),
+    prisma.inmateReviewQueueItem.count({ where: { status: 'pending' } }),
+    prisma.inmateIntelligenceReport.findFirst({
+      where: {
+        reportType: { in: ['new_inmates', 'daily_intelligence'] },
+        approvalState: { in: ['approved', 'printed', 'draft', 'reviewed'] },
+        generatedAt: { gte: dayStart },
+      },
+      orderBy: { generatedAt: 'desc' },
+      select: { reportId: true, approvalState: true, rowCount: true },
+    }),
+    prisma.inmateLearningQueueItem.count({
+      where: { facility, status: { in: ['open', 'in_progress'] } },
+    }).catch(() => 0),
+  ]);
+
+  let streak = { streak: 0, required: 10, productionReady: false };
+  try {
+    const { consecutivePassStreak } = await import('./learningQueue.js');
+    streak = await consecutivePassStreak(facility);
+  } catch {
+    // migration may not be applied yet
+  }
+
+  const todaysPdfUploaded = Boolean(todayPdfUpload);
+  const yesterdaysRosterIdentified = Boolean(yesterdayPdfBatch || dailyCase?.priorPdfBatchId);
+  const comparisonCompleted = Boolean(
+    (dailyCase?.priorPdfBatchId && dailyCase?.currentPdfBatchId
+      && ['compared', 'report_ready', 'enriching', 'enriched', 'closed'].includes(dailyCase.status))
+    || (yesterdayPdfBatch && todayPdfBatch),
+  );
+  const newInmatesFound = dailyCase?.newInmateCount
+    ?? todayPdfBatch?.recordsNew
+    ?? newBookings;
+  const requireManualReview = dailyCase?.reviewCount
+    ?? todayPdfBatch?.recordsForReview
+    ?? reviewPending;
+
+  let reportCertification: MorningOperationsBoard['questions']['reportCertification']['answer'] = 'missing';
+  if (certification?.status === 'pass') reportCertification = 'certified';
+  else if (certification?.status === 'fail') reportCertification = 'failed';
+  else if (printableReport || todayPdfBatch) reportCertification = 'provisional';
+
+  const canPrint = Boolean(
+    printableReport
+    && ['approved', 'printed', 'reviewed', 'draft'].includes(printableReport.approvalState),
+  );
+
+  let headline: string;
+  let posture: MorningOperationsBoard['posture'];
+  if (!todaysPdfUploaded) {
+    headline = "Upload today's Sacramento PDF to begin the morning run.";
+    posture = 'action_required';
+  } else if (!yesterdaysRosterIdentified) {
+    headline = "Yesterday's roster is not identified. Upload or link yesterday's PDF before trusting new-inmate counts.";
+    posture = 'action_required';
+  } else if (!comparisonCompleted && todayPdfUpload && todayPdfUpload.status !== 'completed') {
+    headline = "Today's PDF is uploaded but comparison has not finished. Process the import.";
+    posture = 'attention';
+  } else if (requireManualReview > 0) {
+    headline = `Comparison ready: ${newInmatesFound} new inmates; ${requireManualReview} need manual review before the repository is complete.`;
+    posture = 'attention';
+  } else if (reportCertification === 'certified') {
+    headline = `Certified morning: ${newInmatesFound} newly booked. Report is ready to print.`;
+    posture = 'ok';
+  } else if (comparisonCompleted) {
+    headline = `Provisional report: ${newInmatesFound} newly booked. Complete manual verification to certify.`;
+    posture = 'attention';
+  } else {
+    headline = 'Morning operations incomplete. Follow the checklist below.';
+    posture = 'action_required';
+  }
+
+  return {
+    opsDate,
+    priorDate,
+    facility,
+    headline,
+    posture,
+    questions: {
+      todaysPdfUploaded: {
+        answer: todaysPdfUploaded,
+        detail: todayPdfUpload
+          ? `${todayPdfUpload.originalName} · ${todayPdfUpload.status}`
+          : "No PDF with today's roster date uploaded yet",
+      },
+      yesterdaysRosterIdentified: {
+        answer: yesterdaysRosterIdentified,
+        detail: yesterdayPdfBatch
+          ? `${yesterdayPdfBatch.sourceFilename} · ${day(yesterdayPdfBatch.rosterDate)}`
+          : dailyCase?.priorPdfBatchId
+            ? `Daily case prior batch ${dailyCase.priorPdfBatchId}`
+            : `No completed PDF batch for ${priorDate}`,
+      },
+      comparisonCompleted: {
+        answer: comparisonCompleted,
+        detail: comparisonCompleted
+          ? (dailyCase ? `Daily case status: ${dailyCase.status}` : 'Prior and current PDF batches present')
+          : 'Waiting for both prior and current PDF batches',
+      },
+      newInmatesFound: {
+        answer: newInmatesFound,
+        detail: 'First-appearance bookings for today (PDF-primary path)',
+      },
+      requireManualReview: {
+        answer: requireManualReview,
+        detail: requireManualReview > 0
+          ? 'Review queue / CSV exceptions / identity deferrals'
+          : 'Nothing waiting in review',
+      },
+      reportCertification: {
+        answer: reportCertification,
+        detail: certification
+          ? `Engineering cert: ${certification.status}`
+            + (certification.potentialClientsMissed != null
+              ? ` · clients missed ${certification.potentialClientsMissed}`
+              : '')
+          : printableReport
+            ? `Operational report ${printableReport.approvalState} (not yet engineering-certified)`
+            : 'No report for today yet',
+      },
+      canPrintReport: {
+        answer: canPrint,
+        detail: canPrint
+          ? `Report ${printableReport!.reportId} · ${printableReport!.approvalState} · ${printableReport!.rowCount} rows`
+          : 'Generate or approve the New Inmate Report first',
+        reportId: printableReport?.reportId ?? dailyCase?.initialReportId ?? null,
+      },
+    },
+    readiness: {
+      consecutivePassStreak: streak.streak,
+      required: streak.required,
+      productionReady: streak.productionReady,
+    },
+    openLearningQueueItems: openLearning,
+    links: {
+      upload: '/admin/intelligence/upload',
+      newInmates: '/admin/intelligence/new-inmates',
+      review: '/admin/intelligence/review',
+      reports: '/admin/intelligence/reports',
+      learningQueue: '/admin/intelligence/learning-queue',
+    },
+  };
+}
+
+// ---------------------------------------------------------------------------
 // Report approval
 // ---------------------------------------------------------------------------
 

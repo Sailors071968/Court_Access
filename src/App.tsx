@@ -99,6 +99,8 @@ import { IntelligenceSettings } from './pages/admin/intelligence/IntelligenceSet
 import { ImportInspection } from './pages/admin/intelligence/ImportInspection';
 import { MappingEditor } from './pages/admin/intelligence/MappingEditor';
 import { OperationsConsole } from './pages/admin/intelligence/OperationsConsole';
+import { MorningOperationsDashboard } from './pages/admin/intelligence/MorningOperationsDashboard';
+import { LearningQueue } from './pages/admin/intelligence/LearningQueue';
 import { Reports } from './pages/admin/intelligence/Reports';
 import { StatutoryIntelligence } from './pages/admin/StatutoryIntelligence';
 import { GoldStandardCertification } from './pages/admin/GoldStandardCertification';
@@ -484,13 +486,28 @@ function App() {
             }
           />
           {/* New Inmate Intelligence — administrator only, isolated from public features */}
-          {/* The operations console is the home screen: an operator opening the
-              subsystem should see what to do next, not a summary of yesterday. */}
+          {/* Morning Operations Dashboard is the home: seven answers for today's New Inmate Report. */}
           <Route
             path="admin/intelligence"
             element={
               <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <MorningOperationsDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/intelligence/console"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
                 <OperationsConsole />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/intelligence/learning-queue"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <LearningQueue />
               </ProtectedRoute>
             }
           />

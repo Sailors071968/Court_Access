@@ -1,13 +1,15 @@
-# Sacramento Validation Suite (gold-standard regression)
+# Sacramento Validation Suite (certification dataset)
 
-Permanent acceptance dataset for NIIS’s primary mission: detect newly booked inmates.
+Permanent regression dataset for NIIS’s primary mission: operational accuracy.
 
-## Required inputs (not in git — place locally)
+**Gold standard:** manual investigator comparison — not the software.
+
+## Required inputs (not in git — place locally / CI artifact)
 
 | File | Pages | Notes |
 |---|---:|---|
 | `SACJAILSCAN08-09-2026.pdf` | 87 | Double-spaced Active Inmate Basic Roster |
-| `SACJAILSCAN08-10-2026.pdf` | 59 | Single-spaced; may be named `…(1)_compressed.pdf` |
+| `SACJAILSCAN08-10-2026.pdf` | 59 | Single-spaced; may be the compressed upload |
 
 Expected SHA256 (from production Import Inspection):
 
@@ -16,29 +18,26 @@ Expected SHA256 (from production Import Inspection):
 
 ## Ground truth
 
-`ground-truth-67-names.txt` — administrator’s manually verified 67 newly booked names (08/10 vs 08/09).
+`ground-truth-67-names.md` — administrator’s manually verified 67 newly booked names (08/10 vs 08/09).
 
 ## Run
 
 ```bash
 cd backend
-npx tsx scripts/seed-sacramento.ts          # publishes PDF profile v2 when needed
+npx tsx scripts/seed-sacramento.ts
 SAC_WIPE=1 npx tsx scripts/sacramento-validation-suite.ts
 ```
 
-Optional paths: `SAC_PRIOR_PDF`, `SAC_CURRENT_PDF`, `SAC_GOLD_LIST`.
+The harness fails unless:
 
-## Pass criteria
+- Precision and recall are 100% vs the 67  
+- `New + Existing + Returning + Review = N`  
+- Every miss/extra is explained with stage, rule, and evidence  
 
-```
-Ground Truth: 67
-NIIS: 67
-Missing: 0
-Extra: 0
-```
+## Multi-day
 
-Result written to `reports/niis-reliability/SACRAMENTO_VALIDATION_RESULT.md`.
+See `multi-day-chain.md`. After 08/09→08/10 is green, continue 08/10→08/11, etc.
 
 ## Policy
 
-Every future parser, normalization, identity, or reporting change that affects Sacramento ingest must keep this suite green before it is considered acceptable.
+Every future NIIS change affecting Sacramento ingest must keep this suite green before it is considered acceptable. CI job: `sacramento-accuracy-certification`.

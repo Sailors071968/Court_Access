@@ -5,7 +5,8 @@
 
 ## Binding directive
 
-→ **[NIIS_ACCURACY_CERTIFICATION.md](./NIIS_ACCURACY_CERTIFICATION.md)**
+→ **[NIIS_ACCURACY_CERTIFICATION.md](./NIIS_ACCURACY_CERTIFICATION.md)**  
+→ **[DAILY_PDF_PRIMARY_WORKFLOW.md](./DAILY_PDF_PRIMARY_WORKFLOW.md)** — PDF comparison first; CSV enrichment only
 
 ## Certification pair (permanent dataset)
 

@@ -566,6 +566,53 @@ export async function registerInmateOperationsRoutes(app: FastifyInstance): Prom
         changeNote: p.changeNote,
       })),
       totals: { uploads: uploadCount, imports: batchCount },
+      dailyWorkflow: {
+        primarySource: 'pdf',
+        pipeline: [
+          'yesterday_pdf',
+          'today_pdf',
+          'roster_comparison',
+          'new_inmate_detection',
+          'historical_lookup',
+          'new_inmate_report',
+          'repository',
+          'optional_csv_enrichment',
+        ],
+        csvRole: 'enrichment_only_never_determines_newness',
+      },
     });
+  });
+
+  // -------------------------------------------------------------------------
+  // Daily Case — one operational day (PDF primary, optional CSV enrichment)
+  // -------------------------------------------------------------------------
+
+  app.get('/api/admin/intelligence/daily-cases', async (request, reply) => {
+    if (!requireAdministrator(request as AuthenticatedRequest, reply)) return;
+    const query = request.query as { facility?: string; limit?: string; offset?: string };
+    const { listDailyCases } = await import('./dailyCase.js');
+    return reply.send(await listDailyCases({
+      facility: query.facility,
+      limit: clampLimit(query.limit, 30, 100),
+      offset: offsetOf(query.offset),
+    }));
+  });
+
+  app.get('/api/admin/intelligence/daily-cases/:caseId', async (request, reply) => {
+    if (!requireAdministrator(request as AuthenticatedRequest, reply)) return;
+    const { caseId } = request.params as { caseId: string };
+    const { getDailyCase } = await import('./dailyCase.js');
+    const row = await getDailyCase(caseId);
+    if (!row) return reply.code(404).send({ error: 'Daily case not found' });
+    return reply.send(row);
+  });
+
+  app.get('/api/admin/intelligence/daily-cases/by-date/:facility/:opsDate', async (request, reply) => {
+    if (!requireAdministrator(request as AuthenticatedRequest, reply)) return;
+    const { facility, opsDate } = request.params as { facility: string; opsDate: string };
+    const { getDailyCaseByDate } = await import('./dailyCase.js');
+    const row = await getDailyCaseByDate(facility, opsDate);
+    if (!row) return reply.code(404).send({ error: 'Daily case not found' });
+    return reply.send(row);
   });
 }

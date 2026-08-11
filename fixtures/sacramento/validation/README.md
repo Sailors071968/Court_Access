@@ -2,7 +2,8 @@
 
 Permanent regression dataset for NIIS’s primary mission: operational accuracy.
 
-**Gold standard:** manual investigator comparison — not the software.
+**Gold standard:** manual investigator comparison — not the software.  
+**Pipeline:** Yesterday PDF → Today PDF → New Inmate Report (CSV is enrichment only).
 
 ## Required inputs (not in git — place locally / CI artifact)
 

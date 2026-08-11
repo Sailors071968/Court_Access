@@ -121,6 +121,14 @@ NIIS is production-ready for Sacramento only when it repeatedly satisfies:
 5. Printable report exactly matches manual verification  
 6. Every conclusion traceable to preserved evidence  
 
+## Daily workflow (PDF primary)
+
+Certification exercises the revenue path:
+
+**Yesterday PDF → Today PDF → comparison → new-inmate report** (CSV is optional enrichment and must not determine newness).
+
+See `DAILY_PDF_PRIMARY_WORKFLOW.md` and the `InmateDailyCase` operational unit.
+
 ## What may change before certification passes
 
-Only root-cause fixes required to pass this certification (parser, normalization, identity, classification, report semantics, evidence preservation). No Phase 2 feature work.
+Only root-cause fixes required to pass this certification (parser, normalization, identity, classification, report semantics, evidence preservation, Daily Case / PDF-primary wiring). No unrelated Phase 2 feature work.

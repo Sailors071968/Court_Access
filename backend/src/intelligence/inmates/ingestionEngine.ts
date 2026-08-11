@@ -43,6 +43,8 @@ import { resolveProfile } from '../platform/parserProfiles.js';
 import { getColumnMap } from './parsers/columnMaps.js';
 import { parseCsvRoster } from './parsers/csvParser.js';
 import { parsePdfRoster } from './parsers/pdfParser.js';
+import { applyCsvEnrichmentPolicy, type IdentityOutcome } from './csvEnrichmentPolicy.js';
+import { pdfPrimaryExists } from './dailyCase.js';
 import type {
   IngestionCounts, IngestionIssue, IngestionOutcome, IngestionRequest,
   NormalizedRecord, ParseResult, ResolutionPreview,
@@ -271,6 +273,12 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
   counts.total = collapsed.length;
   counts.failed = normalized.length === 0 && parsed.records.length > 0 ? parsed.records.length : 0;
 
+  // PDF-primary day: if a completed PDF batch already exists for this roster
+  // date, CSV rows that would create new inmates become review exceptions.
+  const pdfPrimaryAlreadyPresent = sourceType === 'csv' && request.rosterDate
+    ? await pdfPrimaryExists(request.facility, request.rosterDate)
+    : false;
+
   // --- Dry run: resolve against the live repository, write nothing --------
   if (request.dryRun) {
     const preview: ResolutionPreview[] = [];
@@ -284,6 +292,25 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
 
     for (const entry of collapsed) {
       const result = await resolveOne(entry.record, entry.lineNumber, document);
+      const policy = applyCsvEnrichmentPolicy({
+        sourceType,
+        identityOutcome: result.outcome as IdentityOutcome,
+        pdfPrimaryAlreadyPresent,
+      });
+      if (policy.forcedException) {
+        result.outcome = policy.outcome;
+        result.evidence = {
+          ...result.evidence,
+          humanReviewRequired: true,
+          reviewRationale: policy.reason,
+        };
+        issues.push({
+          severity: 'warning',
+          code: 'csv_only_exception',
+          lineNumber: entry.lineNumber,
+          message: policy.reason,
+        });
+      }
       tally(counts, result.outcome);
       preview.push({
         lineNumber: entry.lineNumber,
@@ -402,6 +429,25 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
     let processed = 0;
     for (const entry of collapsed) {
       const result = await resolveOne(entry.record, entry.lineNumber, { ...sourceDoc, lineNumber: entry.lineNumber });
+      const policy = applyCsvEnrichmentPolicy({
+        sourceType: resolvedSourceType === 'csv' ? 'csv' : resolvedSourceType,
+        identityOutcome: result.outcome as IdentityOutcome,
+        pdfPrimaryAlreadyPresent,
+      });
+      if (policy.forcedException) {
+        result.outcome = policy.outcome;
+        result.evidence = {
+          ...result.evidence,
+          humanReviewRequired: true,
+          reviewRationale: policy.reason,
+        };
+        issues.push({
+          severity: 'warning',
+          code: 'csv_only_exception',
+          lineNumber: entry.lineNumber,
+          message: policy.reason,
+        });
+      }
       tally(counts, result.outcome);
       const written = await persist({
         batchId: batch.batchId,

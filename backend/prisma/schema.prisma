@@ -4457,3 +4457,57 @@ model InmateBatchComparison {
   @@index([facility, generatedAt])
   @@map("inmate_batch_comparisons")
 }
+
+/**
+ * One operational day at a facility — the unit operators review.
+ *
+ * PDF comparison is the primary revenue path (yesterday PDF vs today PDF → new
+ * inmate report). The optional CSV is enrichment only: it may update fields on
+ * bookings already discovered from the PDF, and must not silently create new
+ * inmates for rows the PDF did not contain.
+ *
+ * Status moves forward; the audit log (JSON) is append-only by convention.
+ */
+model InmateDailyCase {
+  caseId              String   @id @default(uuid())
+  facility            String
+  /** The "today" roster date this case operates on (ops day). */
+  opsDate             DateTime
+  /** pending | prior_ready | current_ready | compared | report_ready | enriching | enriched | closed */
+  status              String   @default("pending")
+
+  priorRosterDate     DateTime?
+  currentRosterDate   DateTime?
+
+  priorPdfUploadId    String?
+  priorPdfBatchId     String?
+  currentPdfUploadId  String?
+  currentPdfBatchId   String?
+  csvUploadId         String?
+  csvBatchId          String?
+
+  /** New-inmate report produced immediately after PDF comparison (before CSV). */
+  initialReportId     String?
+  /** Optional enriched report after CSV updates existing bookings. */
+  enrichedReportId    String?
+  comparisonId        String?
+
+  newInmateCount      Int      @default(0)
+  returningInmateCount Int     @default(0)
+  existingInmateCount Int      @default(0)
+  exceptionCount      Int      @default(0)
+  reviewCount         Int      @default(0)
+
+  /** Append-only operational notes: attachments, comparisons, enrichment, exceptions. */
+  auditLog            Json     @default("[]")
+
+  createdById         String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  closedAt            DateTime?
+
+  @@unique([facility, opsDate])
+  @@index([facility, status, opsDate])
+  @@index([opsDate])
+  @@map("inmate_daily_cases")
+}

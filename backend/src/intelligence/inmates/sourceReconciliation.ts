@@ -1,15 +1,17 @@
 // ============================================================================
 // Cross-source reconciliation.
 //
-// Both the CSV export and the PDF roster are authoritative, and neither replaces
-// the other. So when they describe the same booking on the same roster date and
-// disagree, the disagreement is the finding — not something to be resolved by
-// whichever file was ingested second.
+// Discovery priority (daily revenue path): PDF is primary. Newness is decided by
+// yesterday PDF vs today PDF. CSV is optional enrichment for fields on bookings
+// already discovered from the PDF — it must not silently create new inmates.
+//
+// When both sources describe the same booking on the same roster date and
+// disagree about an attribute, the disagreement is still a finding — recorded,
+// not papered over by whichever file was ingested second.
 //
 // The resolution of a conflict starts as UNKNOWN and stays UNKNOWN until either
-// a rule genuinely applies or a person decides. That is deliberate: silently
-// preferring the CSV because it is easier to parse would produce a repository
-// that looks consistent and is wrong, with nothing recorded to show it.
+// a rule genuinely applies or a person decides. OCR vs machine-written CSV is the
+// one automatic preference (CSV wins for the attribute, conflict still stored).
 //
 // Pure. Given two sets of observations it returns the conflicts; persistence is
 // the caller's job.

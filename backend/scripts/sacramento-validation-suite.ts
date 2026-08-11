@@ -3,6 +3,8 @@
  * Sacramento Validation Suite — NIIS Accuracy Certification harness.
  *
  * Gold standard: manual investigator comparison — not the software.
+ * Pipeline under test: Yesterday PDF → Today PDF → comparison → New Inmate Report
+ * (CSV enrichment is out of scope for this suite; CSV must never determine newness.)
  *
  * Pass requires ALL of:
  *   - Recall 100% / Precision 100% vs the gold new-inmate list

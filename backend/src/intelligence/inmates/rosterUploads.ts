@@ -196,11 +196,10 @@ export async function storeUpload(args: StoreUploadArgs): Promise<StoredUpload |
  * the same file concurrently — two ingestions of one roster would race on the same
  * bookings and the loser would record spurious conflicts against itself.
  *
- * Ordering matters: CSV before PDF. The CSV is the machine-written source and the
- * PDF may be scanned, and cross-source reconciliation prefers the machine-written
- * value. Ingesting the PDF first would still reach the same conclusion, but every
- * disagreement would be recorded as a change from the OCR value to the real one,
- * which reads as though the jail changed something when only the source did.
+ * Ordering matters: PDF before CSV. The daily revenue path is PDF comparison
+ * (yesterday vs today) → new-inmate report. CSV is optional enrichment and must
+ * not determine newness; ingesting PDF first lets the Daily Case emit the report
+ * before any CSV arrives, and lets CSV-only rows be flagged as exceptions.
  */
 export type UploadSettledResult = {
   ok: boolean;
@@ -220,8 +219,8 @@ export async function startProcessing(args: {
 
   const uploads = await prisma.inmateRosterUpload.findMany({
     where: { uploadId: { in: args.uploadIds } },
-    // CSV first. See above.
-    orderBy: [{ fileKind: 'asc' }, { uploadedAt: 'asc' }],
+    // PDF first (fileKind desc: 'pdf' > 'csv'), then upload time.
+    orderBy: [{ fileKind: 'desc' }, { uploadedAt: 'asc' }],
   });
 
   const found = new Set(uploads.map((u) => u.uploadId));
@@ -359,6 +358,26 @@ async function processOne(uploadId: string, userId: string): Promise<UploadSettl
       progressTotal: outcome.counts.total,
     },
   });
+
+  // Attach to the Daily Case (PDF-primary day; CSV enrichment). Failures here
+  // must not fail the ingest — the case is operational packaging.
+  if (outcome.status === 'completed') {
+    try {
+      const { attachUploadToDailyCase } = await import('./dailyCase.js');
+      await attachUploadToDailyCase({
+        facility: upload.facility,
+        uploadId,
+        batchId: outcome.batchId,
+        fileKind: upload.fileKind,
+        rosterDate: upload.rosterDate?.toISOString().slice(0, 10) ?? null,
+        counts: outcome.counts,
+        userId,
+        autoReport: upload.fileKind === 'pdf',
+      });
+    } catch {
+      // ignore — ingest already succeeded
+    }
+  }
 
   return {
     ok: outcome.status === 'completed',

@@ -545,8 +545,34 @@ async function main() {
       potentialClientsMissed: null,
       precision: null,
       recall: null,
-      note: 'Durable prior/current PDFs not available. Architecture frozen pending certification inputs.',
+      note: 'Durable prior/current PDFs not available. Continuous validation continues on each live morning pair — do not wait on this historical benchmark alone.',
     });
+    try {
+      const { recordEngineeringCertification } = await import(
+        '../src/intelligence/inmates/engineeringCertification.js'
+      );
+      await recordEngineeringCertification({
+        facility: FACILITY,
+        priorDate: PRIOR_DATE,
+        currentDate: CURRENT_DATE,
+        priorInmateCount: null,
+        currentInmateCount: null,
+        newInmates: null,
+        existingInmates: null,
+        returningInmates: null,
+        reviewRequired: null,
+        reconcileOk: null,
+        precision: null,
+        recall: null,
+        potentialClientsFound: null,
+        potentialClientsMissed: null,
+        processingTimeMs: Date.now() - runStartedAt,
+        status: 'blocked',
+        reportDir: REPORT_DIR,
+      });
+    } catch {
+      // DB may not have migration yet — files above still written.
+    }
     process.exit(2);
   }
 
@@ -726,8 +752,44 @@ async function main() {
     recall,
     note: pass
       ? 'Certified against manual gold standard for this pair.'
-      : 'Not certified — fix root causes; do not paper over the report.',
+      : 'Not certified — discrepancies entered the Learning Queue.',
   });
+
+  // Engineering Certification Report (admin/dev) + Learning Queue (no discrepancy forgotten).
+  try {
+    const { recordEngineeringCertification } = await import(
+      '../src/intelligence/inmates/engineeringCertification.js'
+    );
+    await recordEngineeringCertification({
+      facility: FACILITY,
+      priorDate: PRIOR_DATE,
+      currentDate: CURRENT_DATE,
+      priorInmateCount,
+      currentInmateCount: rosterN,
+      newInmates: dispCounts.new,
+      existingInmates: dispCounts.existing,
+      returningInmates: dispCounts.returning,
+      reviewRequired: dispCounts.review,
+      reconcileOk,
+      precision,
+      recall,
+      potentialClientsFound,
+      potentialClientsMissed,
+      processingTimeMs,
+      status: pass ? 'pass' : 'fail',
+      misses: missExplanations.map((m) => ({
+        name: m.name, stage: m.stage, rule: m.rule, evidence: m.evidence, why: m.why,
+      })),
+      extras: extraExplanations.map((m) => ({
+        name: m.name, stage: 'Report generation', rule: m.rule, evidence: m.evidence, why: m.why,
+      })),
+      stageLedger: stages,
+      operationalReportId: reportId,
+      reportDir: REPORT_DIR,
+    });
+  } catch (err) {
+    console.log(`engineering certification note: ${err instanceof Error ? err.message : String(err)}`);
+  }
 
   const md = [
     '# Sacramento Validation Suite — Accuracy Certification Result',

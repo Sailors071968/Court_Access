@@ -1,6 +1,14 @@
 # Continuous daily certification datasets
 
-Every verified morning becomes a permanent regression case.
+Every verified morning becomes a production validation dataset and, once green, a permanent regression case.
+
+**Do not wait** for the historical 08/09→08/10 PDFs. Record today’s manual ground truth with:
+
+```bash
+cd backend && npm run cert:daily-truth -- --date YYYY-MM-DD --gold /path/to/manual-list.md
+```
+
+Discrepancies enter the Learning Queue automatically.
 
 ## Layout
 

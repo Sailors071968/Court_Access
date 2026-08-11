@@ -91,11 +91,12 @@ jobs:
       - name: Install backend
         run: cd backend && npm ci && npx prisma generate
 
-      - name: Unit tests — Active Inmate Basic Roster parser + CSV enrichment policy
+      - name: Unit tests — Sacramento validation policies
         run: |
           cd backend && node --import tsx --test \
             tests/sacramentoJailScan.test.ts \
-            tests/csvEnrichmentPolicy.test.ts
+            tests/csvEnrichmentPolicy.test.ts \
+            tests/learningQueuePolicy.test.ts
 
       - name: Prepare upload dir + schema
         run: |
@@ -130,8 +131,11 @@ jobs:
             reports/niis-reliability/SACRAMENTO_VALIDATION_RESULT.json
             reports/niis-reliability/DAILY_CERTIFICATION_SUMMARY.md
             reports/niis-reliability/DAILY_CERTIFICATION_SUMMARY.json
+            reports/niis-reliability/ENGINEERING_CERTIFICATION_REPORT.md
+            reports/niis-reliability/ENGINEERING_CERTIFICATION_REPORT.json
             reports/niis-reliability/NIIS_ACCURACY_CERTIFICATION.md
             reports/niis-reliability/OPERATIONAL_VALIDATION_MODE.md
+            reports/niis-reliability/CONTINUOUS_OPERATIONAL_VALIDATION.md
           retention-days: 30
           if-no-files-found: warn
 

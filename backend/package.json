@@ -27,6 +27,7 @@
     "test": "node --import tsx --test tests/**/*.test.ts",
     "test:sacramento-parser": "node --import tsx --test tests/sacramentoJailScan.test.ts",
     "cert:sacramento": "tsx scripts/sacramento-validation-suite.ts",
+    "cert:daily-truth": "tsx scripts/record-daily-ground-truth.ts",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "bash scripts/db-safe-migrate.sh deploy",

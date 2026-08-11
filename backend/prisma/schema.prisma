@@ -4511,3 +4511,82 @@ model InmateDailyCase {
   @@index([opsDate])
   @@map("inmate_daily_cases")
 }
+
+/**
+ * Engineering certification snapshot for one ops day.
+ *
+ * Operational report (new inmates for staff) is separate. This row is how NIIS
+ * earns trust: reconcile, precision/recall, clients found/missed, PASS/FAIL.
+ * Production readiness requires sustained consecutive PASSes — not one day.
+ */
+model InmateDailyCertification {
+  certificationId          String   @id @default(uuid())
+  facility                 String
+  opsDate                  DateTime
+  priorRosterDate          DateTime?
+  /** pass | fail | blocked | pending_manual_truth */
+  status                   String
+  priorInmateCount         Int?
+  currentInmateCount       Int?
+  newInmateCount           Int?
+  existingInmateCount      Int?
+  returningInmateCount     Int?
+  reviewCount              Int?
+  reconcileOk              Boolean?
+  precision                Float?
+  recall                   Float?
+  potentialClientsFound    Int?
+  potentialClientsMissed   Int?
+  processingTimeMs         Int?
+  /** Full engineering payload: misses, extras, root causes, stage ledger. */
+  summary                  Json     @default("{}")
+  dailyCaseId              String?
+  operationalReportId      String?
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+
+  @@unique([facility, opsDate])
+  @@index([facility, status, opsDate])
+  @@index([opsDate])
+  @@map("inmate_daily_certifications")
+}
+
+/**
+ * Learning Queue — every discrepancy is remembered until fixed and regress-tested.
+ *
+ * Manual investigator comparison is ground truth. NIIS disagreements become
+ * engineering defects here. Fixed items become permanent regression cases.
+ */
+model InmateLearningQueueItem {
+  itemId          String   @id @default(uuid())
+  facility        String
+  opsDate         DateTime
+  inmateName      String
+  /** missed_new | false_new | reconcile_failure */
+  errorType       String
+  /**
+   * parser | normalization | identity | classification | report | unknown
+   * Set when diagnosed; may start as unknown.
+   */
+  rootCause       String   @default("unknown")
+  /** open | in_progress | fixed | verified_regression */
+  status          String   @default("open")
+  stage           String?
+  rule            String?
+  evidence        String?
+  why             String?
+  /** Path under fixtures/sacramento/validation/days/… once promoted to regression. */
+  regressionPath  String?
+  certificationId String?
+  openedAt        DateTime @default(now())
+  fixedAt         DateTime?
+  verifiedAt      DateTime?
+  updatedAt       DateTime @updatedAt
+  note            String?
+
+  @@unique([facility, opsDate, inmateName, errorType])
+  @@index([status, opsDate])
+  @@index([facility, status])
+  @@index([errorType, status])
+  @@map("inmate_learning_queue")
+}

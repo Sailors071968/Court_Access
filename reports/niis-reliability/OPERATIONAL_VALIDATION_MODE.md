@@ -1,11 +1,12 @@
 # CourtAccess NIIS — Operational Validation Mode
 
 **Effective:** 2026-08-11  
-**Status:** Binding.
+**Status:** Binding.  
+**Also see:** [CONTINUOUS_OPERATIONAL_VALIDATION.md](./CONTINUOUS_OPERATIONAL_VALIDATION.md) — every day is a validation dataset; do not wait on history alone.
 
 ## Architecture freeze
 
-The architecture is **frozen**. Until Sacramento daily PDF comparison is certified at 100% recall and 100% precision:
+The architecture is **frozen**. Until Sacramento daily PDF comparison sustains 100% recall and 100% precision (see 10-day readiness standard):
 
 | Forbidden | Allowed |
 |---|---|

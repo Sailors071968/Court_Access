@@ -615,4 +615,109 @@ export async function registerInmateOperationsRoutes(app: FastifyInstance): Prom
     if (!row) return reply.code(404).send({ error: 'Daily case not found' });
     return reply.send(row);
   });
+
+  // -------------------------------------------------------------------------
+  // Continuous Operational Validation — Learning Queue + engineering certs
+  // (admin/developer only; not the staff revenue report)
+  // -------------------------------------------------------------------------
+
+  app.get('/api/admin/intelligence/learning-queue', async (request, reply) => {
+    if (!requireAdministrator(request as AuthenticatedRequest, reply)) return;
+    const query = request.query as { facility?: string; status?: string; limit?: string; offset?: string };
+    const { listLearningQueue } = await import('./learningQueue.js');
+    return reply.send(await listLearningQueue({
+      facility: query.facility,
+      status: query.status,
+      limit: clampLimit(query.limit, 100, 500),
+      offset: offsetOf(query.offset),
+    }));
+  });
+
+  app.patch('/api/admin/intelligence/learning-queue/:itemId', async (request, reply) => {
+    if (!requireAdministrator(request as AuthenticatedRequest, reply)) return;
+    const { itemId } = request.params as { itemId: string };
+    const body = request.body as {
+      status?: 'open' | 'in_progress' | 'fixed' | 'verified_regression';
+      rootCause?: 'parser' | 'normalization' | 'identity' | 'classification' | 'report' | 'unknown';
+      note?: string;
+      regressionPath?: string;
+    };
+    const { updateLearningQueueItem } = await import('./learningQueue.js');
+    try {
+      const row = await updateLearningQueueItem({ itemId, ...body });
+      return reply.send({
+        itemId: row.itemId,
+        status: row.status,
+        rootCause: row.rootCause,
+        regressionPath: row.regressionPath,
+        fixedAt: row.fixedAt?.toISOString() ?? null,
+        verifiedAt: row.verifiedAt?.toISOString() ?? null,
+      });
+    } catch {
+      return reply.code(404).send({ error: 'Learning queue item not found' });
+    }
+  });
+
+  app.get('/api/admin/intelligence/certifications', async (request, reply) => {
+    if (!requireAdministrator(request as AuthenticatedRequest, reply)) return;
+    const query = request.query as { facility?: string; limit?: string };
+    const facility = query.facility ?? 'sacramento';
+    const limit = clampLimit(query.limit, 30, 100);
+    const rows = await prisma.inmateDailyCertification.findMany({
+      where: { facility },
+      orderBy: { opsDate: 'desc' },
+      take: limit,
+    });
+    const { consecutivePassStreak } = await import('./learningQueue.js');
+    const streak = await consecutivePassStreak(facility);
+    return reply.send({
+      facility,
+      readiness: streak,
+      certifications: rows.map((r) => ({
+        certificationId: r.certificationId,
+        opsDate: r.opsDate.toISOString().slice(0, 10),
+        status: r.status,
+        precision: r.precision,
+        recall: r.recall,
+        potentialClientsFound: r.potentialClientsFound,
+        potentialClientsMissed: r.potentialClientsMissed,
+        reconcileOk: r.reconcileOk,
+        currentInmateCount: r.currentInmateCount,
+        newInmateCount: r.newInmateCount,
+      })),
+    });
+  });
+
+  app.get('/api/admin/intelligence/certifications/:facility/:opsDate', async (request, reply) => {
+    if (!requireAdministrator(request as AuthenticatedRequest, reply)) return;
+    const { facility, opsDate } = request.params as { facility: string; opsDate: string };
+    const row = await prisma.inmateDailyCertification.findUnique({
+      where: {
+        facility_opsDate: {
+          facility,
+          opsDate: new Date(`${opsDate.slice(0, 10)}T00:00:00.000Z`),
+        },
+      },
+    });
+    if (!row) return reply.code(404).send({ error: 'Certification not found' });
+    return reply.send({
+      certificationId: row.certificationId,
+      facility: row.facility,
+      opsDate: row.opsDate.toISOString().slice(0, 10),
+      status: row.status,
+      summary: row.summary,
+      precision: row.precision,
+      recall: row.recall,
+      precisionPct: pct(row.precision),
+      recallPct: pct(row.recall),
+      potentialClientsFound: row.potentialClientsFound,
+      potentialClientsMissed: row.potentialClientsMissed,
+      reconcileOk: row.reconcileOk,
+      processingTimeMs: row.processingTimeMs,
+    });
+  });
+}
+
+function pct(value: number | null): string | null {
+  return value == null ? null : `${(value * 100).toFixed(1)}%`;
 }

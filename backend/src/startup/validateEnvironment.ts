@@ -30,6 +30,8 @@ export interface ValidationReport {
   overall: Level;
   checks: CheckResult[];
   production: boolean;
+  /** Whether a FAIL stops the boot: true in production, and when nothing configured this process. */
+  enforced: boolean;
 }
 
 /** The published fallback in server.ts — using it in production is not a secret. */
@@ -92,7 +94,43 @@ function checkWritable(name: string, dir: string | undefined, fallback: string):
 export function validateEnvironment(): ValidationReport {
   const env = process.env;
   const production = env.NODE_ENV === 'production';
+
+  // Is this process configured at all?
+  //
+  // Downgrading FAIL to WARNING outside production is deliberate and worth
+  // keeping: a developer should not need a full production environment to run
+  // the server. But it used NODE_ENV as the only signal, and NODE_ENV lives in
+  // the environment — so a process launched with *no* environment concluded it
+  // was a developer machine and waived every fatal check. That is not a
+  // hypothetical: it downgraded four of them, continued, and died ~325ms later
+  // inside Prisma reporting "Database unreachable" and advising
+  // `prisma migrate deploy`, none of which was true. See
+  // deploy/ROOT_CAUSE_CRASH_LOOP.md.
+  //
+  // DATABASE_URL is the second signal because there is no way to run this
+  // server usefully without it: the schema guard exits 1 within a second of
+  // boot when it is missing. So a process holding neither has not been
+  // configured by anyone, in any environment.
+  //
+  // This adds no new way to refuse to start. Every case it now stops was
+  // already going to exit 1 moments later; it changes which message you get and
+  // how soon, not whether the service runs.
+  const configured = Boolean(env.NODE_ENV) || Boolean(env.DATABASE_URL);
+  const enforced = production || !configured;
+
   const checks: CheckResult[] = [];
+
+  if (!configured) {
+    checks.push(
+      fail(
+        'environment',
+        'neither NODE_ENV nor DATABASE_URL is set — this process was started with no environment',
+        'Nothing configured this process. If it is managed by PM2, its definition is probably missing ' +
+          '--env-file, or the file it points at is unreadable: check `pm2 jlist` for node_args. ' +
+          'See deploy/DEPLOY_FROM_SCRATCH.md.',
+      ),
+    );
+  }
 
   // -- Runtime ---------------------------------------------------------------
   const major = Number(process.versions.node.split('.')[0]);
@@ -191,18 +229,19 @@ export function validateEnvironment(): ValidationReport {
   const warned = checks.filter((c) => c.level === 'WARNING');
 
   // Outside production nothing is fatal, so a developer is not forced to
-  // populate a production environment to run the server.
+  // populate a production environment to run the server — unless the process
+  // has no environment at all, which is not a development default.
   const overall: Level =
-    failed.length > 0 && production ? 'FAIL' : warned.length > 0 || failed.length > 0 ? 'WARNING' : 'PASS';
+    failed.length > 0 && enforced ? 'FAIL' : warned.length > 0 || failed.length > 0 ? 'WARNING' : 'PASS';
 
-  return { overall, checks, production };
+  return { overall, checks, production, enforced };
 }
 
 export function printValidationReport(report: ValidationReport): void {
   console.log('[Startup] Validating configuration...');
 
   for (const c of report.checks) {
-    const level = report.production || c.level !== 'FAIL' ? c.level : 'WARNING';
+    const level = report.enforced || c.level !== 'FAIL' ? c.level : 'WARNING';
     console.log(`  ${level.padEnd(8)} ${c.name.padEnd(28)} ${c.message}`);
     if (c.remedy && level !== 'PASS') {
       console.log(`           ${''.padEnd(28)} -> ${c.remedy}`);
@@ -214,6 +253,14 @@ export function printValidationReport(report: ValidationReport): void {
 
   if (report.overall === 'FAIL') {
     console.error(`[Startup] FAILED — ${failed} fatal, ${warned} warnings. Server will not start.`);
+    if (!report.production) {
+      // Says why a non-production process is being stopped, so this does not
+      // look like the validator misfiring on a developer machine.
+      console.error(
+        '[Startup] Enforced despite NODE_ENV not being production: this process has no ' +
+          'environment at all, so there is nothing to treat as a development default.',
+      );
+    }
   } else if (!report.production && failed > 0) {
     console.warn(
       `[Startup] ${failed} check(s) would be fatal in production, ${warned} warnings. ` +

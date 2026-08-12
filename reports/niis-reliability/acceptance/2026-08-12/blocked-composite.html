@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>NIIS Acceptance 2026-08-12 — BLOCKED</title>
+<style>
+ body{font-family:Georgia,serif;margin:0;background:#1a1a1a;color:#f2f2f2}
+ .wrap{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:16px;min-height:100vh}
+ section{background:#222;border:1px solid #444;padding:16px}
+ h1{font-size:18px;margin:0 0 8px;color:#f6c945}
+ h2{font-size:14px;margin:0 0 12px;color:#ccc;font-weight:normal}
+ .fail{color:#ff6b6b;font-weight:bold}
+ .ok{color:#6bffb0}
+ .metric{font-size:28px;margin:8px 0}
+ .small{font-size:12px;color:#999;line-height:1.5}
+ table{width:100%;border-collapse:collapse;font-size:12px}
+ td,th{border-bottom:1px solid #333;padding:6px;text-align:left}
+</style></head><body>
+<div class="wrap">
+<section>
+ <h1>Morning Operations</h1>
+ <h2>Sacramento · 2026-08-12 · Daily Case: NONE</h2>
+ <p class="fail">BLOCKED — Stage 1 FAIL</p>
+ <p class="metric">New inmates: —</p>
+ <p class="small">pdfUploaded: NO<br>comparisonFinished: NO<br>Operator: Upload today&apos;s Sacramento PDF to begin the Daily Case.</p>
+ <table>
+  <tr><th>Stage</th><th>Verdict</th></tr>
+  <tr><td>PDF received</td><td class="fail">FAIL</td></tr>
+  <tr><td>Import Job</td><td>SKIPPED</td></tr>
+  <tr><td>Parser</td><td>SKIPPED</td></tr>
+  <tr><td>Comparison</td><td>SKIPPED</td></tr>
+ </table>
+</section>
+<section>
+ <h1>Today&apos;s New Inmates</h1>
+ <h2>Sacramento · 2026-08-12 · source: unavailable</h2>
+ <p class="metric">No certified results available</p>
+ <p class="ok">results: 0 · seed contamination: 0</p>
+ <p class="small">DB inmates after purge: 0<br>firstAppearance rows: 0<br>Bare unscoped query refused (unavailable).<br>No NGUYEN/BAKER/SILVA/demo rows displayed.</p>
+</section>
+<section>
+ <h1>Import Summary</h1>
+ <h2>SACJAILSCAN08-12-2026.pdf</h2>
+ <p class="fail">NOT PRESENT ON AGENT</p>
+ <p class="small">uploadId: —<br>size: —<br>sha256: —<br>jobId: —<br><br>Filesystem search: 0 hits<br>InmateRosterUpload rows for 08-12: 0<br>Production API: 401 (no admin creds)<br>courtaccess.net health: 200</p>
+ <p class="fail" style="margin-top:24px">ACCEPTANCE: REJECT / BLOCKED</p>
+ <p class="small">This panel is measured evidence of blocker state — not a successful pipeline screenshot. Success screenshot requires real PDF bytes + completed Daily Case.</p>
+</section>
+</div>
+</body></html>

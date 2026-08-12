@@ -53,3 +53,9 @@ backend/*.traineddata
 
 # Backend bundle, produced by `npm run build` in backend/
 backend/dist/
+
+# Operational verification writes live credentials and tokens for the browser
+# check. Evidence, but not the kind that belongs in a repository.
+reports/operational-verification/admin-credentials.txt
+reports/operational-verification/login-response.json
+reports/operational-verification/refresh-after-restart.json

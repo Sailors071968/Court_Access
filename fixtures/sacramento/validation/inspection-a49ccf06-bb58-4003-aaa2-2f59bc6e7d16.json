@@ -1,0 +1,100 @@
+{
+  "inspectionId": "a49ccf06-bb58-4003-aaa2-2f59bc6e7d16",
+  "inspectedAt": "2026-08-10T19:37:41.729Z",
+  "inspectedById": "bc4e4eb2-7f02-44c7-89c2-f2913e03c791",
+  "file": {
+    "kind": "pdf",
+    "sha256": "6fd5066261f20405322e5ecd5ccf3be44253cb1f04f9fa33784613c331cb6991",
+    "filename": "SACJAILSCAN08-10-2026 (1)_compressed.pdf",
+    "sizeBytes": 4527814
+  },
+  "columns": [],
+  "profile": {
+    "label": "Sacramento County Main Jail \u2014 PDF roster",
+    "version": 1,
+    "profileId": "8c69d1a4-be4e-4fff-ba5d-6c966d71477e",
+    "isFallback": false,
+    "sourceType": "pdf_text",
+    "expectedHeaders": [
+      "BOOKING",
+      "NAME",
+      "DOB",
+      "SEX",
+      "BOOKED",
+      "HOUSING",
+      "CHARGES",
+      "BAIL"
+    ]
+  },
+  "summary": {
+    "unknown": [],
+    "duplicated": [],
+    "recognized": [],
+    "missingRequired": [],
+    "emptyThoughMapped": [],
+    "suggestedMappings": []
+  },
+  "facility": "sacramento",
+  "structure": {
+    "ragged": [],
+    "headerRow": [],
+    "linesRead": true,
+    "pageCount": 59,
+    "rowsSampled": 14351,
+    "sampleLines": [
+      "r",
+      ",, \t,",
+      "<o-,o-L\\o",
+      "Sacramento County",
+      "Main",
+      "Jail",
+      "6511",
+      "Street",
+      "Sacra",
+      "mento,",
+      "CA",
+      "95814",
+      "Instructions",
+      "\u2022",
+      "Checking",
+      "both rosters, find",
+      "the inmate",
+      "alphabetically",
+      "by last name",
+      "\u2022",
+      "Using",
+      "the examples",
+      "on",
+      "the board above",
+      "as",
+      "a reference, complete the appropriate",
+      "forms",
+      "\u2022 \tStand in",
+      "the line against the wall with your",
+      "identification and wait to be called by the",
+      "officers",
+      "-- 1 of 59 --",
+      "SACRAMENTO COUNTY SHERIFF'S",
+      "OFFICE",
+      "Active Inmate Basic Roster",
+      "Facility:",
+      "MAIN /,Hide Classilicallon,Hide Overall Status.Order",
+      "by: Name",
+      "Name",
+      "XREF"
+    ],
+    "hasTextLayer": true,
+    "ocrWouldBeUsed": false,
+    "encodingWarnings": []
+  },
+  "compatibility": {
+    "reasons": [
+      "59 page(s) with a usable text layer, about 1674 characters per page. No OCR needed.",
+      "6 of 14351 line(s) carry both a date and a name, so the layout is probably row-per-inmate.",
+      "A header line was found: \"by last name\" (3 recognised column names)."
+    ],
+    "verdict": "would_import",
+    "parserConfidence": 75
+  },
+  "suggestedProfileUpdate": null
+}

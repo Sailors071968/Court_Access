@@ -16,6 +16,11 @@
 
 import prisma from '../../lib/prisma.js';
 import { displayName } from './displayName.js';
+import {
+  compareRosterBatches,
+  isReportableNew,
+  resolvePdfRosterPair,
+} from './rosterComparison.js';
 
 export interface ReportParameters {
   from?: string;
@@ -23,6 +28,12 @@ export interface ReportParameters {
   facility?: string;
   /** Include rows whose identity confidence is below this. Default includes all. */
   minConfidence?: number;
+  /**
+   * PDF-primary set-diff. When both are set, "new" means on current roster and
+   * absent from prior — matching manual investigator comparison.
+   */
+  priorBatchId?: string;
+  currentBatchId?: string;
 }
 
 export interface ReportRow {
@@ -51,20 +62,46 @@ const money = (cents: bigint | null): string | null =>
   cents === null ? null : (Number(cents) / 100).toFixed(2);
 
 /**
- * Gather the rows.
+ * Gather the rows for the Morning New Inmate Intelligence Report.
  *
- * A query over `isFirstAppearance`, which ingestion recorded at the time. Not
- * re-derived: recomputing "new" from current data would change last week's
- * report every time an older roster was backfilled.
+ * PDF-primary rule (binding): a person is on this report when they appear on
+ * today's roster and not on yesterday's. Historical bookings are enrichment.
+ *
+ * When a prior/current PDF batch pair can be resolved, set-diff is used.
+ * Otherwise falls back to `isFirstAppearance` (provisional; may disagree with
+ * manual comparison for historical returnees).
  */
 export async function buildNewInmateReport(params: ReportParameters): Promise<ReportRow[]> {
-  const where: Record<string, unknown> = { isFirstAppearance: true };
-  if (params.facility) where.facility = params.facility;
-  if (params.from || params.to) {
-    where.bookedAt = {
-      ...(params.from ? { gte: new Date(params.from) } : {}),
-      ...(params.to ? { lte: new Date(params.to) } : {}),
-    };
+  let bookingIds: string[] | null = null;
+
+  let priorBatchId = params.priorBatchId;
+  let currentBatchId = params.currentBatchId;
+  if ((!priorBatchId || !currentBatchId) && params.facility && params.from) {
+    const pair = await resolvePdfRosterPair(params.facility, params.from);
+    if (pair) {
+      priorBatchId = pair.priorBatchId;
+      currentBatchId = pair.currentBatchId;
+    }
+  }
+
+  if (priorBatchId && currentBatchId) {
+    const comparison = await compareRosterBatches({ priorBatchId, currentBatchId });
+    bookingIds = comparison.current
+      .filter((row) => isReportableNew(row.disposition) && row.bookingId)
+      .map((row) => row.bookingId!);
+  }
+
+  const where: Record<string, unknown> = bookingIds
+    ? { bookingId: { in: bookingIds } }
+    : { isFirstAppearance: true };
+  if (!bookingIds) {
+    if (params.facility) where.facility = params.facility;
+    if (params.from || params.to) {
+      where.bookedAt = {
+        ...(params.from ? { gte: new Date(params.from) } : {}),
+        ...(params.to ? { lte: new Date(params.to) } : {}),
+      };
+    }
   }
 
   const bookings = await prisma.inmateBooking.findMany({

@@ -23,6 +23,20 @@ describe('Daily Difference Viewer classification', () => {
       }),
       { color: 'green', classification: 'new' },
     );
+    // Absent yesterday + repo history ⇒ returning (still on New Inmate Report)
+    assert.deepEqual(
+      classifyDifferenceColor({
+        onPrior: false, onCurrent: true, presence: 'returning', hasAttributeChanges: false,
+      }),
+      { color: 'blue', classification: 'returning' },
+    );
+    // Roster set-diff wins over stale repo "existing" when absent yesterday
+    assert.deepEqual(
+      classifyDifferenceColor({
+        onPrior: false, onCurrent: true, presence: 'existing', hasAttributeChanges: false,
+      }),
+      { color: 'green', classification: 'new' },
+    );
     assert.deepEqual(
       classifyDifferenceColor({
         onPrior: true, onCurrent: true, presence: 'returning', hasAttributeChanges: true,

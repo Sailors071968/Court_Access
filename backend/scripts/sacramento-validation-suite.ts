@@ -641,6 +641,7 @@ async function main() {
   }
 
   const batchId = day2.upload?.batchId ?? null;
+  const priorBatchId = day1.upload?.batchId ?? null;
   const ingestTotal = day2.upload?.counts?.total ?? 0;
   stages.push({
     stage: 'Identity candidates / decisions (ingest total)',
@@ -650,34 +651,55 @@ async function main() {
       : undefined,
   });
 
-  const { counts: dispCounts, byName } = batchId
-    ? await dispositionAccounting(batchId)
-    : {
-        counts: { new: 0, existing: 0, returning: 0, review: 0, unclassified: 0, failed: 0 } as Record<Disposition, number>,
-        byName: new Map<string, Disposition>(),
-      };
+  // Roster set-diff is the authority for daily dispositions + the New Inmate Report.
+  let dispCounts: Record<Disposition, number> = {
+    new: 0, existing: 0, returning: 0, review: 0, unclassified: 0, failed: 0,
+  };
+  let byName = new Map<string, Disposition>();
+  let reported: string[] = [];
+
+  if (priorBatchId && batchId) {
+    const { compareRosterBatches, isReportableNew } = await import(
+      '../src/intelligence/inmates/rosterComparison.js'
+    );
+    const diff = await compareRosterBatches({
+      priorBatchId,
+      currentBatchId: batchId,
+    });
+    dispCounts = { ...diff.counts };
+    byName = new Map(diff.current.map((r) => [r.name, r.disposition as Disposition]));
+    reported = diff.current
+      .filter((r) => isReportableNew(r.disposition))
+      .map((r) => r.name);
+  } else if (batchId) {
+    const fallback = await dispositionAccounting(batchId);
+    dispCounts = fallback.counts;
+    byName = fallback.byName;
+  }
 
   const classified =
     dispCounts.new + dispCounts.existing + dispCounts.returning + dispCounts.review;
   stages.push({
-    stage: 'Classification (named dispositions)',
+    stage: 'Classification (roster set-diff dispositions)',
     count: classified,
     note:
       classified !== rosterN
         ? `classified ${classified} vs unique parsed names ${rosterN}; failed=${dispCounts.failed} unclassified=${dispCounts.unclassified}`
-        : undefined,
+        : 'new = on today not yesterday; returning = same + historical bookings',
   });
 
   // --- New inmate report -------------------------------------------------
   const toDate = nextDateIso(CURRENT_DATE);
-  const allNew = await getNewInmates({
-    facility: FACILITY,
-    from: CURRENT_DATE,
-    to: toDate,
-    limit: 5000,
-    offset: 0,
-  });
-  const reported = allNew.results.map((r) => normalizeName(r.name));
+  if (reported.length === 0) {
+    const allNew = await getNewInmates({
+      facility: FACILITY,
+      from: CURRENT_DATE,
+      to: toDate,
+      limit: 5000,
+      offset: 0,
+    });
+    reported = allNew.results.map((r) => normalizeName(r.name));
+  }
   const reportedSet = new Set(reported);
   stages.push({
     stage: 'Report generation (new inmates in date window)',

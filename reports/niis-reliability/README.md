@@ -3,6 +3,7 @@
 **One job:** the exact list of every newly booked Sacramento inmate, every morning.  
 **Architecture frozen.** Historical 08/09→08/10 remains the benchmark — but **do not wait** on it; every live day is a validation dataset.
 
+→ **[ACCURACY_FIRST.md](./ACCURACY_FIRST.md)** — Phase B deferred until manual-list match  
 → **[DAILY_INTELLIGENCE_OPERATIONS_DIRECTIVE.md](./DAILY_INTELLIGENCE_OPERATIONS_DIRECTIVE.md)** — final daily ops phases  
 → **[OPERATIONAL_EXCELLENCE_DIRECTIVE_V1.md](./OPERATIONAL_EXCELLENCE_DIRECTIVE_V1.md)** — governing mission & priority order  
 → **[CONTINUOUS_OPERATIONAL_VALIDATION.md](./CONTINUOUS_OPERATIONAL_VALIDATION.md)**  

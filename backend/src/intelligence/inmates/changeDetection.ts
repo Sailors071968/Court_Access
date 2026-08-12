@@ -82,12 +82,11 @@ export interface PresenceInput {
 }
 
 /**
- * New, returning, or already known.
+ * Repository-relative presence (used during single-file ingest).
  *
- * The distinction between returning and known matters operationally: a person
- * who was released and has been booked again is an event, and a person who has
- * simply been in custody since yesterday is not. Both would look identical if
- * only the booking count were consulted.
+ * For the Morning New Inmate Intelligence Report and Daily Case certification,
+ * use `classifyRosterDisposition` / `compareRosterBatches` in rosterComparison.ts:
+ * operational "new" is on today's PDF ∧ not on yesterday's PDF.
  */
 export function classifyPresence(input: PresenceInput): ChangeEventDraft {
   if (input.priorBookingCount === 0) {

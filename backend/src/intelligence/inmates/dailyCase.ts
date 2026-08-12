@@ -234,8 +234,12 @@ export async function attachUploadToDailyCase(args: {
 }
 
 /**
- * When both prior and current PDFs are present, mark compared and optionally
- * emit the initial New Inmate Report immediately (before any CSV).
+ * When both prior and current PDFs are present, run the Roster Comparison Engine
+ * (set-diff) and optionally emit the initial New Inmate Report immediately
+ * (before any CSV).
+ *
+ * "New" for the report = on current PDF ∧ not on prior PDF — not repository
+ * first appearance. That matches manual investigator comparison.
  */
 export async function finalizePdfComparison(args: {
   caseId: string;
@@ -249,13 +253,88 @@ export async function finalizePdfComparison(args: {
     return { caseId: daily.caseId, status: daily.status };
   }
 
+  const { compareRosterBatches } = await import('./rosterComparison.js');
+  const comparison = await compareRosterBatches({
+    priorBatchId: daily.priorPdfBatchId,
+    currentBatchId: daily.currentPdfBatchId,
+  });
+
+  // Persist a durable comparison snapshot for operators / diagnostics.
+  const reportable = comparison.counts.new + comparison.counts.returning;
+  const comparisonRow = await prisma.inmateBatchComparison.upsert({
+    where: {
+      baselineBatchId_currentBatchId: {
+        baselineBatchId: daily.priorPdfBatchId,
+        currentBatchId: daily.currentPdfBatchId,
+      },
+    },
+    create: {
+      facility: daily.facility,
+      baselineBatchId: daily.priorPdfBatchId,
+      currentBatchId: daily.currentPdfBatchId,
+      baselineRosterDate: daily.priorRosterDate,
+      currentRosterDate: daily.currentRosterDate,
+      newInmates: reportable,
+      returns: comparison.counts.returning,
+      departures: comparison.departed.length,
+      detail: {
+        engine: 'roster_set_diff',
+        counts: comparison.counts,
+        reconcileOk: comparison.reconcileOk,
+        newInmateNames: comparison.newInmateNames,
+        departed: comparison.departed.slice(0, 500),
+        current: comparison.current.slice(0, 500).map((r) => ({
+          name: r.name,
+          disposition: r.disposition,
+          why: r.why,
+          bookingId: r.bookingId,
+          inmateId: r.inmateId,
+        })),
+      } as object,
+      detailTruncated: comparison.current.length > 500,
+      generatedById: args.userId ?? null,
+    },
+    update: {
+      newInmates: reportable,
+      returns: comparison.counts.returning,
+      departures: comparison.departed.length,
+      detail: {
+        engine: 'roster_set_diff',
+        counts: comparison.counts,
+        reconcileOk: comparison.reconcileOk,
+        newInmateNames: comparison.newInmateNames,
+        departed: comparison.departed.slice(0, 500),
+        current: comparison.current.slice(0, 500).map((r) => ({
+          name: r.name,
+          disposition: r.disposition,
+          why: r.why,
+          bookingId: r.bookingId,
+          inmateId: r.inmateId,
+        })),
+      } as object,
+      detailTruncated: comparison.current.length > 500,
+      generatedById: args.userId ?? null,
+    },
+  });
+
   let status: DailyCaseStatus = 'compared';
   await appendAudit(daily.caseId, {
     at: new Date().toISOString(),
     kind: 'pdf_compared',
-    detail: `Prior batch ${daily.priorPdfBatchId} vs current batch ${daily.currentPdfBatchId}`,
+    detail:
+      `Roster set-diff prior ${daily.priorPdfBatchId} vs current ${daily.currentPdfBatchId}: ` +
+      `new=${comparison.counts.new} returning=${comparison.counts.returning} ` +
+      `existing=${comparison.counts.existing} review=${comparison.counts.review} ` +
+      `reconcileOk=${comparison.reconcileOk}`,
     actorId: args.userId ?? null,
-  }, { status });
+  }, {
+    status,
+    comparisonId: comparisonRow.comparisonId,
+    newInmateCount: reportable,
+    returningInmateCount: comparison.counts.returning,
+    existingInmateCount: comparison.counts.existing,
+    reviewCount: comparison.counts.review,
+  });
 
   if (args.autoReport !== false && !daily.initialReportId) {
     const ops = daily.opsDate.toISOString().slice(0, 10);
@@ -266,7 +345,13 @@ export async function finalizePdfComparison(args: {
     })();
     try {
       const report = await generateAndPersistReport(
-        { facility: daily.facility, from: ops, to: next },
+        {
+          facility: daily.facility,
+          from: ops,
+          to: next,
+          priorBatchId: daily.priorPdfBatchId,
+          currentBatchId: daily.currentPdfBatchId,
+        },
         args.userId ?? 'daily-case',
       );
       status = 'report_ready';
@@ -275,13 +360,19 @@ export async function finalizePdfComparison(args: {
         data: {
           initialReportId: report.reportId,
           newInmateCount: report.rowCount,
+          returningInmateCount: comparison.counts.returning,
+          existingInmateCount: comparison.counts.existing,
+          reviewCount: comparison.counts.review,
+          comparisonId: comparisonRow.comparisonId,
           status,
         },
       });
       await appendAudit(daily.caseId, {
         at: new Date().toISOString(),
         kind: 'initial_report',
-        detail: `Initial New Inmate Report ${report.reportId} (${report.rowCount} rows) — before CSV enrichment`,
+        detail:
+          `Initial New Inmate Report ${report.reportId} (${report.rowCount} rows) ` +
+          `via roster set-diff — before CSV enrichment`,
         actorId: args.userId ?? null,
       });
     } catch (err) {

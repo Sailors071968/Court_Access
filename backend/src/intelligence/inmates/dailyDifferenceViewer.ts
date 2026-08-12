@@ -7,6 +7,7 @@
 // ============================================================================
 
 import prisma from '../../lib/prisma.js';
+import { classifyRosterDisposition } from './rosterComparison.js';
 
 export type DifferenceColor = 'green' | 'blue' | 'yellow' | 'gray' | 'red';
 export type DifferenceClass =
@@ -148,8 +149,11 @@ function chargesLabel(charges: NormPayload['charges']): string | null {
 }
 
 /**
- * Color priority when multiple signals apply:
+ * Color priority from roster set-diff (ops accuracy), then attribute changes.
  * review/failed > new > returning > changed > unchanged/departed.
+ *
+ * "New" / "returning" mean absent from yesterday's roster — not repository
+ * first appearance. Returning still appears on the New Inmate Report.
  */
 export function classifyDifferenceColor(input: {
   onPrior: boolean;
@@ -165,6 +169,13 @@ export function classifyDifferenceColor(input: {
   }
   if (input.presence === 'unclassified' || input.presence === null) {
     return { color: 'red', classification: 'unclassified' };
+  }
+  // Roster-primary: absent yesterday ⇒ green/blue even if repo has history.
+  if (!input.onPrior && input.onCurrent) {
+    if (input.presence === 'returning') {
+      return { color: 'blue', classification: 'returning' };
+    }
+    return { color: 'green', classification: 'new' };
   }
   if (input.presence === 'new') {
     return { color: 'green', classification: 'new' };
@@ -260,18 +271,16 @@ function attributeDiffs(
   return out;
 }
 
-function presenceFromResolution(
-  resolution: string,
-  changeType: string | null,
-): 'new' | 'returning' | 'existing' | 'review' | 'failed' | 'unclassified' {
-  if (resolution === 'needs_review') return 'review';
-  if (resolution === 'failed') return 'failed';
-  if (resolution === 'new_inmate') return 'new';
-  if (changeType === 'new_inmate') return 'new';
-  if (changeType === 'returning_inmate') return 'returning';
-  if (resolution === 'matched' || resolution === 'duplicate') return 'existing';
-  if (changeType === 'known_inmate') return 'existing';
-  return 'unclassified';
+function presenceFromRoster(args: {
+  onPrior: boolean;
+  resolution: string;
+  historicalBookingCount: number;
+}): 'new' | 'returning' | 'existing' | 'review' | 'failed' | 'unclassified' {
+  return classifyRosterDisposition({
+    onPrior: args.onPrior,
+    resolution: args.resolution,
+    historicalBookingCount: args.historicalBookingCount,
+  });
 }
 
 function buildWhy(args: {
@@ -552,14 +561,8 @@ export async function buildDailyDifferenceView(args: {
           }),
     ]);
 
-  const presenceByBooking = new Map<string, string>();
-  const presenceByInmate = new Map<string, string>();
   const attrByBooking = new Map<string, typeof changeEvents>();
   for (const e of changeEvents) {
-    if (e.changeType === 'new_inmate' || e.changeType === 'returning_inmate' || e.changeType === 'known_inmate') {
-      if (e.bookingId) presenceByBooking.set(e.bookingId, e.changeType);
-      if (e.inmateId) presenceByInmate.set(e.inmateId, e.changeType);
-    }
     if (ATTR_CHANGE_TYPES.has(e.changeType) && e.bookingId) {
       const list = attrByBooking.get(e.bookingId) ?? [];
       list.push(e);
@@ -634,6 +637,21 @@ export async function buildDailyDifferenceView(args: {
     });
   }
 
+  const currentDate = currentBatch.rosterDate ?? new Date(`${pair.opsDate}T00:00:00.000Z`);
+  const inmateIdsForHistory = people
+    .map((p) => p.current?.snap.inmateId)
+    .filter((id): id is string => Boolean(id));
+  const historicalGrouped = inmateIdsForHistory.length > 0
+    ? await prisma.inmateBooking.groupBy({
+        by: ['inmateId'],
+        where: { inmateId: { in: inmateIdsForHistory }, bookedAt: { lt: currentDate } },
+        _count: { bookingId: true },
+      })
+    : [];
+  const historicalByInmate = new Map(
+    historicalGrouped.map((g) => [g.inmateId, g._count.bookingId]),
+  );
+
   const counts = emptyCounts();
   const rows: DifferenceRow[] = [];
 
@@ -642,12 +660,13 @@ export async function buildDailyDifferenceView(args: {
     const currentSnap = person.current?.snap ?? null;
     const bookingId = currentSnap?.bookingId ?? priorSnap?.bookingId ?? null;
     const inmateId = currentSnap?.inmateId ?? priorSnap?.inmateId ?? null;
-    const changeType =
-      (bookingId ? presenceByBooking.get(bookingId) : null)
-      ?? (inmateId ? presenceByInmate.get(inmateId) : null)
-      ?? null;
+    const historicalBookingCount = inmateId ? (historicalByInmate.get(inmateId) ?? 0) : 0;
     const presence = currentSnap
-      ? presenceFromResolution(currentSnap.resolution, changeType)
+      ? presenceFromRoster({
+          onPrior: Boolean(priorSnap),
+          resolution: currentSnap.resolution,
+          historicalBookingCount,
+        })
       : null;
     const attrEvents = bookingId ? (attrByBooking.get(bookingId) ?? []) : [];
     const attributeChanges = attributeDiffs(priorSnap, currentSnap, attrEvents);

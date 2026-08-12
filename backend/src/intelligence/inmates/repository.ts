@@ -204,20 +204,42 @@ export interface NewInmateParams {
 }
 
 /**
- * Newly discovered inmates — the primary output of the subsystem.
+ * Newly booked inmates for the morning revenue report.
  *
- * A query over `isFirstAppearance`, which ingestion recorded at the time. This
- * is not re-derived from current data: doing so would change last week's report
- * every time an older roster was backfilled.
+ * Prefer PDF roster set-diff (on today ∧ not on yesterday) when a prior/current
+ * PDF pair exists for the facility+date. That matches manual investigator
+ * comparison. Fall back to `isFirstAppearance` only when no pair is available.
  */
 export async function getNewInmates(params: NewInmateParams) {
-  const where: Record<string, unknown> = { isFirstAppearance: true };
-  if (params.facility) where.facility = params.facility;
-  if (params.from || params.to) {
-    where.bookedAt = {
-      ...(params.from ? { gte: new Date(params.from) } : {}),
-      ...(params.to ? { lte: new Date(params.to) } : {}),
-    };
+  let where: Record<string, unknown> = { isFirstAppearance: true };
+
+  if (params.facility && params.from) {
+    const { resolvePdfRosterPair, compareRosterBatches, isReportableNew } =
+      await import('./rosterComparison.js');
+    const pair = await resolvePdfRosterPair(params.facility, params.from);
+    if (pair) {
+      const comparison = await compareRosterBatches(pair);
+      const bookingIds = comparison.current
+        .filter((row) => isReportableNew(row.disposition) && row.bookingId)
+        .map((row) => row.bookingId!);
+      where = { bookingId: { in: bookingIds.length > 0 ? bookingIds : ['__none__'] } };
+    } else {
+      if (params.facility) where.facility = params.facility;
+      if (params.from || params.to) {
+        where.bookedAt = {
+          ...(params.from ? { gte: new Date(params.from) } : {}),
+          ...(params.to ? { lte: new Date(params.to) } : {}),
+        };
+      }
+    }
+  } else {
+    if (params.facility) where.facility = params.facility;
+    if (params.from || params.to) {
+      where.bookedAt = {
+        ...(params.from ? { gte: new Date(params.from) } : {}),
+        ...(params.to ? { lte: new Date(params.to) } : {}),
+      };
+    }
   }
 
   const [total, bookings] = await Promise.all([

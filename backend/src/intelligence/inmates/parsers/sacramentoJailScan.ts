@@ -77,8 +77,10 @@ export function parseActiveInmateBasicRoster(
     if (seen.has(key)) continue;
     seen.add(key);
 
-    // Classification tokens (MEDIUM SECURITY etc.) sit inside the housing capture;
-    // strip trailing security class for a cleaner housingLocation.
+    // Classification tokens (MINIMUM/MEDIUM/MAXIMUM SECURITY) sit inside the
+    // housing capture on this layout — split them into a dedicated field.
+    const classMatch = housing.match(/\b((?:MINIMUM|MEDIUM|MAXIMUM)\s+SECURITY)\b/i);
+    const classification = classMatch ? classMatch[1]!.toUpperCase().replace(/\s+/g, ' ') : '';
     const housingOnly = housing
       .replace(/\b(MINIMUM|MEDIUM|MAXIMUM)\s+SECURITY\b/gi, '')
       .replace(/\s+/g, ' ')
@@ -91,6 +93,7 @@ export function parseActiveInmateBasicRoster(
       DOB: dob,
       Gender: sex,
       Housing: housingOnly || housing,
+      Classification: classification,
       Booked: booked,
       __lineNumber: String(records.length + 1),
     });

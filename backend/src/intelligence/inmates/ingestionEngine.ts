@@ -150,6 +150,51 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
       sourceSha256, parsed.stats.ocrUsed ? 'pdf_ocr' : sourceType);
   }
 
+  // --- Canonical roster + parse validation (PDF primary path) ------------
+  // Primary Engineering Directive Steps 2–3: extract every record, then validate
+  // before comparison. Never continue when validation fails.
+  if (extension === '.pdf' && request.rosterDate) {
+    const { validateParsedRecords } = await import('./rosterSnapshot.js');
+    const { roster, validation } = validateParsedRecords({
+      facility: request.facility,
+      rosterDate: request.rosterDate,
+      records: parsed.records,
+      pageCount: parsed.stats.pageCount ?? null,
+      sourcePdf: request.filePath.split('/').pop() ?? request.filePath,
+      sourceSha256,
+      emptyPages: parsed.stats.emptyPages,
+      minInmates: Number(process.env.SAC_MIN_ROSTER_INMATES ?? '1'),
+    });
+    for (const err of validation.errors) {
+      issues.push({
+        severity: 'error',
+        code: err.code,
+        message: err.message,
+        lineNumber: err.page ?? undefined,
+      });
+    }
+    for (const warn of validation.warnings) {
+      issues.push({
+        severity: 'warning',
+        code: warn.code,
+        message: warn.message,
+        lineNumber: warn.page ?? undefined,
+      });
+    }
+    if (!validation.ok) {
+      return failed(
+        request,
+        startedAt,
+        `Parse validation failed (${validation.errors.length} error(s), `
+          + `${roster.inmates.length} inmate(s) extracted). Processing stopped — `
+          + 'comparison must not begin. See issues.',
+        issues,
+        sourceSha256,
+        parsed.stats.ocrUsed ? 'pdf_ocr' : sourceType,
+      );
+    }
+  }
+
   // --- Normalize ---------------------------------------------------------
   report('normalizing', { total: parsed.records.length });
   const normalized: { lineNumber: number; record: NormalizedRecord }[] = [];

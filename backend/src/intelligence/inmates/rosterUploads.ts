@@ -377,6 +377,22 @@ async function processOne(uploadId: string, userId: string): Promise<UploadSettl
     } catch {
       // ignore — ingest already succeeded
     }
+
+    // Immutable canonical snapshot for tomorrow's baseline (Directive Steps 1–5).
+    if (upload.fileKind === 'pdf' && outcome.batchId) {
+      try {
+        const { snapshotFromBatch } = await import('./rosterSnapshot.js');
+        await snapshotFromBatch({
+          batchId: outcome.batchId,
+          uploadId,
+          uploadedById: userId,
+          uploadedByName: upload.uploadedByName,
+        });
+      } catch {
+        // Snapshot failure must not unwind a completed ingest; Learning Queue
+        // / next-day compare will surface a missing baseline.
+      }
+    }
   }
 
   return {

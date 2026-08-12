@@ -1,5 +1,7 @@
 # Accuracy First — Phase B deferred
 
+**Superseded in authority by** [PRIMARY_ENGINEERING_DIRECTIVE.md](./PRIMARY_ENGINEERING_DIRECTIVE.md). This note remains for the Phase B deferral rule.
+
 **Binding rule:** every engineering hour is spent improving operational accuracy until NIIS consistently produces the **same new-inmate list** as manual investigator comparison.
 
 ## Definition of “new” (revenue path)

@@ -253,10 +253,15 @@ export async function finalizePdfComparison(args: {
     return { caseId: daily.caseId, status: daily.status };
   }
 
-  const { compareRosterBatches } = await import('./rosterComparison.js');
-  const comparison = await compareRosterBatches({
-    priorBatchId: daily.priorPdfBatchId,
+  // Primary Engineering Directive Step 5: compare against yesterday's certified
+  // snapshot when available; fall back to prior PDF batch only during transition.
+  const { compareAgainstPriorSnapshot } = await import('./rosterComparison.js');
+  const ops = daily.opsDate.toISOString().slice(0, 10);
+  const comparison = await compareAgainstPriorSnapshot({
+    facility: daily.facility,
+    opsDate: ops,
     currentBatchId: daily.currentPdfBatchId,
+    fallbackPriorBatchId: daily.priorPdfBatchId,
   });
 
   // Persist a durable comparison snapshot for operators / diagnostics.
@@ -322,7 +327,10 @@ export async function finalizePdfComparison(args: {
     at: new Date().toISOString(),
     kind: 'pdf_compared',
     detail:
-      `Roster set-diff prior ${daily.priorPdfBatchId} vs current ${daily.currentPdfBatchId}: ` +
+      `Roster comparison baseline=${comparison.baselineSource} ` +
+      `snapshot=${comparison.priorSnapshotId ?? 'none'} ` +
+      `priorBatch=${comparison.priorBatchId ?? daily.priorPdfBatchId} ` +
+      `currentBatch=${daily.currentPdfBatchId}: ` +
       `new=${comparison.counts.new} returning=${comparison.counts.returning} ` +
       `existing=${comparison.counts.existing} review=${comparison.counts.review} ` +
       `reconcileOk=${comparison.reconcileOk}`,
@@ -337,7 +345,6 @@ export async function finalizePdfComparison(args: {
   });
 
   if (args.autoReport !== false && !daily.initialReportId) {
-    const ops = daily.opsDate.toISOString().slice(0, 10);
     const next = (() => {
       const d = dayStart(ops);
       d.setUTCDate(d.getUTCDate() + 1);

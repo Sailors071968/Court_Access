@@ -4552,6 +4552,83 @@ model InmateDailyCertification {
 }
 
 /**
+ * Immutable canonical roster snapshot for one facility + roster date.
+ *
+ * Per Primary Engineering Directive: never compare against raw prior PDFs.
+ * Compare today's extracted roster against yesterday's certified snapshot.
+ * Snapshots are append-only for a given content hash; certification freezes them.
+ */
+model InmateRosterSnapshot {
+  snapshotId         String   @id @default(uuid())
+  facility           String
+  /** The date the Active Inmate Roster represents. */
+  rosterDate         DateTime
+  county             String   @default("sacramento")
+  /**
+   * extracted | validated | certified
+   * validated = parse validation passed (safe as tomorrow's baseline)
+   * certified = engineering daily cert PASS for that day
+   */
+  status             String   @default("extracted")
+  sourceUploadId     String?
+  sourceBatchId      String?
+  sourceDocumentSha256 String?
+  originalFilename   String?
+  pageCount          Int?
+  inmateCount        Int      @default(0)
+  /** SHA-256 over the canonical member set (sorted XREF|name|DOB). */
+  contentHash        String
+  parserVersion      String?
+  processingVersion  String?
+  validationOk       Boolean  @default(false)
+  validationErrors   Json     @default("[]")
+  uploadedById       String?
+  uploadedByName     String?
+  extractedAt        DateTime @default(now())
+  validatedAt        DateTime?
+  certifiedAt        DateTime?
+  createdAt          DateTime @default(now())
+
+  members InmateRosterSnapshotMember[]
+
+  @@unique([facility, rosterDate, contentHash])
+  @@index([facility, rosterDate, status])
+  @@index([status, rosterDate])
+  @@map("inmate_roster_snapshots")
+}
+
+/** One inmate row inside an immutable roster snapshot. */
+model InmateRosterSnapshotMember {
+  memberId           String   @id @default(uuid())
+  snapshotId         String
+  /** 0-based order in alphabetical roster. */
+  ordinal            Int
+  name               String
+  normalizedName     String
+  xref               String?
+  housing            String?
+  classification     String?
+  gender             String?
+  dateOfBirth        String?
+  releaseDate        String?
+  sourcePage         Int?
+  sourceRow          Int?
+  extractionConfidence Int?
+  /** Bounding box / evidence pointer JSON when available. */
+  evidence           Json?
+  inmateId           String?
+  bookingId          String?
+  ingestionRecordId  String?
+
+  snapshot InmateRosterSnapshot @relation(fields: [snapshotId], references: [snapshotId], onDelete: Cascade)
+
+  @@index([snapshotId, normalizedName])
+  @@index([snapshotId, xref])
+  @@index([xref])
+  @@map("inmate_roster_snapshot_members")
+}
+
+/**
  * Learning Queue — every discrepancy is remembered until fixed and regress-tested.
  *
  * Manual investigator comparison is ground truth. NIIS disagreements become

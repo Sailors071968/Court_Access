@@ -61,8 +61,11 @@ export interface RosterDispositionRow {
 
 export interface RosterComparisonResult {
   facility: string;
-  priorBatchId: string;
+  priorBatchId: string | null;
   currentBatchId: string;
+  priorSnapshotId: string | null;
+  /** Where yesterday's baseline came from. */
+  baselineSource: 'certified_snapshot' | 'validated_snapshot' | 'prior_batch_fallback';
   priorDate: string | null;
   currentDate: string | null;
   priorCount: number;
@@ -117,20 +120,24 @@ export function rosterJoinKeys(member: Pick<RosterMember, 'xref' | 'inmateId' | 
 }
 
 /**
- * Pure disposition for one current-roster person relative to yesterday.
+ * Pure disposition — Primary Engineering Directive Steps 8–11.
  *
- * Mutual exclusive: review/failed → returning/new → existing → unclassified.
- * Returning = newly on today's roster (absent yesterday) but has Sacramento history.
+ * Exactly one of: NEW | EXISTING | RETURNING | REVIEW (plus failed/unclassified defects).
+ * NEW / RETURNING both appear on the Morning New Inmate Report (absent yesterday).
  */
 export function classifyRosterDisposition(input: {
   onPrior: boolean;
   resolution: string;
   historicalBookingCount: number;
 }): RosterDisposition {
+  // Step 11 — uncertain cases only; never silently guess.
   if (input.resolution === 'needs_review') return 'review';
   if (input.resolution === 'failed') return 'failed';
+  // Step 10 — present yesterday and today.
   if (input.onPrior) return 'existing';
+  // Step 9 — historically known, not active yesterday, active today.
   if (input.historicalBookingCount > 0) return 'returning';
+  // Step 8 — present today, absent yesterday, no prior active-roster match.
   if (
     input.resolution === 'new_inmate'
     || input.resolution === 'matched'
@@ -268,38 +275,29 @@ async function historicalCounts(
   return map;
 }
 
-/**
- * Compare yesterday's PDF batch to today's PDF batch.
- * This is the sole authority for daily new-inmate detection.
- */
-export async function compareRosterBatches(args: {
-  priorBatchId: string;
+function runComparison(args: {
+  facility: string;
+  priorMembers: RosterMember[];
+  currentMembers: RosterMember[];
   currentBatchId: string;
-}): Promise<RosterComparisonResult> {
-  const [priorBatch, currentBatch, priorMembers, currentMembers] = await Promise.all([
-    prisma.inmateIngestionBatch.findUniqueOrThrow({ where: { batchId: args.priorBatchId } }),
-    prisma.inmateIngestionBatch.findUniqueOrThrow({ where: { batchId: args.currentBatchId } }),
-    loadBatchMembers(args.priorBatchId),
-    loadBatchMembers(args.currentBatchId),
-  ]);
-
-  const priorIndex = indexMembers(priorMembers);
-  const currentDate = currentBatch.rosterDate ?? new Date();
-  const inmateIds = currentMembers
-    .map((m) => m.inmateId)
-    .filter((id): id is string => Boolean(id));
-  const history = await historicalCounts(inmateIds, currentDate);
-
+  priorBatchId: string | null;
+  priorSnapshotId: string | null;
+  baselineSource: RosterComparisonResult['baselineSource'];
+  priorDate: string | null;
+  currentDate: string | null;
+  history: Map<string, number>;
+}): RosterComparisonResult {
+  const priorIndex = indexMembers(args.priorMembers);
   const counts = emptyCounts();
   const current: RosterDispositionRow[] = [];
   const newInmateBookingIds: string[] = [];
   const newInmateNames: string[] = [];
 
-  for (const member of currentMembers) {
+  for (const member of args.currentMembers) {
     const prior = findPrior(member, priorIndex);
     const onPrior = Boolean(prior);
     const historicalBookingCount = member.inmateId
-      ? (history.get(member.inmateId) ?? 0)
+      ? (args.history.get(member.inmateId) ?? 0)
       : 0;
     const disposition = classifyRosterDisposition({
       onPrior,
@@ -311,22 +309,22 @@ export async function compareRosterBatches(args: {
     let why: string;
     switch (disposition) {
       case 'new':
-        why = 'On today\'s roster and absent from yesterday\'s roster; no prior Sacramento bookings in the repository.';
+        why = 'NEW: present today, absent from yesterday\'s certified roster; no historical bookings.';
         break;
       case 'returning':
-        why = `On today's roster and absent from yesterday's — reportable as newly booked. Repository shows ${historicalBookingCount} earlier booking(s).`;
+        why = `RETURNING: present today, absent yesterday; ${historicalBookingCount} prior booking(s) in repository.`;
         break;
       case 'existing':
-        why = 'Present on both yesterday\'s and today\'s rosters.';
+        why = 'EXISTING: present on yesterday\'s certified roster and today\'s roster.';
         break;
       case 'review':
-        why = 'Identity deferred to human review; not counted as new until decided.';
+        why = 'REVIEW: identity uncertain — never silently guess.';
         break;
       case 'failed':
-        why = 'Ingestion failed for this row.';
+        why = 'FAILED: ingestion failed for this row.';
         break;
       default:
-        why = 'No disposition could be assigned — engineering defect.';
+        why = 'UNCLASSIFIED — engineering defect; reconciliation fails.';
     }
 
     current.push({
@@ -348,8 +346,8 @@ export async function compareRosterBatches(args: {
     }
   }
 
-  const currentIndex = indexMembers(currentMembers);
-  const departed = priorMembers
+  const currentIndex = indexMembers(args.currentMembers);
+  const departed = args.priorMembers
     .filter((p) => !findPrior(p, currentIndex))
     .map((p) => ({ name: p.name, inmateId: p.inmateId, xref: p.xref }));
 
@@ -358,16 +356,18 @@ export async function compareRosterBatches(args: {
   const reconcileOk =
     counts.unclassified === 0
     && counts.failed === 0
-    && classified === currentMembers.length;
+    && classified === args.currentMembers.length;
 
   return {
-    facility: currentBatch.facility,
+    facility: args.facility,
     priorBatchId: args.priorBatchId,
     currentBatchId: args.currentBatchId,
-    priorDate: priorBatch.rosterDate?.toISOString().slice(0, 10) ?? null,
-    currentDate: currentBatch.rosterDate?.toISOString().slice(0, 10) ?? null,
-    priorCount: priorMembers.length,
-    currentCount: currentMembers.length,
+    priorSnapshotId: args.priorSnapshotId,
+    baselineSource: args.baselineSource,
+    priorDate: args.priorDate,
+    currentDate: args.currentDate,
+    priorCount: args.priorMembers.length,
+    currentCount: args.currentMembers.length,
     counts,
     current,
     departed,
@@ -375,6 +375,124 @@ export async function compareRosterBatches(args: {
     newInmateNames,
     reconcileOk,
   };
+}
+
+/**
+ * Preferred comparison path (Primary Engineering Directive Step 5):
+ * today's batch vs yesterday's certified/validated snapshot.
+ * Falls back to prior PDF batch only when no snapshot exists (transition).
+ */
+export async function compareAgainstPriorSnapshot(args: {
+  facility: string;
+  opsDate: string;
+  currentBatchId: string;
+  fallbackPriorBatchId?: string | null;
+}): Promise<RosterComparisonResult> {
+  const { loadPriorCertifiedSnapshot } = await import('./rosterSnapshot.js');
+  const [currentBatch, currentMembers, priorSnap] = await Promise.all([
+    prisma.inmateIngestionBatch.findUniqueOrThrow({ where: { batchId: args.currentBatchId } }),
+    loadBatchMembers(args.currentBatchId),
+    loadPriorCertifiedSnapshot(args.facility, args.opsDate),
+  ]);
+
+  const currentDate = currentBatch.rosterDate ?? new Date(`${args.opsDate}T00:00:00.000Z`);
+  const inmateIds = currentMembers
+    .map((m) => m.inmateId)
+    .filter((id): id is string => Boolean(id));
+  const history = await historicalCounts(inmateIds, currentDate);
+
+  if (priorSnap) {
+    const priorMembers: RosterMember[] = priorSnap.members.map((m, idx) => ({
+      key: m.xref ? `xref:${m.xref}` : `name:${m.normalizedName}`,
+      name: m.normalizedName,
+      xref: m.xref,
+      inmateId: m.inmateId,
+      bookingId: m.bookingId,
+      recordId: `snapshot:${priorSnap.snapshotId}:${idx}`,
+      resolution: 'matched',
+      confidence: 100,
+      matchTier: 'snapshot',
+      sourcePage: m.sourcePage,
+      lineNumber: m.sourceRow ?? idx + 1,
+      dob: m.dateOfBirth,
+    }));
+    return runComparison({
+      facility: args.facility,
+      priorMembers,
+      currentMembers,
+      currentBatchId: args.currentBatchId,
+      priorBatchId: null,
+      priorSnapshotId: priorSnap.snapshotId,
+      baselineSource: priorSnap.status === 'certified' ? 'certified_snapshot' : 'validated_snapshot',
+      priorDate: priorSnap.rosterDate,
+      currentDate: currentBatch.rosterDate?.toISOString().slice(0, 10) ?? args.opsDate,
+      history,
+    });
+  }
+
+  const fallbackId = args.fallbackPriorBatchId;
+  if (!fallbackId) {
+    throw Object.assign(
+      new Error(
+        'No certified/validated prior roster snapshot and no fallback prior PDF batch. '
+        + 'Upload and validate yesterday\'s roster before comparing today.',
+      ),
+      { statusCode: 409 },
+    );
+  }
+
+  const [priorBatch, priorMembers] = await Promise.all([
+    prisma.inmateIngestionBatch.findUniqueOrThrow({ where: { batchId: fallbackId } }),
+    loadBatchMembers(fallbackId),
+  ]);
+
+  return runComparison({
+    facility: args.facility,
+    priorMembers,
+    currentMembers,
+    currentBatchId: args.currentBatchId,
+    priorBatchId: fallbackId,
+    priorSnapshotId: null,
+    baselineSource: 'prior_batch_fallback',
+    priorDate: priorBatch.rosterDate?.toISOString().slice(0, 10) ?? null,
+    currentDate: currentBatch.rosterDate?.toISOString().slice(0, 10) ?? args.opsDate,
+    history,
+  });
+}
+
+/**
+ * Compare yesterday's PDF batch to today's PDF batch (fallback / suite helper).
+ * Prefer `compareAgainstPriorSnapshot` in production operations.
+ */
+export async function compareRosterBatches(args: {
+  priorBatchId: string;
+  currentBatchId: string;
+}): Promise<RosterComparisonResult> {
+  const [priorBatch, currentBatch, priorMembers, currentMembers] = await Promise.all([
+    prisma.inmateIngestionBatch.findUniqueOrThrow({ where: { batchId: args.priorBatchId } }),
+    prisma.inmateIngestionBatch.findUniqueOrThrow({ where: { batchId: args.currentBatchId } }),
+    loadBatchMembers(args.priorBatchId),
+    loadBatchMembers(args.currentBatchId),
+  ]);
+
+  const currentDate = currentBatch.rosterDate ?? new Date();
+  const inmateIds = currentMembers
+    .map((m) => m.inmateId)
+    .filter((id): id is string => Boolean(id));
+  const history = await historicalCounts(inmateIds, currentDate);
+
+  return runComparison({
+    facility: currentBatch.facility,
+    priorMembers,
+    currentMembers,
+    currentBatchId: args.currentBatchId,
+    priorBatchId: args.priorBatchId,
+    priorSnapshotId: null,
+    baselineSource: 'prior_batch_fallback',
+    priorDate: priorBatch.rosterDate?.toISOString().slice(0, 10) ?? null,
+    currentDate: currentBatch.rosterDate?.toISOString().slice(0, 10) ?? null,
+    history,
+  });
 }
 
 /**

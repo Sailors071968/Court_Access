@@ -159,6 +159,29 @@ export async function recordEngineeringCertification(input: EngineeringCertifica
     });
   }
 
+  // Promote today's validated snapshot to engineering-certified on PASS so
+  // tomorrow's comparison uses an immutable certified baseline (Directive §5/§14).
+  if (input.status === 'pass') {
+    try {
+      const snap = await prisma.inmateRosterSnapshot.findFirst({
+        where: {
+          facility: input.facility,
+          rosterDate: opsDate,
+          status: { in: ['validated', 'certified'] },
+          validationOk: true,
+        },
+        orderBy: { validatedAt: 'desc' },
+        select: { snapshotId: true, status: true },
+      });
+      if (snap && snap.status !== 'certified') {
+        const { certifyRosterSnapshot } = await import('./rosterSnapshot.js');
+        await certifyRosterSnapshot(snap.snapshotId);
+      }
+    } catch {
+      // Snapshot table may not be migrated yet on older hosts.
+    }
+  }
+
   const md = renderEngineeringCertificationMarkdown(input);
   if (input.writeFiles !== false) {
     const dir = input.reportDir ?? join(process.cwd(), '../reports/niis-reliability');

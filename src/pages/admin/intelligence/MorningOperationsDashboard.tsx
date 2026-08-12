@@ -99,6 +99,9 @@ export function MorningOperationsDashboard() {
         {board.northStar
           ?? 'Every morning NIIS must tell the truth about who is newly booked into the Sacramento County Jail.'}
       </p>
+      <p className="text-xs text-gray-500" data-testid="operational-lock">
+        Architecture COMPLETE · V1.0 FROZEN · Success = recall / precision / reconciliation / zero silent failures · operator mode
+      </p>
 
       <Headline board={board} />
 

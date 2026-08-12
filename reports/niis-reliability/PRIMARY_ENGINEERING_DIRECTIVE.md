@@ -3,9 +3,12 @@
 > **Every morning NIIS must tell the truth about who is newly booked into the Sacramento County Jail.**
 > Everything else is secondary.
 
+**OPERATIONAL LOCK:** [OPERATIONAL_LOCK.md](./OPERATIONAL_LOCK.md) — Architecture COMPLETE · V1.0 FROZEN.  
+No new architectural directives unless required to correct a verified operational defect.  
+Success is measured only by operational performance (recall / precision / reconciliation / silent failures / review / speed).
+
 **Supreme law:** [ENGINEERING_LAW_0.md](./ENGINEERING_LAW_0.md) — *The System Must Never Lie.*  
-**Version 1.0 contract:** [NIIS_V1_ENGINEERING_CONTRACT.md](./NIIS_V1_ENGINEERING_CONTRACT.md) — Definition of Done + subsystem contracts.  
-Those documents supersede this one and every other engineering directive.
+**Version 1.0 contract:** [NIIS_V1_ENGINEERING_CONTRACT.md](./NIIS_V1_ENGINEERING_CONTRACT.md).
 
 > CourtAccess NIIS is an evidence-governed criminal intelligence system. It does not guess. It does not fabricate. It does not infer facts without evidence. Every conclusion must be traceable to preserved evidence and reproducible by independent verification. The only acceptable measure of success is sustained agreement with verified investigator ground truth.
 

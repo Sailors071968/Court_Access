@@ -327,6 +327,37 @@ export interface MorningOperationsBoard {
     checks: { id: string; question: string; verdict: string; detail: string }[];
   } | null;
   openLearningQueueItems: number;
+  /** Reduce Human Review — primary trust metric. */
+  automaticClassification: {
+    ratePercent: number | null;
+    automaticallyCertified: number;
+    humanReview: number;
+    corrected: number;
+    totalRoster: number;
+    summary: string;
+  };
+  /** Seven daily operational goals at a glance. */
+  dailyGoals: {
+    pdfProcessed: boolean;
+    extracted: number | null;
+    newInmates: number | null;
+    requireReview: number | null;
+    reportCertified: boolean;
+    processingTimeMs: number | null;
+    criticalAlerts: number;
+  };
+  /** Manual Compare Assistant teaser. */
+  compareAssistant: {
+    message: string;
+    leastConfident: { key: string; name: string; classification: string; uncertainty: number }[];
+  } | null;
+  /** New feature work locked until 30 consecutive certified days. */
+  featureWork: {
+    allowed: boolean;
+    streak: number;
+    required: number;
+    message: string;
+  };
   links: {
     upload: string;
     newInmates: string;
@@ -496,6 +527,12 @@ export async function getMorningOperationsBoard(
 
   const { collectMorningAlerts } = await import('./morningAlerts.js');
   const { OPERATIONAL_NORTH_STAR } = await import('./truthCategories.js');
+  const {
+    computeAutomaticClassificationRate,
+    featureWorkGate,
+    buildManualCompareAssistant,
+  } = await import('./classificationConfidence.js');
+
   const alerts = await collectMorningAlerts({
     facility,
     opsDate,
@@ -505,9 +542,57 @@ export async function getMorningOperationsBoard(
     reviewCount: requireManualReview,
   });
 
+  let corrected = 0;
+  try {
+    corrected = await prisma.inmateInvestigatorDecision.count({
+      where: {
+        facility,
+        opsDate: dayStart,
+        disagreesWithNiis: true,
+      },
+    });
+  } catch {
+    corrected = 0;
+  }
+
+  const extractedCount =
+    certification?.currentInmateCount
+    ?? (dailyCase
+      ? (dailyCase.newInmateCount + dailyCase.existingInmateCount
+        + dailyCase.returningInmateCount + dailyCase.reviewCount) || null
+      : null);
+
+  const automaticClassification = computeAutomaticClassificationRate({
+    totalRoster: extractedCount,
+    humanReview: requireManualReview,
+    corrected,
+  });
+
+  let compareAssistant: MorningOperationsBoard['compareAssistant'] = null;
+  if (comparisonCompleted && (dailyCase?.priorPdfBatchId || yesterdayPdfBatch) && todayPdfBatch) {
+    try {
+      const { buildDailyDifferenceView } = await import('./dailyDifferenceViewer.js');
+      const diff = await buildDailyDifferenceView({ facility, opsDate });
+      const assistant = buildManualCompareAssistant(diff.rows, 4);
+      compareAssistant = {
+        message: assistant.message,
+        leastConfident: assistant.leastConfident.map((c) => ({
+          key: c.key,
+          name: c.name,
+          classification: c.classification,
+          uncertainty: c.uncertainty,
+        })),
+      };
+    } catch {
+      compareAssistant = null;
+    }
+  }
+
+  const featureWork = featureWorkGate(streak.streak);
+  const criticalAlerts = alerts.filter((a) => a.severity === 'critical');
+
   let headline: string;
   let posture: MorningOperationsBoard['posture'];
-  const criticalAlerts = alerts.filter((a) => a.severity === 'critical');
   if (!todaysPdfUploaded) {
     headline = "Upload today's Sacramento PDF to begin the morning run.";
     posture = 'action_required';
@@ -524,7 +609,9 @@ export async function getMorningOperationsBoard(
     headline = `Provisional: self-verification found ${selfVerification.failedCount} fail(s) and ${selfVerification.unknownCount} UNKNOWN check(s). Do not treat as certified.`;
     posture = 'attention';
   } else if (requireManualReview > 0) {
-    headline = `Comparison ready: ${newInmatesFound} new inmates; ${requireManualReview} routed to human review (preserves truth — not a silent failure).`;
+    headline = compareAssistant?.leastConfident.length
+      ? `${newInmatesFound} new · ${requireManualReview} review — start with the ${compareAssistant.leastConfident.length} least-confident cases.`
+      : `Comparison ready: ${newInmatesFound} new inmates; ${requireManualReview} routed to human review.`;
     posture = 'attention';
   } else if (reportCertification === 'certified') {
     headline = `Certified morning: ${newInmatesFound} newly booked. Report is ready to print.`;
@@ -609,6 +696,18 @@ export async function getMorningOperationsBoard(
     },
     selfVerification,
     openLearningQueueItems: openLearning,
+    automaticClassification,
+    dailyGoals: {
+      pdfProcessed: todaysPdfUploaded && (todayPdfBatch?.status === 'completed' || Boolean(dailyCase?.currentPdfBatchId)),
+      extracted: extractedCount,
+      newInmates: newInmatesFound,
+      requireReview: requireManualReview,
+      reportCertified: reportCertification === 'certified',
+      processingTimeMs: certification?.processingTimeMs ?? null,
+      criticalAlerts: criticalAlerts.length,
+    },
+    compareAssistant,
+    featureWork,
     links: {
       upload: '/admin/intelligence/upload',
       newInmates: '/admin/intelligence/new-inmates',

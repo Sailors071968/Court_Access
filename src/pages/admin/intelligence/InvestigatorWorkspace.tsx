@@ -158,9 +158,49 @@ export function InvestigatorWorkspace() {
       />
 
       <p className="text-sm text-gray-600">
-        This is how morning manual comparison becomes part of NIIS. Every click feeds the certification corpus.
-        Human review preserves truth when evidence is insufficient.
+        Confidence monitor: review highest-uncertainty cases first. Every click feeds the certification corpus.
+        Goal — reduce unnecessary review while preserving correctness.
       </p>
+
+      {view.compareAssistant ? (
+        <Panel title="Manual Compare Assistant" description={view.compareAssistant.message}>
+          <ul className="space-y-1 text-sm">
+            {view.compareAssistant.leastConfident.map((c, i) => (
+              <li key={c.key} className="flex flex-wrap items-center gap-2">
+                <Badge tone="warn">#{i + 1}</Badge>
+                <span className="font-medium">{c.name}</span>
+                <Badge tone="info">{c.classification}</Badge>
+                <span className="text-xs text-gray-500">uncertainty {c.uncertainty}</span>
+              </li>
+            ))}
+          </ul>
+        </Panel>
+      ) : null}
+
+      {view.automaticClassification ? (
+        <div className="grid gap-2 sm:grid-cols-4 text-sm">
+          <div className="rounded border border-gray-900 bg-gray-900 px-3 py-2 text-white">
+            <p className="text-xs text-gray-300">Auto rate</p>
+            <p className="text-xl font-semibold">
+              {view.automaticClassification.ratePercent == null
+                ? 'UNKNOWN'
+                : `${view.automaticClassification.ratePercent}%`}
+            </p>
+          </div>
+          <div className="rounded border px-3 py-2">
+            <p className="text-xs text-gray-500">Automatic</p>
+            <p className="text-xl font-semibold">{view.automaticClassification.automaticallyCertified}</p>
+          </div>
+          <div className="rounded border px-3 py-2">
+            <p className="text-xs text-gray-500">Review</p>
+            <p className="text-xl font-semibold">{view.automaticClassification.humanReview}</p>
+          </div>
+          <div className="rounded border px-3 py-2">
+            <p className="text-xs text-gray-500">Corrected</p>
+            <p className="text-xl font-semibold">{view.automaticClassification.corrected}</p>
+          </div>
+        </div>
+      ) : null}
 
       {flash ? (
         <p className="rounded border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-900">{flash}</p>
@@ -181,8 +221,13 @@ export function InvestigatorWorkspace() {
             <span className="text-lg font-semibold text-gray-900">{current.name}</span>
             <Badge tone="info">NIIS: {current.niisClassification}</Badge>
             <TruthBadge category={current.truthCategory} />
+            {current.uncertainty != null ? (
+              <Badge tone={current.uncertainty >= 60 ? 'warn' : 'neutral'}>
+                uncertainty {current.uncertainty}
+              </Badge>
+            ) : null}
             <span className="text-xs text-gray-500">
-              {index + 1} of {pending.length} pending
+              {index + 1} of {pending.length} pending (least confident first)
             </span>
             <Button
               variant="secondary"

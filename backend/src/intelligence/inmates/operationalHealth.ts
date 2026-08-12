@@ -8,6 +8,11 @@ import prisma from '../../lib/prisma.js';
 import { OPERATIONAL_NORTH_STAR } from './truthCategories.js';
 import { collectMorningAlerts } from './morningAlerts.js';
 import { consecutivePassStreak } from './learningQueue.js';
+import {
+  computeAutomaticClassificationRate,
+  featureWorkGate,
+  type AutomaticClassificationRate,
+} from './classificationConfidence.js';
 
 export interface OperationalHealthBoard {
   northStar: string;
@@ -28,6 +33,23 @@ export interface OperationalHealthBoard {
   potentialClients: number | null;
   potentialClientsMissed: number | null;
   silentFailureCount: number;
+  automaticClassification: AutomaticClassificationRate;
+  /** Seven daily operational goals at a glance. */
+  dailyGoals: {
+    pdfProcessed: boolean;
+    extracted: number | null;
+    newInmates: number | null;
+    requireReview: number | null;
+    reportCertified: boolean;
+    processingTimeMs: number | null;
+    criticalAlerts: number;
+  };
+  featureWork: {
+    allowed: boolean;
+    streak: number;
+    required: number;
+    message: string;
+  };
   alerts: Awaited<ReturnType<typeof collectMorningAlerts>>;
   readiness: {
     consecutivePassStreak: number;
@@ -167,6 +189,28 @@ export async function getOperationalHealth(
       ? newCount + returningCount
       : cert?.potentialClientsFound ?? newCount;
 
+  let corrected = 0;
+  try {
+    corrected = await prisma.inmateInvestigatorDecision.count({
+      where: {
+        facility,
+        opsDate: opsStart,
+        disagreesWithNiis: true,
+      },
+    });
+  } catch {
+    corrected = 0;
+  }
+
+  const automaticClassification = computeAutomaticClassificationRate({
+    totalRoster: todayRosterCount,
+    humanReview: reviewCount ?? 0,
+    corrected,
+  });
+
+  const criticalAlerts = alerts.filter((a) => a.severity === 'critical').length;
+  const featureWork = featureWorkGate(streak.streak);
+
   return {
     northStar: OPERATIONAL_NORTH_STAR,
     facility,
@@ -186,6 +230,17 @@ export async function getOperationalHealth(
     potentialClients,
     potentialClientsMissed: cert?.potentialClientsMissed ?? null,
     silentFailureCount,
+    automaticClassification,
+    dailyGoals: {
+      pdfProcessed: Boolean(dailyCase?.currentPdfBatchId || currentSnap),
+      extracted: todayRosterCount,
+      newInmates: newCount,
+      requireReview: reviewCount,
+      reportCertified: certification === 'PASS',
+      processingTimeMs: cert?.processingTimeMs ?? null,
+      criticalAlerts,
+    },
+    featureWork,
     alerts,
     readiness: {
       consecutivePassStreak: streak.streak,

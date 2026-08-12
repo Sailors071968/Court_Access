@@ -2,18 +2,27 @@
 
 > Every morning NIIS must tell the truth about who is newly booked into the Sacramento County Jail.
 
-The architecture is mature. Prefer this loop over new architectural directives.
+Architecture phase complete. Prefer this loop — see [REDUCE_HUMAN_REVIEW.md](./REDUCE_HUMAN_REVIEW.md).
+
+## Effortless morning
+
+```
+Morning Dashboard → Upload today's PDF → Auto-compare → Proposed NEW
+→ Investigator Workspace (least confident first) → Exceptions
+→ Print Certified Report → Begin business
+```
 
 ## Every day
 
-1. **Upload** yesterday's certified PDF (if needed)  
-2. **Upload** today's PDF  
-3. Let NIIS **generate** the New Inmate Report  
-4. Perform your **manual comparison**  
-5. **Compare** NIIS to your manual results  
-6. **Fix** every discrepancy  
-7. **Add** every resolved discrepancy to the certification corpus / evidence package  
-8. **Repeat** tomorrow  
+1. **Upload** today's Sacramento County PDF (yesterday if needed)  
+2. Let NIIS produce proposed classifications  
+3. Review **highest-uncertainty** cases first (Manual Compare Assistant)  
+4. **Certify** the report  
+5. Capture every discrepancy  
+6. Add it to the certification corpus / evidence package  
+7. **Repeat** tomorrow  
+
+Watch Automatic Classification Rate rise as unnecessary review shrinks.
 
 ## Commands that support the loop
 

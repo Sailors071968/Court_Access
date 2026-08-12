@@ -102,6 +102,108 @@ export function MorningOperationsDashboard() {
 
       <Headline board={board} />
 
+      {/* Reduce Human Review — primary trust metric */}
+      {board.automaticClassification ? (
+        <Panel
+          title="Automatic Classification Rate"
+          description="How close NIIS is to a trusted operational assistant. Goal: shrink unnecessary review without sacrificing correctness."
+        >
+          <div className="grid gap-3 sm:grid-cols-4" data-testid="auto-classification-rate">
+            <div className="rounded-lg border border-gray-900 bg-gray-900 px-4 py-3 text-white sm:col-span-1">
+              <p className="text-xs uppercase tracking-wide text-gray-300">Today</p>
+              <p className="mt-1 text-3xl font-semibold tabular-nums">
+                {board.automaticClassification.ratePercent == null
+                  ? 'UNKNOWN'
+                  : `${board.automaticClassification.ratePercent}%`}
+              </p>
+            </div>
+            <div className="rounded-lg border border-gray-200 px-4 py-3">
+              <p className="text-xs uppercase tracking-wide text-gray-500">Automatically Certified</p>
+              <p className="mt-1 text-2xl font-semibold tabular-nums text-gray-900">
+                {board.automaticClassification.automaticallyCertified.toLocaleString()}
+              </p>
+            </div>
+            <div className="rounded-lg border border-gray-200 px-4 py-3">
+              <p className="text-xs uppercase tracking-wide text-gray-500">Human Review</p>
+              <p className="mt-1 text-2xl font-semibold tabular-nums text-gray-900">
+                {board.automaticClassification.humanReview.toLocaleString()}
+              </p>
+            </div>
+            <div className="rounded-lg border border-gray-200 px-4 py-3">
+              <p className="text-xs uppercase tracking-wide text-gray-500">Corrected</p>
+              <p className="mt-1 text-2xl font-semibold tabular-nums text-gray-900">
+                {board.automaticClassification.corrected.toLocaleString()}
+              </p>
+            </div>
+          </div>
+        </Panel>
+      ) : null}
+
+      {/* Seven daily operational goals at a glance */}
+      {board.dailyGoals ? (
+        <Panel title="Daily operational goals" description="Answer these seven immediately — then begin business.">
+          <ol className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4 text-sm" data-testid="daily-goals">
+            <Goal ok={board.dailyGoals.pdfProcessed} label="PDF processed" value={board.dailyGoals.pdfProcessed ? 'Yes' : 'No'} />
+            <Goal ok={board.dailyGoals.extracted != null} label="Extracted" value={board.dailyGoals.extracted ?? 'UNKNOWN'} />
+            <Goal ok={board.dailyGoals.newInmates != null} label="New" value={board.dailyGoals.newInmates ?? 'UNKNOWN'} />
+            <Goal
+              ok={(board.dailyGoals.requireReview ?? 0) === 0}
+              label="Require review"
+              value={board.dailyGoals.requireReview ?? 'UNKNOWN'}
+              warn={(board.dailyGoals.requireReview ?? 0) > 0}
+            />
+            <Goal ok={board.dailyGoals.reportCertified} label="Report certified" value={board.dailyGoals.reportCertified ? 'Yes' : 'No'} />
+            <Goal
+              ok={board.dailyGoals.processingTimeMs != null}
+              label="Processing time"
+              value={
+                board.dailyGoals.processingTimeMs == null
+                  ? 'UNKNOWN'
+                  : `${(board.dailyGoals.processingTimeMs / 1000).toFixed(0)}s`
+              }
+            />
+            <Goal
+              ok={board.dailyGoals.criticalAlerts === 0}
+              label="Critical alerts"
+              value={board.dailyGoals.criticalAlerts}
+              warn={board.dailyGoals.criticalAlerts > 0}
+            />
+            <li className="rounded border border-gray-200 px-3 py-2">
+              <Link
+                to={links.investigatorWorkspace ?? '/admin/intelligence/investigator-workspace'}
+                className="font-medium text-blue-700 underline"
+              >
+                Open Investigator Workspace →
+              </Link>
+            </li>
+          </ol>
+        </Panel>
+      ) : null}
+
+      {board.compareAssistant?.leastConfident?.length ? (
+        <Panel
+          title="Manual Compare Assistant"
+          description={board.compareAssistant.message}
+        >
+          <ul className="space-y-1.5 text-sm" data-testid="compare-assistant">
+            {board.compareAssistant.leastConfident.map((c, i) => (
+              <li key={c.key} className="flex flex-wrap items-center gap-2">
+                <Badge tone="warn">#{i + 1}</Badge>
+                <span className="font-medium text-gray-900">{c.name}</span>
+                <Badge tone="info">{c.classification}</Badge>
+                <span className="text-xs text-gray-500">uncertainty {c.uncertainty}</span>
+              </li>
+            ))}
+          </ul>
+          <Link
+            to={links.investigatorWorkspace ?? '/admin/intelligence/investigator-workspace'}
+            className="mt-3 inline-block text-sm font-medium text-blue-700 underline"
+          >
+            Review these first in Investigator Workspace
+          </Link>
+        </Panel>
+      ) : null}
+
       {(board.alerts?.length ?? 0) > 0 ? (
         <Panel
           title="Conditions that could change today's report"
@@ -136,6 +238,19 @@ export function MorningOperationsDashboard() {
             ))}
           </ul>
         </Panel>
+      ) : null}
+
+      {board.featureWork ? (
+        <p
+          className={`rounded border px-3 py-2 text-sm ${
+            board.featureWork.allowed
+              ? 'border-emerald-300 bg-emerald-50 text-emerald-900'
+              : 'border-amber-200 bg-amber-50 text-amber-900'
+          }`}
+          data-testid="feature-work-gate"
+        >
+          {board.featureWork.message}
+        </p>
       ) : null}
 
       <div className="grid gap-4 sm:grid-cols-2" data-testid="reliability-streaks">
@@ -372,6 +487,28 @@ function QuestionRow({
           </Link>
         ) : null}
       </div>
+    </li>
+  );
+}
+
+function Goal({
+  label,
+  value,
+  ok,
+  warn,
+}: {
+  label: string;
+  value: string | number;
+  ok: boolean;
+  warn?: boolean;
+}) {
+  return (
+    <li className="flex items-center justify-between gap-2 rounded border border-gray-200 px-3 py-2">
+      <span className="text-gray-600">{label}</span>
+      <span className="flex items-center gap-1.5 font-semibold tabular-nums text-gray-900">
+        {value}
+        <Badge tone={warn ? 'warn' : ok ? 'good' : 'bad'}>{warn ? '!' : ok ? 'ok' : '—'}</Badge>
+      </span>
     </li>
   );
 }

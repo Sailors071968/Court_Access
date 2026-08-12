@@ -14,6 +14,13 @@ import { buildDailyDifferenceView, type DifferenceRow } from './dailyDifferenceV
 import { enqueueDiscrepancy } from './learningQueue.js';
 import { explainReportableWhy } from './truthCategories.js';
 import type { DefectCategory } from './defectCategories.js';
+import {
+  uncertaintyScore,
+  buildManualCompareAssistant,
+  computeAutomaticClassificationRate,
+  type ManualCompareAssistant,
+  type AutomaticClassificationRate,
+} from './classificationConfidence.js';
 
 export type InvestigatorAction =
   | 'confirm_new'
@@ -45,6 +52,8 @@ export interface InvestigatorCandidate {
   niisClassification: string;
   whyHere: string;
   truthCategory: string;
+  /** 0–100; higher = review first (Manual Compare Assistant). */
+  uncertainty: number;
   prior: DifferenceRow['prior'];
   current: DifferenceRow['current'];
   evidence: DifferenceRow['evidence'];
@@ -73,6 +82,9 @@ export interface InvestigatorWorkspaceView {
     decided: number;
     total: number;
   };
+  /** Manual Compare Assistant — least confident first. */
+  compareAssistant: ManualCompareAssistant;
+  automaticClassification: AutomaticClassificationRate;
   candidates: InvestigatorCandidate[];
   actions: InvestigatorAction[];
 }
@@ -131,24 +143,47 @@ export async function getInvestigatorWorkspace(args: {
   });
 
   const decided = await loadDecidedKeys(facility, diff.opsDate);
+  const compareAssistant = buildManualCompareAssistant(diff.rows, 4);
 
-  // Focus investigator attention: NEW, RETURNING, REVIEW first; then others.
-  const priority = (c: string) => {
-    if (c === 'new') return 0;
-    if (c === 'returning') return 1;
-    if (c === 'review' || c === 'failed' || c === 'unclassified') return 2;
-    if (c === 'changed') return 3;
-    return 4;
-  };
-
+  // Manual Compare Assistant: highest uncertainty first (confidence monitor).
   const sorted = [...diff.rows].sort(
-    (a, b) => priority(a.classification) - priority(b.classification) || a.name.localeCompare(b.name),
+    (a, b) => uncertaintyScore(b) - uncertaintyScore(a) || a.name.localeCompare(b.name),
   );
+
+  let corrected = 0;
+  try {
+    corrected = await prisma.inmateInvestigatorDecision.count({
+      where: {
+        facility,
+        opsDate: new Date(`${diff.opsDate}T00:00:00.000Z`),
+        disagreesWithNiis: true,
+      },
+    });
+  } catch {
+    corrected = 0;
+  }
+
+  const humanReview = diff.counts.review + diff.counts.failed + diff.counts.unclassified;
+  const automaticClassification = computeAutomaticClassificationRate({
+    totalRoster: diff.current.count || diff.rows.filter((r) => r.onCurrent).length,
+    humanReview,
+    corrected,
+  });
 
   const candidates: InvestigatorCandidate[] = [];
   for (const row of sorted) {
     const isDecided = decided.has(row.key);
     if (isDecided && !args.includeDecided) continue;
+
+    // Workspace focuses on non-trivial cases unless includeDecided
+    const u = uncertaintyScore(row);
+    if (
+      !args.includeDecided
+      && ['unchanged', 'existing'].includes(row.classification)
+      && u < 40
+    ) {
+      continue;
+    }
 
     let historicalBookings: InvestigatorCandidate['historicalBookings'] = [];
     if (row.inmateId) {
@@ -184,6 +219,7 @@ export async function getInvestigatorWorkspace(args: {
       niisClassification: row.classification,
       whyHere: row.why.summary || explained.why,
       truthCategory: explained.truthCategory,
+      uncertainty: u,
       prior: row.prior,
       current: row.current,
       evidence: row.evidence,
@@ -212,6 +248,8 @@ export async function getInvestigatorWorkspace(args: {
       decided: decidedCount,
       total: diff.rows.length,
     },
+    compareAssistant,
+    automaticClassification,
     candidates,
     actions: [
       'confirm_new',

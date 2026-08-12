@@ -552,6 +552,33 @@ export interface MorningOperationsBoard {
     checks: { id: string; question: string; verdict: string; detail: string }[];
   } | null;
   openLearningQueueItems: number;
+  automaticClassification?: {
+    ratePercent: number | null;
+    automaticallyCertified: number;
+    humanReview: number;
+    corrected: number;
+    totalRoster: number;
+    summary: string;
+  };
+  dailyGoals?: {
+    pdfProcessed: boolean;
+    extracted: number | null;
+    newInmates: number | null;
+    requireReview: number | null;
+    reportCertified: boolean;
+    processingTimeMs: number | null;
+    criticalAlerts: number;
+  };
+  compareAssistant?: {
+    message: string;
+    leastConfident: { key: string; name: string; classification: string; uncertainty: number }[];
+  } | null;
+  featureWork?: {
+    allowed: boolean;
+    streak: number;
+    required: number;
+    message: string;
+  };
   links: {
     upload: string;
     newInmates: string;
@@ -580,6 +607,7 @@ export interface InvestigatorCandidate {
   niisClassification: string;
   whyHere: string;
   truthCategory: string;
+  uncertainty?: number;
   prior: DailyDifferenceRow['prior'];
   current: DailyDifferenceRow['current'];
   evidence: DailyDifferenceRow['evidence'];
@@ -604,6 +632,24 @@ export interface InvestigatorWorkspaceView {
   reportCertification: string;
   reconcileOk: boolean;
   queue: { pending: number; decided: number; total: number };
+  compareAssistant?: {
+    message: string;
+    leastConfident: {
+      key: string;
+      name: string;
+      classification: string;
+      uncertainty: number;
+      why: string;
+    }[];
+  };
+  automaticClassification?: {
+    ratePercent: number | null;
+    automaticallyCertified: number;
+    humanReview: number;
+    corrected: number;
+    totalRoster: number;
+    summary: string;
+  };
   candidates: InvestigatorCandidate[];
   actions: InvestigatorAction[];
 }
@@ -627,6 +673,29 @@ export interface OperationalHealthBoard {
   potentialClients: number | null;
   potentialClientsMissed: number | null;
   silentFailureCount: number;
+  automaticClassification?: {
+    ratePercent: number | null;
+    automaticallyCertified: number;
+    humanReview: number;
+    corrected: number;
+    totalRoster: number;
+    summary: string;
+  };
+  dailyGoals?: {
+    pdfProcessed: boolean;
+    extracted: number | null;
+    newInmates: number | null;
+    requireReview: number | null;
+    reportCertified: boolean;
+    processingTimeMs: number | null;
+    criticalAlerts: number;
+  };
+  featureWork?: {
+    allowed: boolean;
+    streak: number;
+    required: number;
+    message: string;
+  };
   alerts: {
     id: string;
     severity: 'critical' | 'warning' | 'info';

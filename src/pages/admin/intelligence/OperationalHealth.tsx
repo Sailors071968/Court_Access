@@ -86,6 +86,52 @@ export function OperationalHealth() {
         {board.northStar}
       </p>
 
+      {board.automaticClassification ? (
+        <Panel title="Automatic Classification Rate" description={board.automaticClassification.summary}>
+          <div className="grid gap-3 sm:grid-cols-4">
+            <Metric
+              label="Today"
+              value={
+                board.automaticClassification.ratePercent == null
+                  ? null
+                  : `${board.automaticClassification.ratePercent}%`
+              }
+              tone="good"
+            />
+            <Metric label="Automatically Certified" value={board.automaticClassification.automaticallyCertified} />
+            <Metric label="Human Review" value={board.automaticClassification.humanReview} />
+            <Metric label="Corrected" value={board.automaticClassification.corrected} />
+          </div>
+        </Panel>
+      ) : null}
+
+      {board.dailyGoals ? (
+        <Panel title="Daily operational goals" description="Seven answers at a glance.">
+          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4 text-sm">
+            <Metric label="PDF processed" value={board.dailyGoals.pdfProcessed ? 'Yes' : 'No'} />
+            <Metric label="Extracted" value={board.dailyGoals.extracted} />
+            <Metric label="New" value={board.dailyGoals.newInmates} />
+            <Metric label="Require review" value={board.dailyGoals.requireReview} />
+            <Metric label="Certified" value={board.dailyGoals.reportCertified ? 'Yes' : 'No'} />
+            <Metric
+              label="Processing time"
+              value={
+                board.dailyGoals.processingTimeMs == null
+                  ? null
+                  : `${(board.dailyGoals.processingTimeMs / 1000).toFixed(0)}s`
+              }
+            />
+            <Metric label="Critical alerts" value={board.dailyGoals.criticalAlerts} />
+          </div>
+        </Panel>
+      ) : null}
+
+      {board.featureWork ? (
+        <p className={`rounded border px-3 py-2 text-sm ${board.featureWork.allowed ? 'border-emerald-300 bg-emerald-50' : 'border-amber-300 bg-amber-50'}`}>
+          {board.featureWork.message}
+        </p>
+      ) : null}
+
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Metric label="Today's Roster" value={board.todayRosterCount} />
         <Metric label="Yesterday" value={board.yesterdayRosterCount} />

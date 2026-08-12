@@ -5,7 +5,8 @@
 
 **Supreme law:** [ENGINEERING_LAW_0.md](./ENGINEERING_LAW_0.md) — The System Must Never Lie.  
 **V1.0 contract:** [NIIS_V1_ENGINEERING_CONTRACT.md](./NIIS_V1_ENGINEERING_CONTRACT.md).  
-**Daily discipline (prefer over new architecture):** [DAILY_OPERATIONAL_LOOP.md](./DAILY_OPERATIONAL_LOOP.md).  
+**Final objective:** [REDUCE_HUMAN_REVIEW.md](./REDUCE_HUMAN_REVIEW.md) — Automatic Classification Rate + uncertainty-first review.  
+**Daily discipline:** [DAILY_OPERATIONAL_LOOP.md](./DAILY_OPERATIONAL_LOOP.md).  
 **Investigator Workspace:** `/admin/intelligence/investigator-workspace`  
 **Operational Health:** `/admin/intelligence/operational-health`
 

@@ -358,6 +358,40 @@ export interface MorningOperationsBoard {
     required: number;
     message: string;
   };
+  /** Operational Excellence Charter — always-on morning metrics. */
+  operationalMetrics: {
+    todayRosterSize: number | null;
+    yesterdayRosterSize: number | null;
+    newInmates: number | null;
+    existingInmates: number | null;
+    returningInmates: number | null;
+    reviewRequired: number | null;
+    processingTimeMs: number | null;
+    certificationStatus: 'certified' | 'provisional' | 'missing' | 'failed';
+    automaticClassificationRatePercent: number | null;
+    operationalTrustScore: number | null;
+    operationalTrustBand: 'trusted' | 'watch' | 'untrusted' | 'unknown';
+    consecutiveCertifiedDays: number;
+    openCriticalDefects: number;
+  };
+  /** Business-facing Sailors Bail Bonds metrics. */
+  businessMetrics: {
+    potentialNewClientsIdentifiedToday: number | null;
+    potentialClientsMissed: number | null;
+    falseOpportunities: number | null;
+    evidence: string;
+  };
+  /** Morning SLA checklist + elapsed vs calibrated target. */
+  morningSla: {
+    elapsedMs: number | null;
+    targetMs: number | null;
+    withinTarget: boolean | null;
+    gates: { id: string; label: string; ok: boolean }[];
+    allGatesOk: boolean;
+    summary: string;
+  };
+  /** Fixed Priority 1–5 from the Operational Excellence Charter. */
+  operationalPriorities: readonly string[];
   links: {
     upload: string;
     newInmates: string;
@@ -591,6 +625,76 @@ export async function getMorningOperationsBoard(
   const featureWork = featureWorkGate(streak.streak);
   const criticalAlerts = alerts.filter((a) => a.severity === 'critical');
 
+  const {
+    evaluateMorningSla,
+    computeOperationalTrustScore,
+    computeBusinessMetrics,
+    extrasCountFromCertSummary,
+    OPERATIONAL_PRIORITIES,
+  } = await import('./operationalExcellence.js');
+
+  const existingInmates = certification?.existingInmateCount ?? dailyCase?.existingInmateCount ?? null;
+  const returningInmates = certification?.returningInmateCount ?? dailyCase?.returningInmateCount ?? null;
+  const todayRosterSize =
+    certification?.currentInmateCount
+    ?? extractedCount;
+  const yesterdayRosterSize = certification?.priorInmateCount ?? null;
+
+  const falseOpportunities = extrasCountFromCertSummary(certification?.summary);
+  const groundTruthSealed =
+    reportCertification === 'certified'
+    || (certification?.potentialClientsMissed != null && falseOpportunities != null);
+
+  const businessMetrics = computeBusinessMetrics({
+    potentialClientsFound: certification?.potentialClientsFound ?? null,
+    potentialClientsMissed: certification?.potentialClientsMissed ?? null,
+    newCount: newInmatesFound,
+    returningCount: returningInmates,
+    falseOpportunities,
+    groundTruthSealed,
+  });
+
+  const openCriticalDefects = criticalAlerts.length + (
+    openLearning > 0 && (certification?.status === 'fail' || reportCertification === 'failed')
+      ? 1
+      : 0
+  );
+
+  const trust = computeOperationalTrustScore({
+    certification: reportCertification,
+    reconcileOk: certification?.reconcileOk ?? null,
+    silentFailureCount: selfVerification
+      ? selfVerification.failedCount + selfVerification.unknownCount
+      : 0,
+    potentialClientsMissed: businessMetrics.potentialClientsMissed,
+    falseOpportunities: businessMetrics.falseOpportunities,
+    automaticClassificationRatePercent: automaticClassification.ratePercent,
+    consecutiveCertifiedDays: streak.streak,
+    openCriticalDefects,
+  });
+
+  let processingTimeMs = certification?.processingTimeMs ?? null;
+  if (
+    processingTimeMs == null
+    && todayPdfUpload?.uploadedAt
+    && todayPdfBatch?.finishedAt
+  ) {
+    processingTimeMs = Math.max(
+      0,
+      new Date(todayPdfBatch.finishedAt).getTime() - new Date(todayPdfUpload.uploadedAt).getTime(),
+    );
+  }
+
+  const morningSla = evaluateMorningSla({
+    pdfAccepted: todaysPdfUploaded && (todayPdfUpload?.status === 'completed' || Boolean(todayPdfBatch)),
+    canonicalRosterGenerated: todayRosterSize != null && todayRosterSize > 0,
+    comparisonCompleted,
+    newInmateReportAvailable: Boolean(printableReport) || comparisonCompleted,
+    investigatorWorkspaceReady: comparisonCompleted,
+    certifiedReportPrintable: reportCertification === 'certified' && canPrint,
+    elapsedMs: processingTimeMs,
+  });
+
   let headline: string;
   let posture: MorningOperationsBoard['posture'];
   if (!todaysPdfUploaded) {
@@ -698,16 +802,34 @@ export async function getMorningOperationsBoard(
     openLearningQueueItems: openLearning,
     automaticClassification,
     dailyGoals: {
-      pdfProcessed: todaysPdfUploaded && (todayPdfBatch?.status === 'completed' || Boolean(dailyCase?.currentPdfBatchId)),
+      pdfProcessed: todaysPdfUploaded && (Boolean(todayPdfBatch) || Boolean(dailyCase?.currentPdfBatchId)),
       extracted: extractedCount,
       newInmates: newInmatesFound,
       requireReview: requireManualReview,
       reportCertified: reportCertification === 'certified',
-      processingTimeMs: certification?.processingTimeMs ?? null,
+      processingTimeMs,
       criticalAlerts: criticalAlerts.length,
     },
     compareAssistant,
     featureWork,
+    operationalMetrics: {
+      todayRosterSize,
+      yesterdayRosterSize,
+      newInmates: newInmatesFound,
+      existingInmates,
+      returningInmates,
+      reviewRequired: requireManualReview,
+      processingTimeMs,
+      certificationStatus: reportCertification,
+      automaticClassificationRatePercent: automaticClassification.ratePercent,
+      operationalTrustScore: trust.score,
+      operationalTrustBand: trust.band,
+      consecutiveCertifiedDays: streak.streak,
+      openCriticalDefects,
+    },
+    businessMetrics,
+    morningSla,
+    operationalPriorities: OPERATIONAL_PRIORITIES,
     links: {
       upload: '/admin/intelligence/upload',
       newInmates: '/admin/intelligence/new-inmates',

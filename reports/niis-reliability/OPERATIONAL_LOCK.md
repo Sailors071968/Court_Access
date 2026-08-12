@@ -100,5 +100,8 @@ Given the stated business goal—that finding every newly booked Sacramento Coun
 
 ---
 
+**Operational service:** [OPERATIONAL_EXCELLENCE_CHARTER.md](./OPERATIONAL_EXCELLENCE_CHARTER.md) — permanent Sacramento service; Priority 1–5 fixed; trust over sophistication.  
+**Next conversation:** [PRODUCTION_OPERATIONS_INDEX.md](./PRODUCTION_OPERATIONS_INDEX.md) — run NIIS in production (procedures, DR, monitoring, release, incident response).
+
 **Binding law stack (subordinate to this lock):**  
 [ENGINEERING_LAW_0.md](./ENGINEERING_LAW_0.md) · [NIIS_V1_ENGINEERING_CONTRACT.md](./NIIS_V1_ENGINEERING_CONTRACT.md) · [REDUCE_HUMAN_REVIEW.md](./REDUCE_HUMAN_REVIEW.md) · [DAILY_OPERATIONAL_LOOP.md](./DAILY_OPERATIONAL_LOOP.md) · [EVIDENCE_CERTIFICATION_DIRECTIVE.md](./EVIDENCE_CERTIFICATION_DIRECTIVE.md) · [IMMUTABLE_EVIDENCE_OPERATIONAL_TRUTH_DIRECTIVE.md](./IMMUTABLE_EVIDENCE_OPERATIONAL_TRUTH_DIRECTIVE.md)

@@ -100,10 +100,112 @@ export function MorningOperationsDashboard() {
           ?? 'Every morning NIIS must tell the truth about who is newly booked into the Sacramento County Jail.'}
       </p>
       <p className="text-xs text-gray-500" data-testid="operational-lock">
-        Architecture COMPLETE · V1.0 FROZEN · Success = recall / precision / reconciliation / zero silent failures · operator mode
+        Architecture COMPLETE · V1.0 FROZEN · Permanent operational service · Trust over sophistication
       </p>
 
       <Headline board={board} />
+
+      {board.businessMetrics ? (
+        <Panel
+          title="Business metrics"
+          description={board.businessMetrics.evidence}
+        >
+          <div className="grid gap-3 sm:grid-cols-3" data-testid="business-metrics">
+            <MetricTile
+              label="Potential New Clients Identified Today"
+              value={board.businessMetrics.potentialNewClientsIdentifiedToday}
+              emphasize
+            />
+            <MetricTile
+              label="Potential Clients Missed"
+              value={board.businessMetrics.potentialClientsMissed}
+              warnWhenNonZero
+            />
+            <MetricTile
+              label="False Opportunities"
+              value={board.businessMetrics.falseOpportunities}
+              warnWhenNonZero
+            />
+          </div>
+        </Panel>
+      ) : null}
+
+      {board.operationalMetrics ? (
+        <Panel
+          title="Operational metrics"
+          description="If any metric regresses, investigate before adding features."
+        >
+          <div className="grid gap-2 sm:grid-cols-3 lg:grid-cols-4" data-testid="operational-metrics">
+            <MetricTile label="Today's roster" value={board.operationalMetrics.todayRosterSize} />
+            <MetricTile label="Yesterday's roster" value={board.operationalMetrics.yesterdayRosterSize} />
+            <MetricTile label="New inmates" value={board.operationalMetrics.newInmates} emphasize />
+            <MetricTile label="Existing" value={board.operationalMetrics.existingInmates} />
+            <MetricTile label="Returning" value={board.operationalMetrics.returningInmates} />
+            <MetricTile label="Review required" value={board.operationalMetrics.reviewRequired} warnWhenNonZero />
+            <MetricTile
+              label="Processing time"
+              value={
+                board.operationalMetrics.processingTimeMs == null
+                  ? null
+                  : `${(board.operationalMetrics.processingTimeMs / 1000).toFixed(0)}s`
+              }
+            />
+            <MetricTile
+              label="Certification"
+              value={board.operationalMetrics.certificationStatus}
+            />
+            <MetricTile
+              label="Automatic Classification Rate"
+              value={
+                board.operationalMetrics.automaticClassificationRatePercent == null
+                  ? null
+                  : `${board.operationalMetrics.automaticClassificationRatePercent}%`
+              }
+            />
+            <MetricTile
+              label="Operational Trust Score"
+              value={
+                board.operationalMetrics.operationalTrustScore == null
+                  ? null
+                  : `${board.operationalMetrics.operationalTrustScore} (${board.operationalMetrics.operationalTrustBand})`
+              }
+            />
+            <MetricTile
+              label="Consecutive Certified Days"
+              value={board.operationalMetrics.consecutiveCertifiedDays}
+            />
+            <MetricTile
+              label="Open Critical Defects"
+              value={board.operationalMetrics.openCriticalDefects}
+              warnWhenNonZero
+            />
+          </div>
+        </Panel>
+      ) : null}
+
+      {board.morningSla ? (
+        <Panel title="Morning SLA" description={board.morningSla.summary}>
+          <ul className="grid gap-1.5 sm:grid-cols-2 text-sm" data-testid="morning-sla">
+            {board.morningSla.gates.map((g) => (
+              <li key={g.id} className="flex items-center gap-2">
+                <Badge tone={g.ok ? 'good' : 'bad'}>{g.ok ? 'ok' : 'open'}</Badge>
+                <span className="text-gray-900">{g.label}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-xs text-gray-500">
+            Elapsed:{' '}
+            {board.morningSla.elapsedMs == null
+              ? 'UNKNOWN'
+              : `${(board.morningSla.elapsedMs / 1000).toFixed(0)}s`}
+            {' · '}
+            Target:{' '}
+            {board.morningSla.targetMs == null
+              ? 'not calibrated (set SAC_MORNING_SLA_MS from production hardware)'
+              : `${(board.morningSla.targetMs / 1000).toFixed(0)}s`}
+          </p>
+        </Panel>
+      ) : null}
 
       {/* Reduce Human Review — primary trust metric */}
       {board.automaticClassification ? (
@@ -420,6 +522,39 @@ export function MorningOperationsDashboard() {
           Open full operations console
         </Link>
         .
+      </p>
+    </div>
+  );
+}
+
+function MetricTile({
+  label,
+  value,
+  emphasize,
+  warnWhenNonZero,
+}: {
+  label: string;
+  value: string | number | null | undefined;
+  emphasize?: boolean;
+  warnWhenNonZero?: boolean;
+}) {
+  const unknown = value === null || value === undefined;
+  const display = unknown ? 'UNKNOWN' : value;
+  const numeric = typeof value === 'number' ? value : null;
+  const warn = warnWhenNonZero && numeric != null && numeric > 0;
+  return (
+    <div
+      className={`rounded-lg border px-3 py-2 ${
+        warn ? 'border-amber-300 bg-amber-50' : 'border-gray-200 bg-white'
+      }`}
+    >
+      <p className="text-xs uppercase tracking-wide text-gray-500">{label}</p>
+      <p
+        className={`mt-1 font-semibold tabular-nums ${
+          emphasize ? 'text-2xl text-gray-900' : 'text-xl text-gray-900'
+        } ${unknown ? 'text-gray-400' : ''}`}
+      >
+        {display}
       </p>
     </div>
   );

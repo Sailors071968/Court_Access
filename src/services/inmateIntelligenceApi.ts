@@ -579,6 +579,36 @@ export interface MorningOperationsBoard {
     required: number;
     message: string;
   };
+  operationalMetrics?: {
+    todayRosterSize: number | null;
+    yesterdayRosterSize: number | null;
+    newInmates: number | null;
+    existingInmates: number | null;
+    returningInmates: number | null;
+    reviewRequired: number | null;
+    processingTimeMs: number | null;
+    certificationStatus: 'certified' | 'provisional' | 'missing' | 'failed';
+    automaticClassificationRatePercent: number | null;
+    operationalTrustScore: number | null;
+    operationalTrustBand: 'trusted' | 'watch' | 'untrusted' | 'unknown';
+    consecutiveCertifiedDays: number;
+    openCriticalDefects: number;
+  };
+  businessMetrics?: {
+    potentialNewClientsIdentifiedToday: number | null;
+    potentialClientsMissed: number | null;
+    falseOpportunities: number | null;
+    evidence: string;
+  };
+  morningSla?: {
+    elapsedMs: number | null;
+    targetMs: number | null;
+    withinTarget: boolean | null;
+    gates: { id: string; label: string; ok: boolean }[];
+    allGatesOk: boolean;
+    summary: string;
+  };
+  operationalPriorities?: readonly string[];
   links: {
     upload: string;
     newInmates: string;

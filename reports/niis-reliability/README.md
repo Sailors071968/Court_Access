@@ -5,7 +5,9 @@
 
 **OPERATIONAL LOCK — Architecture COMPLETE · V1.0 Design FROZEN** (sealed 2026-08-12)  
 → [OPERATIONAL_LOCK.md](./OPERATIONAL_LOCK.md) — success = operational performance only; no new architecture unless fixing a verified defect.  
-**Primary role going forward: operator** — upload PDF → review exceptions → grow corpus. Architecture instruction has stopped.
+**Operational Excellence Charter** → [OPERATIONAL_EXCELLENCE_CHARTER.md](./OPERATIONAL_EXCELLENCE_CHARTER.md) — permanent Sacramento service; Priority 1–5; Morning SLA; business metrics.  
+**Primary role: operator** — upload PDF → review exceptions → grow corpus.  
+**Next major conversation:** [PRODUCTION_OPERATIONS_INDEX.md](./PRODUCTION_OPERATIONS_INDEX.md) — running NIIS in production.
 
 **Supreme law:** [ENGINEERING_LAW_0.md](./ENGINEERING_LAW_0.md) — The System Must Never Lie.  
 **V1.0 contract:** [NIIS_V1_ENGINEERING_CONTRACT.md](./NIIS_V1_ENGINEERING_CONTRACT.md).  

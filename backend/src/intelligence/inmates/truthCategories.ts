@@ -140,3 +140,7 @@ export const HUMAN_REVIEW_IS_SUCCESS =
 /** Architecture COMPLETE · V1.0 FROZEN — operator mode. */
 export const OPERATIONAL_LOCK_NOTICE =
   'Architecture phase complete. V1.0 design frozen. Success = operational performance only.';
+
+/** Permanent operational service — trust over sophistication. */
+export const OPERATIONAL_EXCELLENCE_NOTICE =
+  'Permanent Sacramento operational service. Improve measurable performance only. Trust over sophistication.';

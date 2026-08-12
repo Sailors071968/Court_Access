@@ -3,6 +3,10 @@
 //
 // Distinct from the Operational (revenue) New Inmate Report staff use each
 // morning. This report answers: can we trust NIIS today?
+//
+// Immutable Operational Truth: NEVER overwrite a prior certification.
+// Corrections create a superseding revision:
+//   Original → Correction → Reason → Reviewer → Timestamp → Superseding Cert
 // ============================================================================
 
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -42,6 +46,11 @@ export interface EngineeringCertificationInput {
   stageLedger?: { stage: string; count: number; note?: string }[];
   operationalReportId?: string | null;
   dailyCaseId?: string | null;
+  /** Required when superseding a prior certification for the same day. */
+  correctionReason?: string | null;
+  reviewerId?: string | null;
+  reviewerName?: string | null;
+  evidencePackagePath?: string | null;
   /** When false, do not write markdown under reports/ (tests). Default true. */
   writeFiles?: boolean;
   reportDir?: string;
@@ -52,8 +61,9 @@ function dayStart(iso: string): Date {
 }
 
 /**
- * Persist engineering certification, enqueue learning-queue items for every
- * discrepancy, and write the admin-facing markdown/json reports.
+ * Persist engineering certification as an append-only revision.
+ * Enqueue learning-queue items for every discrepancy.
+ * Write admin-facing markdown/json reports (latest view only under reports/).
  */
 export async function recordEngineeringCertification(input: EngineeringCertificationInput) {
   const opsDate = dayStart(input.currentDate);
@@ -71,16 +81,45 @@ export async function recordEngineeringCertification(input: EngineeringCertifica
       precision: input.precision,
       recall: input.recall,
     },
+    immutable: true,
   };
 
-  const row = await prisma.inmateDailyCertification.upsert({
-    where: {
-      facility_opsDate: { facility: input.facility, opsDate },
-    },
-    create: {
+  // Find current revision (if any) — never update it; supersede instead.
+  const prior = await prisma.inmateDailyCertification.findFirst({
+    where: { facility: input.facility, opsDate, isCurrent: true },
+    orderBy: { revision: 'desc' },
+  });
+
+  const revision = (prior?.revision ?? 0) + 1;
+  if (prior && !input.correctionReason && revision > 1) {
+    // Allow silent first re-record only when prior exists without reason by
+    // auto-labeling — still preserves history.
+    input = {
+      ...input,
+      correctionReason:
+        input.correctionReason
+        ?? `Superseding revision ${prior.revision} (status was ${prior.status})`,
+    };
+  }
+
+  if (prior) {
+    await prisma.inmateDailyCertification.update({
+      where: { certificationId: prior.certificationId },
+      data: { isCurrent: false },
+    });
+  }
+
+  const row = await prisma.inmateDailyCertification.create({
+    data: {
       facility: input.facility,
       opsDate,
       priorRosterDate,
+      revision,
+      isCurrent: true,
+      supersedesId: prior?.certificationId ?? null,
+      correctionReason: revision === 1 ? null : (input.correctionReason ?? null),
+      reviewerId: input.reviewerId ?? null,
+      reviewerName: input.reviewerName ?? null,
       status: input.status,
       priorInmateCount: input.priorInmateCount,
       currentInmateCount: input.currentInmateCount,
@@ -97,25 +136,7 @@ export async function recordEngineeringCertification(input: EngineeringCertifica
       summary: summary as object,
       dailyCaseId: input.dailyCaseId ?? null,
       operationalReportId: input.operationalReportId ?? null,
-    },
-    update: {
-      priorRosterDate,
-      status: input.status,
-      priorInmateCount: input.priorInmateCount,
-      currentInmateCount: input.currentInmateCount,
-      newInmateCount: input.newInmates,
-      existingInmateCount: input.existingInmates,
-      returningInmateCount: input.returningInmates,
-      reviewCount: input.reviewRequired,
-      reconcileOk: input.reconcileOk,
-      precision: input.precision,
-      recall: input.recall,
-      potentialClientsFound: input.potentialClientsFound,
-      potentialClientsMissed: input.potentialClientsMissed,
-      processingTimeMs: input.processingTimeMs,
-      summary: summary as object,
-      dailyCaseId: input.dailyCaseId ?? undefined,
-      operationalReportId: input.operationalReportId ?? undefined,
+      evidencePackagePath: input.evidencePackagePath ?? null,
     },
   });
 
@@ -182,21 +203,60 @@ export async function recordEngineeringCertification(input: EngineeringCertifica
     }
   }
 
-  const md = renderEngineeringCertificationMarkdown(input);
+  const md = renderEngineeringCertificationMarkdown({
+    ...input,
+    revision,
+    supersedesId: prior?.certificationId ?? null,
+  });
   if (input.writeFiles !== false) {
     const dir = input.reportDir ?? join(process.cwd(), '../reports/niis-reliability');
     mkdirSync(dir, { recursive: true });
     writeFileSync(join(dir, 'ENGINEERING_CERTIFICATION_REPORT.md'), md);
     writeFileSync(
       join(dir, 'ENGINEERING_CERTIFICATION_REPORT.json'),
-      JSON.stringify({ certificationId: row.certificationId, ...input, summary }, null, 2),
+      JSON.stringify({
+        certificationId: row.certificationId,
+        revision,
+        supersedesId: prior?.certificationId ?? null,
+        ...input,
+        summary,
+      }, null, 2),
     );
   }
 
-  return { certificationId: row.certificationId, markdown: md };
+  return {
+    certificationId: row.certificationId,
+    revision,
+    supersedesId: prior?.certificationId ?? null,
+    markdown: md,
+  };
 }
 
-export function renderEngineeringCertificationMarkdown(input: EngineeringCertificationInput): string {
+/** Full certification history for one ops day (oldest → newest). */
+export async function listCertificationRevisions(facility: string, opsDate: string) {
+  const day = dayStart(opsDate);
+  const rows = await prisma.inmateDailyCertification.findMany({
+    where: { facility, opsDate: day },
+    orderBy: { revision: 'asc' },
+  });
+  return rows.map((r) => ({
+    certificationId: r.certificationId,
+    revision: r.revision,
+    isCurrent: r.isCurrent,
+    supersedesId: r.supersedesId,
+    correctionReason: r.correctionReason,
+    reviewerName: r.reviewerName,
+    status: r.status,
+    createdAt: r.createdAt.toISOString(),
+    precision: r.precision,
+    recall: r.recall,
+    evidencePackagePath: r.evidencePackagePath,
+  }));
+}
+
+export function renderEngineeringCertificationMarkdown(
+  input: EngineeringCertificationInput & { revision?: number; supersedesId?: string | null },
+): string {
   const reconSum =
     input.newInmates != null && input.existingInmates != null
     && input.returningInmates != null && input.reviewRequired != null
@@ -208,10 +268,15 @@ export function renderEngineeringCertificationMarkdown(input: EngineeringCertifi
     '',
     '> Admin / developer only — not the staff revenue report.',
     '> Manual investigator comparison is the gold standard. Discrepancies are defects.',
+    '> Immutable: this report never overwrites a prior certification — it may supersede it.',
     '',
     `**Status:** ${input.status.toUpperCase()}`,
     `**Facility:** ${input.facility}`,
     `**Pair:** ${input.priorDate} → ${input.currentDate}`,
+    `**Revision:** ${input.revision ?? 1}`,
+    `**Supersedes:** ${input.supersedesId ?? '(original)'}`,
+    input.correctionReason ? `**Correction reason:** ${input.correctionReason}` : '',
+    input.reviewerName ? `**Reviewer:** ${input.reviewerName}` : '',
     `**Generated:** ${new Date().toISOString()}`,
     '',
     '## Totals',
@@ -275,5 +340,5 @@ export function renderEngineeringCertificationMarkdown(input: EngineeringCertifi
       : ['*(not recorded)*', '']),
     'Every discrepancy is also in the Learning Queue — no discrepancy is forgotten.',
     '',
-  ].join('\n');
+  ].filter((l) => l !== '').join('\n');
 }

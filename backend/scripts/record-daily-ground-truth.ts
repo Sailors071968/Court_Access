@@ -32,14 +32,20 @@ import {
   summaryCounts,
   ensureCorpusEntry,
 } from '../src/intelligence/inmates/manualClassification.js';
-import { appendEvidenceLedger } from '../src/intelligence/inmates/evidenceLedger.js';
+import { appendEvidenceLedger, listEvidenceLedger } from '../src/intelligence/inmates/evidenceLedger.js';
 import { normalizeRosterName } from '../src/intelligence/inmates/rosterComparison.js';
 import { inferDefectCategory } from '../src/intelligence/inmates/defectCategories.js';
+import { sealEvidencePackage } from '../src/intelligence/inmates/evidencePackage.js';
+import { isForensicModeEnabled } from '../src/intelligence/inmates/forensicMode.js';
 
 function arg(name: string, fallback?: string): string | undefined {
   const i = process.argv.indexOf(`--${name}`);
   if (i >= 0 && process.argv[i + 1]) return process.argv[i + 1];
   return fallback;
+}
+
+function hasFlag(name: string): boolean {
+  return process.argv.includes(`--${name}`);
 }
 
 function priorDateOf(iso: string): string {
@@ -63,12 +69,16 @@ async function main() {
   const prior = arg('prior-date') ?? (opsDate ? priorDateOf(opsDate) : undefined);
   const priorPdf = arg('prior');
   const currentPdf = arg('current');
+  const correctionReason = arg('correction-reason');
+  const reviewerName = arg('reviewer');
+  const forensic = hasFlag('forensic') || isForensicModeEnabled();
 
   if (!opsDate || (!classificationPath && !goldPath)) {
     console.error(
       'Usage: record-daily-ground-truth.ts --date YYYY-MM-DD '
         + '(--classification <manual-classification.md> | --gold <new-only.md>) '
-        + '[--prior-date YYYY-MM-DD] [--prior pdf] [--current pdf]',
+        + '[--prior-date YYYY-MM-DD] [--prior pdf] [--current pdf] '
+        + '[--correction-reason …] [--reviewer …] [--forensic]',
     );
     process.exit(2);
   }
@@ -317,6 +327,8 @@ async function main() {
     potentialClientsMissed: diff.missedNew.length,
     processingTimeMs: Date.now() - started,
     status: pass ? 'pass' : 'fail',
+    correctionReason: correctionReason ?? null,
+    reviewerName: reviewerName ?? manual.investigator ?? null,
     misses: diff.missedNew.map((name) => ({
       name,
       stage: 'Report generation',
@@ -334,6 +346,7 @@ async function main() {
     reportDir,
   });
 
+  let ledgerEntries: unknown[] = [];
   try {
     await appendEvidenceLedger({
       facility,
@@ -359,16 +372,82 @@ async function main() {
         precision,
         recall,
         certificationId: cert.certificationId,
+        revision: cert.revision,
         corpusStatus,
       },
       certificationId: cert.certificationId,
       corpusEntryId: corpusId,
     });
+    ledgerEntries = await listEvidenceLedger({ facility, opsDate });
   } catch (err) {
     console.warn(
       'Evidence ledger write skipped (migrate InmateEvidenceLedger if needed):',
       err instanceof Error ? err.message : err,
     );
+  }
+
+  // Learning queue snapshot for the evidence package
+  let learningQueueEntries: unknown[] = [];
+  try {
+    learningQueueEntries = await prisma.inmateLearningQueueItem.findMany({
+      where: { facility, opsDate: new Date(`${opsDate}T00:00:00.000Z`) },
+      orderBy: { openedAt: 'asc' },
+    });
+  } catch {
+    /* optional */
+  }
+
+  // Seal immutable Daily Evidence Package (irreplaceable unit of truth).
+  const sealed = sealEvidencePackage({
+    facility,
+    opsDate,
+    priorDate: prior,
+    yesterdayPdfPath: priorPdf && existsSync(priorPdf) ? priorPdf : join(entryDir, 'yesterday.pdf'),
+    todayPdfPath: currentPdf && existsSync(currentPdf) ? currentPdf : join(entryDir, 'today.pdf'),
+    manualClassification: manual,
+    niisClassification: {
+      reportableNames: niisReportableNames,
+      count: niisReportableNames.length,
+      recordedAt: new Date().toISOString(),
+    },
+    engineeringCertification: {
+      certificationId: cert.certificationId,
+      revision: cert.revision,
+      supersedesId: cert.supersedesId,
+      status: pass ? 'pass' : 'fail',
+      precision,
+      recall,
+      missedNew: diff.missedNew,
+      falseNew: diff.falseNew,
+    },
+    engineeringCertificationMarkdown: cert.markdown,
+    evidenceLedger: ledgerEntries,
+    learningQueueEntries,
+    repositorySnapshot: {
+      note: 'Rebuild marker — full DB restore via cert:rebuild from sealed packages',
+      corpusEntryId: corpusId,
+      goldNewCount: counts.newCount,
+      niisCount: niisReportableNames.length,
+    },
+    disposition: pass ? 'PASS' : 'FAIL',
+    certificationId: cert.certificationId,
+    certificationRevision: cert.revision,
+    supersedesCertificationId: cert.supersedesId,
+    correctionReason: correctionReason ?? null,
+    reviewerName: reviewerName ?? manual.investigator ?? null,
+    forensic,
+    notes: counts.partial
+      ? 'PARTIAL manual classification (NEW only). Full classes preferred.'
+      : null,
+  });
+
+  try {
+    await prisma.inmateDailyCertification.update({
+      where: { certificationId: cert.certificationId },
+      data: { evidencePackagePath: sealed.packageDir },
+    });
+  } catch {
+    /* migrate may be pending */
   }
 
   writeFileSync(
@@ -385,9 +464,12 @@ async function main() {
       precision,
       recall,
       certificationId: cert.certificationId,
+      revision: cert.revision,
+      supersedesId: cert.supersedesId,
       corpusEntryId: corpusId,
       corpusStatus,
-      note: 'Gold standard is the classification, not the NEW count.',
+      evidencePackage: sealed.packageDir,
+      note: 'Gold standard is the classification, not the NEW count. Package is immutable.',
     }, null, 2),
   );
 
@@ -395,9 +477,10 @@ async function main() {
 
   console.log(`Ops date: ${opsDate} (prior ${prior})`);
   console.log(`Corpus entry: ${entryDir} status=${corpusStatus}`);
+  console.log(`Evidence package: ${sealed.packageDir} (created=${sealed.created} rev=${cert.revision})`);
   console.log(`Missed NEW=${diff.missedNew.length}  False NEW=${diff.falseNew.length}`);
   console.log(`Precision=${(precision * 100).toFixed(1)}% Recall=${(recall * 100).toFixed(1)}%`);
-  console.log(`Status: ${pass ? 'PASS' : 'FAIL'}  certificationId=${cert.certificationId}`);
+  console.log(`Status: ${pass ? 'PASS' : 'FAIL'}  certificationId=${cert.certificationId} revision=${cert.revision}`);
   console.log(`Consecutive PASS streak: ${streak.streak}/${streak.required}  productionReady=${streak.productionReady}`);
 
   await prisma.$disconnect();

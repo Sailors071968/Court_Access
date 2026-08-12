@@ -286,10 +286,19 @@ async function main() {
   const corpusRoot = resolve(
     arg('corpus') ?? join(import.meta.dirname, '../../fixtures/sacramento/certification-corpus'),
   );
+  const changelogPath = arg('changelog');
   const outDir = resolve(
     arg('out') ?? join(import.meta.dirname, '../../reports/niis-reliability'),
   );
   mkdirSync(outDir, { recursive: true });
+
+  // Intentional behavioral changes must be explicitly documented for promotion.
+  let intentionalChangesDocumented = false;
+  let intentionalChangesExcerpt: string | null = null;
+  if (changelogPath && existsSync(changelogPath)) {
+    intentionalChangesDocumented = true;
+    intentionalChangesExcerpt = readFileSync(changelogPath, 'utf8').slice(0, 4000);
+  }
 
   const indexPath = join(corpusRoot, 'index.json');
   if (!existsSync(indexPath)) {
@@ -339,6 +348,16 @@ async function main() {
   else if (runnable.length === 0) releaseStatus = 'BLOCKED';
   else releaseStatus = 'CERTIFIED';
 
+  // Promotion requires CERTIFIED + intentional-change documentation when
+  // behavioral deltas are claimed. Without a changelog, status stays CERTIFIED
+  // but promotionAllowed=false (explicit gate).
+  const promotionAllowed =
+    releaseStatus === 'CERTIFIED'
+    && missedTotal === 0
+    && falseNewTotal === 0
+    && regressions.length === 0
+    && intentionalChangesDocumented;
+
   const evidence = formatCertificationEvidence({
     engine: 'Release Certification — Sacramento Certification Corpus replay',
     testDataset: `${index.entries.length} corpus entries (${runnable.length} runnable)`,
@@ -358,11 +377,31 @@ async function main() {
     `# Release Certification — ${version}`,
     '',
     '> NIIS certifies evidence, not software. Gold standard = investigator classification per day — not a fixed number.',
+    '> Promotion requires: replay every certified package, 0 missed, 0 false new, 0 unexplained regressions, and documented intentional changes.',
     '',
     '```',
     evidence,
     '```',
     '',
+    '## Promotion gate',
+    '',
+    '| Requirement | Result |',
+    '|---|---|',
+    `| Corpus replay CERTIFIED | ${releaseStatus === 'CERTIFIED' ? 'YES' : 'NO'} |`,
+    `| Missed new inmates = 0 | ${runnable.length ? (missedTotal === 0 ? 'YES' : 'NO') : 'UNKNOWN'} |`,
+    `| False new = 0 | ${runnable.length ? (falseNewTotal === 0 ? 'YES' : 'NO') : 'UNKNOWN'} |`,
+    `| Unexplained regressions = 0 | ${regressions.length === 0 ? 'YES' : 'NO'} |`,
+    `| Intentional changes documented (--changelog) | ${intentionalChangesDocumented ? 'YES' : 'NO'} |`,
+    `| **Promotion allowed** | **${promotionAllowed ? 'YES' : 'NO'}** |`,
+    '',
+    intentionalChangesDocumented
+      ? ['## Intentional behavioral changes', '', '```', intentionalChangesExcerpt ?? '', '```', ''].join('\n')
+      : [
+          '## Intentional behavioral changes',
+          '',
+          'Not provided. Pass `--changelog path/to/INTENTIONAL_CHANGES.md` to document any deliberate behavior deltas before promotion.',
+          '',
+        ].join('\n'),
     '## Replay summary',
     '',
     '| Metric | Value |',
@@ -393,6 +432,7 @@ async function main() {
           '',
           'No verified corpus pairs have durable PDFs + investigator classification available in this environment.',
           'Preserve Sacramento County roster PDFs and record full manual classifications before a release can be CERTIFIED.',
+          'Also seal Daily Evidence Packages (`fixtures/sacramento/evidence-packages/`) for rebuildability.',
           '',
         ].join('\n')
       : '',
@@ -408,6 +448,9 @@ async function main() {
     JSON.stringify({
       version,
       releaseStatus,
+      promotionAllowed,
+      intentionalChangesDocumented,
+      changelogPath: changelogPath ?? null,
       corpusRoot,
       philosophy: index.philosophy,
       missedInmates: runnable.length ? missedTotal : null,

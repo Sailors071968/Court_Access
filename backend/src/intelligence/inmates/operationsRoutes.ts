@@ -864,7 +864,7 @@ export async function registerInmateOperationsRoutes(app: FastifyInstance): Prom
     const facility = query.facility ?? 'sacramento';
     const limit = clampLimit(query.limit, 30, 100);
     const rows = await prisma.inmateDailyCertification.findMany({
-      where: { facility },
+      where: { facility, isCurrent: true },
       orderBy: { opsDate: 'desc' },
       take: limit,
     });
@@ -876,6 +876,7 @@ export async function registerInmateOperationsRoutes(app: FastifyInstance): Prom
       certifications: rows.map((r) => ({
         certificationId: r.certificationId,
         opsDate: r.opsDate.toISOString().slice(0, 10),
+        revision: r.revision,
         status: r.status,
         precision: r.precision,
         recall: r.recall,
@@ -884,6 +885,7 @@ export async function registerInmateOperationsRoutes(app: FastifyInstance): Prom
         reconcileOk: r.reconcileOk,
         currentInmateCount: r.currentInmateCount,
         newInmateCount: r.newInmateCount,
+        evidencePackagePath: r.evidencePackagePath,
       })),
     });
   });
@@ -891,19 +893,26 @@ export async function registerInmateOperationsRoutes(app: FastifyInstance): Prom
   app.get('/api/admin/intelligence/certifications/:facility/:opsDate', async (request, reply) => {
     if (!requireAdministrator(request as AuthenticatedRequest, reply)) return;
     const { facility, opsDate } = request.params as { facility: string; opsDate: string };
-    const row = await prisma.inmateDailyCertification.findUnique({
+    const row = await prisma.inmateDailyCertification.findFirst({
       where: {
-        facility_opsDate: {
-          facility,
-          opsDate: new Date(`${opsDate.slice(0, 10)}T00:00:00.000Z`),
-        },
+        facility,
+        opsDate: new Date(`${opsDate.slice(0, 10)}T00:00:00.000Z`),
+        isCurrent: true,
       },
     });
     if (!row) return reply.code(404).send({ error: 'Certification not found' });
+    const { listCertificationRevisions } = await import('./engineeringCertification.js');
+    const history = await listCertificationRevisions(facility, opsDate);
     return reply.send({
       certificationId: row.certificationId,
       facility: row.facility,
       opsDate: row.opsDate.toISOString().slice(0, 10),
+      revision: row.revision,
+      supersedesId: row.supersedesId,
+      correctionReason: row.correctionReason,
+      reviewerName: row.reviewerName,
+      evidencePackagePath: row.evidencePackagePath,
+      history,
       status: row.status,
       summary: row.summary,
       precision: row.precision,

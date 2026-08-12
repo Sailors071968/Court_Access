@@ -362,7 +362,7 @@ async function resolveBatchPair(args: {
         ? prisma.inmateDailyCase.findUnique({ where: { caseId: args.caseId } })
         : null,
       prisma.inmateDailyCertification.findFirst({
-        where: { facility },
+        where: { facility, isCurrent: true },
         orderBy: { opsDate: 'desc' },
       }),
     ]);
@@ -371,8 +371,12 @@ async function resolveBatchPair(args: {
     }
     const opsDate = (currentBatch.rosterDate ?? new Date()).toISOString().slice(0, 10);
     const priorDate = (priorBatch.rosterDate ?? new Date()).toISOString().slice(0, 10);
-    const todayCert = await prisma.inmateDailyCertification.findUnique({
-      where: { facility_opsDate: { facility, opsDate: new Date(`${opsDate}T00:00:00.000Z`) } },
+    const todayCert = await prisma.inmateDailyCertification.findFirst({
+      where: {
+        facility,
+        opsDate: new Date(`${opsDate}T00:00:00.000Z`),
+        isCurrent: true,
+      },
     }).catch(() => null);
     let reportCertification: DailyDifferenceView['reportCertification'] = 'provisional';
     if (todayCert?.status === 'pass') reportCertification = 'certified';
@@ -453,8 +457,8 @@ async function resolveBatchPair(args: {
     }
   }
 
-  const cert = await prisma.inmateDailyCertification.findUnique({
-    where: { facility_opsDate: { facility, opsDate: opsStart } },
+  const cert = await prisma.inmateDailyCertification.findFirst({
+    where: { facility, opsDate: opsStart, isCurrent: true },
   });
   let reportCertification: DailyDifferenceView['reportCertification'] = 'provisional';
   if (cert?.status === 'pass') reportCertification = 'certified';

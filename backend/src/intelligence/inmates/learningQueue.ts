@@ -169,7 +169,7 @@ export async function consecutivePassStreak(facility: string): Promise<{
 }> {
   const required = Number(process.env.SAC_CONSECUTIVE_PASS_REQUIRED ?? '10');
   const rows = await prisma.inmateDailyCertification.findMany({
-    where: { facility },
+    where: { facility, isCurrent: true },
     orderBy: { opsDate: 'desc' },
     take: Math.max(required, 30),
     select: { opsDate: true, status: true },

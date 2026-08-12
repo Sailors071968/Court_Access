@@ -124,3 +124,5 @@ Implementation: `InmateEvidenceLedger` + `evidenceLedger.ts`.
 | Evidence ledger | `evidenceLedger.ts` + Prisma |
 | Release cert | `scripts/release-certification.ts` (`npm run cert:release`) |
 | Daily truth (full classes) | `scripts/record-daily-ground-truth.ts --classification …` |
+| Daily Evidence Packages | `fixtures/sacramento/evidence-packages/` + `evidencePackage.ts` |
+| Immutable truth / Forensic Mode | `IMMUTABLE_EVIDENCE_OPERATIONAL_TRUTH_DIRECTIVE.md` |

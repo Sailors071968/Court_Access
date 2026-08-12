@@ -1,0 +1,13 @@
+{
+  "evidencePackageFormat": "evidence-package-1.0",
+  "softwareVersion": "1.0.0",
+  "processingVersion": "niis-primary-directive-1.0",
+  "parserVersion": null,
+  "identityVersion": "1.1.0",
+  "normalizationVersion": "1.1.0",
+  "comparisonVersion": "roster-set-diff-1.0",
+  "sealedAt": "2026-08-12T15:38:01.612Z",
+  "forensicMode": false,
+  "nodeVersion": "v22.14.0",
+  "gitSha": null
+}

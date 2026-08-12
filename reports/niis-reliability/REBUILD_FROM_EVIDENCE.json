@@ -1,0 +1,16 @@
+{
+  "releaseStatus": "BLOCKED",
+  "packagesRoot": "/workspace/fixtures/sacramento/evidence-packages",
+  "forensic": false,
+  "results": [
+    {
+      "opsDate": "2026-08-10",
+      "status": "BLOCKED",
+      "detail": "Original PDFs absent from evidence package",
+      "missed": 0,
+      "falseNew": 0
+    }
+  ],
+  "evidence": "Rebuild-from-Evidence — replay sealed Daily Evidence Packages\n\nTest Dataset:        1 evidence package(s) under /workspace/fixtures/sacramento/evidence-packages\nRoster Date:         multi\n\nManual Ground Truth: UNKNOWN New Inmates\nNIIS Result:         UNKNOWN New Inmates\nFalse Positives:     UNKNOWN\nFalse Negatives:     UNKNOWN\nPrecision:           UNKNOWN\nRecall:              UNKNOWN\n\nStatus:              UNKNOWN",
+  "generatedAt": "2026-08-12T15:38:02.203Z"
+}

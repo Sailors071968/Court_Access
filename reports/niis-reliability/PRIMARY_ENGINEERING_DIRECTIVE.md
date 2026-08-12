@@ -112,4 +112,8 @@ Accuracy always takes precedence. Once accuracy is achieved: entire morning work
 | Evidence ledger | `backend/src/intelligence/inmates/evidenceLedger.ts` |
 | Defect categories | `backend/src/intelligence/inmates/defectCategories.ts` |
 
-Related (subordinate): `EVIDENCE_CERTIFICATION_DIRECTIVE.md`, `ZERO_ASSUMPTION_ENGINEERING_DIRECTIVE.md`, `ACCURACY_FIRST.md`, `DAILY_INTELLIGENCE_OPERATIONS_DIRECTIVE.md`, `OPERATIONAL_EXCELLENCE_DIRECTIVE_V1.md`.
+| Daily Evidence Packages | `fixtures/sacramento/evidence-packages/` + `evidencePackage.ts` |
+| Forensic Mode | `forensicMode.ts` (`NIIS_FORENSIC_MODE=1`) |
+| Rebuild from evidence | `npm run cert:rebuild` |
+
+Related (subordinate): `IMMUTABLE_EVIDENCE_OPERATIONAL_TRUTH_DIRECTIVE.md`, `EVIDENCE_CERTIFICATION_DIRECTIVE.md`, `ZERO_ASSUMPTION_ENGINEERING_DIRECTIVE.md`, `ACCURACY_FIRST.md`, `DAILY_INTELLIGENCE_OPERATIONS_DIRECTIVE.md`, `OPERATIONAL_EXCELLENCE_DIRECTIVE_V1.md`.

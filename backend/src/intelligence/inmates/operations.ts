@@ -384,8 +384,8 @@ export async function getMorningOperationsBoard(
     prisma.inmateDailyCase.findUnique({
       where: { facility_opsDate: { facility, opsDate: dayStart } },
     }).catch(() => null),
-    prisma.inmateDailyCertification.findUnique({
-      where: { facility_opsDate: { facility, opsDate: dayStart } },
+    prisma.inmateDailyCertification.findFirst({
+      where: { facility, opsDate: dayStart, isCurrent: true },
     }).catch(() => null),
     prisma.inmateBooking.count({
       where: {

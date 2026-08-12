@@ -68,7 +68,7 @@ export async function reliabilityStreaks(
       select: { opsDate: true },
     }),
     prisma.inmateDailyCertification.findFirst({
-      where: { facility },
+      where: { facility, isCurrent: true },
       select: { certificationId: true },
     }),
   ]);
@@ -78,6 +78,7 @@ export async function reliabilityStreaks(
     prisma.inmateDailyCertification.findFirst({
       where: {
         facility,
+        isCurrent: true,
         OR: [
           { potentialClientsMissed: { gt: 0 } },
           { recall: { lt: 1 } },
@@ -89,6 +90,7 @@ export async function reliabilityStreaks(
     prisma.inmateDailyCertification.findFirst({
       where: {
         facility,
+        isCurrent: true,
         OR: [
           { precision: { lt: 1 } },
         ],

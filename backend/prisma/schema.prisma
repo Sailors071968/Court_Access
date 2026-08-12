@@ -4518,12 +4518,25 @@ model InmateDailyCase {
  * Operational report (new inmates for staff) is separate. This row is how NIIS
  * earns trust: reconcile, precision/recall, clients found/missed, PASS/FAIL.
  * Production readiness requires sustained consecutive PASSes — not one day.
+ *
+ * Immutable Operational Truth: rows are NEVER overwritten.
+ * Corrections create a new revision that supersedes the prior (isCurrent flips).
+ * Chain: original → correction → reason → reviewer → timestamp → superseding cert.
  */
 model InmateDailyCertification {
   certificationId          String   @id @default(uuid())
   facility                 String
   opsDate                  DateTime
   priorRosterDate          DateTime?
+  /** Monotonic revision per facility+opsDate. Starts at 1. */
+  revision                 Int      @default(1)
+  /** Exactly one current certification per facility+opsDate. */
+  isCurrent                Boolean  @default(true)
+  /** Prior certification this revision supersedes (null = original). */
+  supersedesId             String?
+  correctionReason         String?
+  reviewerId               String?
+  reviewerName             String?
   /** pass | fail | blocked | pending_manual_truth */
   status                   String
   priorInmateCount         Int?
@@ -4542,12 +4555,16 @@ model InmateDailyCertification {
   summary                  Json     @default("{}")
   dailyCaseId              String?
   operationalReportId      String?
+  /** Path to sealed Daily Evidence Package for this day (if sealed). */
+  evidencePackagePath      String?
   createdAt                DateTime @default(now())
   updatedAt                DateTime @updatedAt
 
-  @@unique([facility, opsDate])
+  @@unique([facility, opsDate, revision])
+  @@index([facility, opsDate, isCurrent])
   @@index([facility, status, opsDate])
   @@index([opsDate])
+  @@index([supersedesId])
   @@map("inmate_daily_certifications")
 }
 

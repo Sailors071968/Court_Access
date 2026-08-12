@@ -93,9 +93,11 @@ export async function collectDailyStageMetrics(args: {
           orderBy: { finishedAt: 'desc' },
           include: { document: true },
         }),
-    prisma.inmateDailyCertification.findUnique({
+    prisma.inmateDailyCertification.findFirst({
       where: {
-        facility_opsDate: { facility: args.facility, opsDate: opsStart },
+        facility: args.facility,
+        opsDate: opsStart,
+        isCurrent: true,
       },
     }),
     prisma.inmateDailyCase.findUnique({

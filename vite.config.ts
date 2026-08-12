@@ -31,7 +31,11 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:3001",
+        // The dev server proxies to whatever backend is running. Configurable
+        // because the release listens on the port its .env declares — 3100 in the
+        // documented deployment — while `npm start` in backend/ uses 3001, and a
+        // hard-coded target silently sends every request to the wrong service.
+        target: process.env.API_PROXY_TARGET ?? "http://localhost:3001",
         changeOrigin: true,
         secure: false,
       },

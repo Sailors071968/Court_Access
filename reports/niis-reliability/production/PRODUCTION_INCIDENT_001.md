@@ -1,9 +1,11 @@
 # Production Incident #001 — uploadedBytes = 0
 
 **Severity:** Critical  
-**Status:** ROOT CAUSE IDENTIFIED · FIX READY · **AWAITING PRODUCTION DEPLOY**  
+**Status:** OPEN — root cause identified · fix in PR #167 · **not RESOLVED until closure Tests 1–10 pass on production**  
 **Target:** https://courtaccess.net · EC2 `44.209.225.79` · commit `b52e9aad` (pre-fix)  
 **Opened:** 2026-08-12  
+**Closure checklist:** `PRODUCTION_INCIDENT_001_CLOSURE.md`  
+**Related (do not mix):** INC-002 CSV worker drain — `PRODUCTION_INCIDENT_002.md`  
 
 ## Mission boundary
 

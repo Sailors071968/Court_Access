@@ -7,6 +7,7 @@ import multipart from '@fastify/multipart';
 
 import type { AuthenticatedRequest } from '../../security/authMiddleware.js';
 import { recordAccess } from './auditLog.js';
+import { processImportJobMultipartUpload } from './importJobMultipartUpload.js';
 import {
   cancelImportJob, createImportJob, getImportJob, listImportJobs, listJobFiles,
   markBatchUploadFailed, markBatchUploading, maybeAutoProcess, pendingUploadsForJob,
@@ -145,144 +146,25 @@ export async function registerImportJobRoutes(app: FastifyInstance): Promise<voi
     instance.post('/api/admin/intelligence/import-jobs/:jobId/uploads', async (request: AuthenticatedRequest, reply: FastifyReply) => {
       if (!requireAdministrator(request, reply)) return;
       const { jobId } = request.params as { jobId: string };
-      if (!(await getImportJob(jobId))) {
-        return reply.code(404).send({ error: 'Not found', message: 'Import job not found.' });
-      }
-
-      const accepted: unknown[] = [];
-      const rejected: { jobFileId?: string; filename: string; reason: string }[] = [];
-      const jobFileIds: string[] = [];
-      let batchIndex = 0;
-      const batchStartedAt = Date.now();
-
-      // INC-001: Multipart fields and files are interleaved. Each file stream MUST be
-      // consumed (piped to durable storage) before the parts() iterator advances.
-      // Holding streams for a second pass deadlocks busboy once the part exceeds the
-      // internal buffer (~100 KB): markBatchUploading never runs, uploadStartedAt stays
-      // null, uploadedBytes stays 0, and the browser eventually aborts.
-      // Pairing rule: each file part is preceded by a jobFileId field (BulkImportPanel).
-      const fieldQueue: string[] = [];
-
-      const trace = (transition: string, fields: Record<string, unknown>) => {
-        console.log(JSON.stringify({
-          incident: 'INC-001',
-          transition,
-          ts: new Date().toISOString(),
-          durationMs: Date.now() - batchStartedAt,
-          jobId,
-          ...fields,
-        }));
-      };
-
-      trace('multipart_request_open', {
-        contentType: request.headers['content-type'] ?? null,
-        contentLength: request.headers['content-length'] ?? null,
+      const outcome = await processImportJobMultipartUpload({
+        request: request as Parameters<typeof processImportJobMultipartUpload>[0]['request'],
+        jobId,
+        deps: {
+          getImportJob,
+          markBatchUploading,
+          markBatchUploadFailed,
+          storeJobFileUpload,
+          maybeAutoProcess,
+          recordAccess: async (args) =>
+            recordAccess({
+              userId: args.userId,
+              action: 'import_job_batch_uploaded',
+              parameters: args.parameters,
+              ipAddress: args.ipAddress,
+            }),
+        },
       });
-
-      try {
-        for await (const part of request.parts()) {
-          if (part.type === 'field') {
-            if (part.fieldname === 'jobFileId' || part.fieldname === 'jobFileIds') {
-              fieldQueue.push(String(part.value));
-            } else if (part.fieldname === 'batchIndex') {
-              batchIndex = Number(part.value) || 0;
-            }
-            continue;
-          }
-          if (part.type !== 'file') continue;
-
-          const jobFileId = fieldQueue.shift();
-          if (!jobFileId) {
-            rejected.push({ filename: part.filename, reason: 'Missing jobFileId for this file part.' });
-            part.file.resume();
-            continue;
-          }
-
-          jobFileIds.push(jobFileId);
-          trace('multipart_file_part', {
-            jobFileId,
-            filename: part.filename,
-            batchIndex,
-          });
-
-          // Mark uploading before draining bytes so operators see progress if the
-          // transfer is slow — and so aborted mid-stream jobs are not left "pending".
-          await markBatchUploading(jobId, [jobFileId], batchIndex);
-          trace('jobfile_uploading', { jobFileId, filename: part.filename });
-
-          const fileStartedAt = Date.now();
-          const stored = await storeJobFileUpload({
-            jobId,
-            jobFileId,
-            stream: part.file,
-            uploadedById: request.user!.userId,
-            uploadedByName: request.user!.email ?? undefined,
-          });
-
-          if ('error' in stored && stored.error) {
-            // Drain any remainder so subsequent parts are not blocked.
-            part.file.resume();
-            rejected.push({ jobFileId, filename: part.filename, reason: stored.error });
-            trace('file_store_fail', {
-              jobFileId,
-              filename: part.filename,
-              error: stored.error,
-              durationMs: Date.now() - fileStartedAt,
-            });
-          } else {
-            accepted.push({ ...stored, filename: part.filename, jobFileId });
-            const sizeBytes = 'sizeBytes' in stored ? stored.sizeBytes : null;
-            const uploadId = 'uploadId' in stored ? stored.uploadId : null;
-            trace('file_store_ok', {
-              jobFileId,
-              filename: part.filename,
-              uploadId,
-              bytes: sizeBytes,
-              durationMs: Date.now() - fileStartedAt,
-            });
-          }
-        }
-      } catch (err) {
-        const reason = err instanceof Error ? err.message : String(err);
-        trace('multipart_abort', { reason, jobFileIds });
-        if (jobFileIds.length > 0) {
-          await markBatchUploadFailed(jobId, jobFileIds, reason);
-        }
-        return reply.code(400).send({
-          error: 'Upload batch failed',
-          message: reason,
-          accepted,
-          rejected,
-        });
-      }
-
-      // Kick async processing when the client has finished the last pending file.
-      const auto = await maybeAutoProcess(jobId, request.user!.userId);
-      const job = await getImportJob(jobId);
-      trace('batch_complete', {
-        batchIndex,
-        accepted: accepted.length,
-        rejected: rejected.length,
-        uploadedBytes: job?.uploadedBytes ?? null,
-        uploadStartedAt: job?.uploadStartedAt ?? null,
-        uploadFinishedAt: job?.uploadFinishedAt ?? null,
-        status: job?.status ?? null,
-        autoProcessStarted: Boolean(auto && 'started' in auto && auto.started.length > 0),
-      });
-
-      await recordAccess({
-        userId: request.user!.userId,
-        action: 'import_job_batch_uploaded',
-        parameters: { jobId, accepted: accepted.length, rejected: rejected.length, batchIndex },
-        ipAddress: request.ip,
-      });
-
-      return reply.code(accepted.length > 0 || rejected.length > 0 ? 201 : 400).send({
-        accepted,
-        rejected,
-        autoProcessStarted: Boolean(auto && 'started' in auto && auto.started.length > 0),
-        job,
-      });
+      return reply.code(outcome.statusCode).send(outcome.body);
     });
   });
 

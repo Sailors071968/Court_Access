@@ -25,6 +25,12 @@
     "firm:demo": "tsx scripts/generate-program02-demonstration.ts",
     "operations:report": "tsx scripts/run-operations-report.ts",
     "test": "node --import tsx --test tests/**/*.test.ts",
+    "test:sacramento-parser": "node --import tsx --test tests/sacramentoJailScan.test.ts",
+    "cert:sacramento": "tsx scripts/sacramento-validation-suite.ts",
+    "cert:daily-truth": "tsx scripts/record-daily-ground-truth.ts",
+    "cert:replay": "tsx scripts/niis-replay.ts",
+    "cert:release": "tsx scripts/release-certification.ts",
+    "cert:rebuild": "tsx scripts/rebuild-from-evidence.ts",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "bash scripts/db-safe-migrate.sh deploy",
@@ -40,7 +46,8 @@
     "phase103-108:acquire": "tsx src/policy/pipeline/phase103_108_realDataAcquisition.ts",
     "phase109-114:repair": "tsx src/policy/pipeline/phase109_114_ingestionRepair.ts",
     "phase121-128:operations": "tsx src/policy/pipeline/phase121_128_operationsConsole.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build:cli": "esbuild src/intelligence/inmates/cli.ts --bundle --platform=node --target=node22 --format=esm --packages=external --outfile=dist/inmate-cli.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1004.0",

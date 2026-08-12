@@ -1,0 +1,71 @@
+{
+  "format": "evidence-package-1.0",
+  "facility": "sacramento",
+  "opsDate": "2026-08-10",
+  "priorDate": "2026-08-09",
+  "sealedAt": "2026-08-12T15:38:01.612Z",
+  "disposition": "BLOCKED",
+  "immutable": true,
+  "certificationId": null,
+  "certificationRevision": 1,
+  "supersedesCertificationId": null,
+  "correctionReason": null,
+  "reviewerName": null,
+  "versions": {
+    "evidencePackageFormat": "evidence-package-1.0",
+    "softwareVersion": "1.0.0",
+    "processingVersion": "niis-primary-directive-1.0",
+    "parserVersion": null,
+    "identityVersion": "1.1.0",
+    "normalizationVersion": "1.1.0",
+    "comparisonVersion": "roster-set-diff-1.0",
+    "sealedAt": "2026-08-12T15:38:01.612Z",
+    "forensicMode": false,
+    "nodeVersion": "v22.14.0",
+    "gitSha": null
+  },
+  "artifacts": {
+    "evidence/yesterday.pdf": {
+      "path": "evidence/yesterday.pdf",
+      "sha256": null,
+      "bytes": null
+    },
+    "evidence/today.pdf": {
+      "path": "evidence/today.pdf",
+      "sha256": null,
+      "bytes": null
+    },
+    "analysis/canonical-yesterday.json": {
+      "path": "analysis/canonical-yesterday.json",
+      "sha256": null,
+      "bytes": null
+    },
+    "analysis/canonical-today.json": {
+      "path": "analysis/canonical-today.json",
+      "sha256": null,
+      "bytes": null
+    },
+    "analysis/niis-classification.json": {
+      "path": "analysis/niis-classification.json",
+      "sha256": "17afcd81d9a99f08ab27f203f4cf2d03dfcf9bf2d2617a008ba0f9c1720adbe5",
+      "bytes": 96
+    },
+    "analysis/manual-classification.md": {
+      "path": "analysis/manual-classification.md",
+      "sha256": "c4cef78b24891af79512a2de83995e67041633fe5c0d80fd7d08aa007bf8b3d1",
+      "bytes": 2054
+    },
+    "certification/CURRENT.json": {
+      "path": "certification/CURRENT.json",
+      "sha256": "36045233c284cbc302f19d67d0fe6f7c1097685a2f51f4daade1c8b84d14ff48",
+      "bytes": 142
+    },
+    "CASE.md": {
+      "path": "CASE.md",
+      "sha256": "af4358acd6af41d70fb13e03fca975bec16a5e1a78a22cda4e1813ffb3c5399f",
+      "bytes": 929
+    }
+  },
+  "contentHash": "68110ab3a13806b4224d1dae10c20c25daec6356ed651065b4b137d24e01a336",
+  "note": "Immutable evidence package. Original PDFs + investigator classifications are irreplaceable. Software improvements create new certification revisions — they never overwrite sealed evidence."
+}

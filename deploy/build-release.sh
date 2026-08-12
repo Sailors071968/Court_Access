@@ -69,6 +69,18 @@ cp "$ROOT/backend/prisma/schema.prisma" "$OUT/prisma/schema.prisma"
 cp -a "$ROOT/backend/prisma/migrations" "$OUT/prisma/migrations"
 
 cp "$ROOT/backend/package.json" "$OUT/package.json"
+cp "$ROOT/backend/package-lock.json" "$OUT/package-lock.json"
+
+# Lockout recovery and Sacramento seed — both run against the live .env on the host.
+cp "$ROOT/deploy/admin-reset-password.mjs" "$OUT/admin-reset-password.mjs"
+mkdir -p "$OUT/scripts"
+cp "$ROOT/backend/scripts/seed-sacramento.mjs" "$OUT/scripts/seed-sacramento.mjs"
+
+# Sacramento fixtures for on-host smoke (CSV/PDF samples).
+if [ -d "$ROOT/fixtures/sacramento" ]; then
+  mkdir -p "$OUT/fixtures/sacramento"
+  cp -a "$ROOT/fixtures/sacramento/." "$OUT/fixtures/sacramento/"
+fi
 
 # A release is not a git checkout, so the commit has to travel with it. Without
 # this, every certification record stores a null commit and the permanent

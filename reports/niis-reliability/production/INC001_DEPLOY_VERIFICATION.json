@@ -1,0 +1,49 @@
+{
+  "incident": "INC-001",
+  "phase": "deployment_verification",
+  "measuredAt": "2026-08-12T19:27:07Z",
+  "status": "OPEN",
+  "resolved": false,
+  "production": {
+    "url": "https://courtaccess.net",
+    "version": "1.1.0",
+    "commit": "b52e9aadfa35c3547327985bd13e411f217ae0e9",
+    "environment": "production",
+    "uptimeSeconds": 181528
+  },
+  "pr167": {
+    "url": "https://github.com/Sailors071968/Court_Access/pull/167",
+    "head": "c2a8ca934f10",
+    "fixCommit": "cdaa823",
+    "deployedToProduction": false
+  },
+  "deployProbe": {
+    "name": "500KB Import Job multipart upload",
+    "verdict": "FIX_NOT_DEPLOYED",
+    "jobId": "51d79eac-2a47-4142-ac80-3ad8e278a95a",
+    "uploadedBytes": 0,
+    "uploadStartedAt": null,
+    "uploadFinishedAt": null,
+    "curlTimeoutSec": 45,
+    "note": "Same failure signature as pre-fix production. Fix is not live."
+  },
+  "closureTests": {
+    "t1_upload_accepted": "BLOCKED_NOT_DEPLOYED",
+    "t2_uploadedBytes": "BLOCKED_NOT_DEPLOYED",
+    "t3_uploadStartedAt": "BLOCKED_NOT_DEPLOYED",
+    "t4_uploadFinishedAt": "BLOCKED_NOT_DEPLOYED",
+    "t5_jobFile_uploaded": "BLOCKED_NOT_DEPLOYED",
+    "t6_parser_auto_start": "BLOCKED_NOT_DEPLOYED",
+    "t7_canonical_roster": "BLOCKED_NOT_DEPLOYED",
+    "t8_comparison": "BLOCKED_NOT_DEPLOYED",
+    "t9_morning_ops_daily_case": "BLOCKED_NOT_DEPLOYED",
+    "t10_new_inmates_today_only": "BLOCKED_NOT_DEPLOYED",
+    "t11_printable_report": "BLOCKED_NOT_DEPLOYED"
+  },
+  "artifacts": {
+    "realPdfPresent": false,
+    "expectedPdf": "SACJAILSCAN08-12-2026.pdf",
+    "expectedSha256": "1b4a8e346f55249b54a7c0c67901594346fef3a1d6f3b95eb6822d3c4eb299e8"
+  },
+  "next": "Deploy PR #167 head (or fix commit cdaa823+) to production by any mechanism. Re-run closure Tests 1–11 against real SACJAILSCAN08-12-2026.pdf. Do not mark RESOLVED until all PASS."
+}

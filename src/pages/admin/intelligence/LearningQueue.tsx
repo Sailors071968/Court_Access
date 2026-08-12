@@ -22,6 +22,9 @@ export function LearningQueue() {
   const [error, setError] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
 
+  // Engineering Law #0: every discrepancy permanently improves NIIS.
+  // The same discrepancy must never surprise the system twice.
+
   const load = useCallback(async () => {
     setLoading(true);
     try {
@@ -60,7 +63,7 @@ export function LearningQueue() {
     <div className="mx-auto max-w-[100rem] space-y-5">
       <PageHeader
         title="Learning Queue"
-        subtitle="No discrepancy is discarded. Each item is a defect until NIIS reproduces the verified result."
+        subtitle="Every mistake makes NIIS better. Human review preserves truth when evidence is insufficient — silent wrong decisions are the failure."
         actions={
           <>
             <select
@@ -121,7 +124,9 @@ export function LearningQueue() {
                         {item.errorType}
                       </Badge>
                     </Td>
-                    <Td>{item.rootCause}</Td>
+                    <Td>
+                      <Badge tone="neutral">{item.defectCategory ?? item.rootCause}</Badge>
+                    </Td>
                     <Td>{item.status}</Td>
                     <Td>
                       <p className="max-w-xs truncate text-xs text-gray-600" title={item.evidence ?? undefined}>

@@ -14,6 +14,7 @@
 // ============================================================================
 
 import prisma from '../../lib/prisma.js';
+import { explainReportableWhy } from './truthCategories.js';
 
 export type RosterDisposition =
   | 'new'
@@ -306,26 +307,11 @@ function runComparison(args: {
     });
     counts[disposition] += 1;
 
-    let why: string;
-    switch (disposition) {
-      case 'new':
-        why = 'NEW: present today, absent from yesterday\'s certified roster; no historical bookings.';
-        break;
-      case 'returning':
-        why = `RETURNING: present today, absent yesterday; ${historicalBookingCount} prior booking(s) in repository.`;
-        break;
-      case 'existing':
-        why = 'EXISTING: present on yesterday\'s certified roster and today\'s roster.';
-        break;
-      case 'review':
-        why = 'REVIEW: identity uncertain — never silently guess.';
-        break;
-      case 'failed':
-        why = 'FAILED: ingestion failed for this row.';
-        break;
-      default:
-        why = 'UNCLASSIFIED — engineering defect; reconciliation fails.';
-    }
+    // Engineering Law #0: one sentence a bail agent understands immediately.
+    const why = explainReportableWhy({
+      disposition,
+      historicalBookingCount,
+    }).why;
 
     current.push({
       name: member.name,

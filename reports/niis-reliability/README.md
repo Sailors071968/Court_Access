@@ -1,26 +1,29 @@
 # NIIS — Continuous Operational Validation
 
-**One job:** the exact list of every newly booked Sacramento inmate, every morning.  
-**Architecture frozen.** Historical 08/09→08/10 remains the benchmark — but **do not wait** on it; every live day is a validation dataset.
+> **Every morning NIIS must tell the truth about who is newly booked into the Sacramento County Jail.**  
+> Everything else is secondary.
 
-→ **[PRIMARY_ENGINEERING_DIRECTIVE.md](./PRIMARY_ENGINEERING_DIRECTIVE.md)** — **what** NIIS must discover (superseding)  
-→ **[ZERO_ASSUMPTION_ENGINEERING_DIRECTIVE.md](./ZERO_ASSUMPTION_ENGINEERING_DIRECTIVE.md)** — **how** claims are proven (evidence-governed)  
+**Supreme law:** [ENGINEERING_LAW_0.md](./ENGINEERING_LAW_0.md) — The System Must Never Lie.  
+**Daily discipline (prefer over new architecture):** [DAILY_OPERATIONAL_LOOP.md](./DAILY_OPERATIONAL_LOOP.md).
+
+**One job:** the exact list of every newly booked Sacramento inmate, every morning.  
+**Architecture mature.** Grow the certification corpus through daily operational agreement — not more design.
+
+→ **[ENGINEERING_LAW_0.md](./ENGINEERING_LAW_0.md)** — supersedes every directive  
+→ **[PRIMARY_ENGINEERING_DIRECTIVE.md](./PRIMARY_ENGINEERING_DIRECTIVE.md)** — **what** NIIS must discover  
+→ **[ZERO_ASSUMPTION_ENGINEERING_DIRECTIVE.md](./ZERO_ASSUMPTION_ENGINEERING_DIRECTIVE.md)** — **how** claims are proven  
+→ **[EVIDENCE_CERTIFICATION_DIRECTIVE.md](./EVIDENCE_CERTIFICATION_DIRECTIVE.md)** / **[IMMUTABLE_EVIDENCE_OPERATIONAL_TRUTH_DIRECTIVE.md](./IMMUTABLE_EVIDENCE_OPERATIONAL_TRUTH_DIRECTIVE.md)**  
 → **[ACCURACY_FIRST.md](./ACCURACY_FIRST.md)** — Phase B deferred until manual-list match  
-→ **[DAILY_INTELLIGENCE_OPERATIONS_DIRECTIVE.md](./DAILY_INTELLIGENCE_OPERATIONS_DIRECTIVE.md)** — daily ops phases (subordinate)  
+→ **[DAILY_INTELLIGENCE_OPERATIONS_DIRECTIVE.md](./DAILY_INTELLIGENCE_OPERATIONS_DIRECTIVE.md)** — subordinate  
 → **[OPERATIONAL_EXCELLENCE_DIRECTIVE_V1.md](./OPERATIONAL_EXCELLENCE_DIRECTIVE_V1.md)** — subordinate  
-→ **[CONTINUOUS_OPERATIONAL_VALIDATION.md](./CONTINUOUS_OPERATIONAL_VALIDATION.md)**  
-→ **[OPERATIONAL_VALIDATION_MODE.md](./OPERATIONAL_VALIDATION_MODE.md)**  
-→ **[NIIS_ACCURACY_CERTIFICATION.md](./NIIS_ACCURACY_CERTIFICATION.md)**  
-→ **[DAILY_PDF_PRIMARY_WORKFLOW.md](./DAILY_PDF_PRIMARY_WORKFLOW.md)**
 
 **Morning command center:** `/admin/intelligence` → `GET /api/admin/intelligence/morning-board`  
-**Daily Difference Viewer:** `/admin/intelligence/daily-difference` → `GET /api/admin/intelligence/daily-difference`
+**Daily Difference Viewer:** `/admin/intelligence/daily-difference`
 
 ## Gold standard
 
-| Prior | Current | Ground truth |
-|---|---|---|
-| 08/09/2026 | 08/10/2026 | **67** newly booked |
+Investigator verified classification for **each** roster date (NEW / EXISTING / RETURNING / REVIEW).  
+A historical NEW count (e.g. 67 on 2026-08-10) is a consequence of that day’s evidence — not a permanent target.
 
 ## Two morning reports
 

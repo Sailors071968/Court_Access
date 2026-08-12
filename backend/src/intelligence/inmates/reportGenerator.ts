@@ -53,6 +53,14 @@ export interface ReportRow {
   matchTier: string | null;
   onWatchList: boolean;
   watchListReason: string | null;
+  /**
+   * Engineering Law #0 — Why am I on this report?
+   * One sentence a bail agent understands immediately.
+   */
+  whyHere: string;
+  /** verified_conclusion | unknown | … */
+  truthCategory: string;
+  disposition: string | null;
   /** Anything an operator should know before acting on the row. */
   flags: string[];
   provenance: { filename: string; sha256: string; rosterDate: string | null; sourceType: string; line: number | null };
@@ -84,11 +92,21 @@ export async function buildNewInmateReport(params: ReportParameters): Promise<Re
     }
   }
 
+  /** bookingId → disposition row from set-diff (preserves whyHere). */
+  const dispositionByBooking = new Map<string, { disposition: string; why: string; historicalBookingCount: number }>();
+
   if (priorBatchId && currentBatchId) {
     const comparison = await compareRosterBatches({ priorBatchId, currentBatchId });
-    bookingIds = comparison.current
-      .filter((row) => isReportableNew(row.disposition) && row.bookingId)
-      .map((row) => row.bookingId!);
+    for (const row of comparison.current) {
+      if (isReportableNew(row.disposition) && row.bookingId) {
+        dispositionByBooking.set(row.bookingId, {
+          disposition: row.disposition,
+          why: row.why,
+          historicalBookingCount: row.historicalBookingCount,
+        });
+      }
+    }
+    bookingIds = [...dispositionByBooking.keys()];
   }
 
   const where: Record<string, unknown> = bookingIds
@@ -114,6 +132,7 @@ export async function buildNewInmateReport(params: ReportParameters): Promise<Re
     },
   });
 
+  const { explainReportableWhy } = await import('./truthCategories.js');
   const rows: ReportRow[] = [];
 
   for (const b of bookings) {
@@ -133,18 +152,19 @@ export async function buildNewInmateReport(params: ReportParameters): Promise<Re
     const flags: string[] = [];
 
     // Flags exist so an operator is not required to infer these from the data.
+    // Confidence is never hidden (Law #0).
     if (b.inmate.identityConfidence < 90) {
-      flags.push(`identity confidence ${b.inmate.identityConfidence}% — matched on partial evidence`);
+      flags.push(`Identity confidence ${b.inmate.identityConfidence}% — matched on partial evidence`);
     }
     if (!b.inmate.dateOfBirth) {
-      flags.push('no date of birth on record — identity matching is weaker for this person');
+      flags.push('Date of birth UNKNOWN — identity matching is weaker for this person');
     }
     if (record?.extractionMethod === 'ocr') {
-      flags.push(`transcribed by OCR (extraction confidence ${record.extractionConfidence ?? '?'}%) — verify against the source`);
+      flags.push(`Transcribed by OCR (extraction confidence ${record.extractionConfidence ?? 'UNKNOWN'}%) — verify against the source`);
     }
-    if (b.charges.some((c) => c.severity === 'felony')) flags.push('felony charge');
-    if (b.charges.length === 0) flags.push('no charges recorded on this booking');
-    if (priors.length > 0) flags.push(`${priors.length} prior booking(s) — returning`);
+    if (b.charges.some((c) => c.severity === 'felony')) flags.push('Felony charge');
+    if (b.charges.length === 0) flags.push('No charges recorded on this booking (UNKNOWN charges)');
+    if (priors.length > 0) flags.push(`${priors.length} prior booking(s) on record`);
 
     const conflicts = await prisma.inmateSourceConflict.count({
       where: { bookingId: b.bookingId, resolution: 'unknown' },
@@ -154,6 +174,16 @@ export async function buildNewInmateReport(params: ReportParameters): Promise<Re
     }
 
     if (params.minConfidence !== undefined && b.inmate.identityConfidence < params.minConfidence) continue;
+
+    const fromCompare = dispositionByBooking.get(b.bookingId);
+    const disposition = (fromCompare?.disposition as 'new' | 'returning' | undefined)
+      ?? (priors.length > 0 ? 'returning' : 'new');
+    const explained = fromCompare
+      ? { why: fromCompare.why, truthCategory: 'verified_conclusion' as const }
+      : explainReportableWhy({
+          disposition,
+          historicalBookingCount: priors.length,
+        });
 
     rows.push({
       inmateId: b.inmateId,
@@ -177,6 +207,9 @@ export async function buildNewInmateReport(params: ReportParameters): Promise<Re
       matchTier: record?.matchTier ?? null,
       onWatchList: Boolean(watch),
       watchListReason: watch?.reason ?? null,
+      whyHere: explained.why,
+      truthCategory: explained.truthCategory,
+      disposition,
       flags,
       provenance: {
         filename: b.sourceBatch.sourceFilename,
@@ -225,6 +258,9 @@ export function renderNewInmateReport(
     : rows.map((r) => `
     <section class="person">
       <h2>${escape(r.name)}${r.onWatchList ? ' <span class="watch">WATCH LIST</span>' : ''}</h2>
+      <p class="why-here"><strong>Why on this report:</strong> ${escape(r.whyHere)}
+        <span class="truth-cue">${escape(r.truthCategory === 'verified_conclusion' ? 'Conclusion' : r.truthCategory === 'unknown' ? 'UNKNOWN' : 'Fact')}</span>
+      </p>
       <table class="facts">
         <tr><th>Date of birth</th><td>${escape(r.dateOfBirth ?? 'UNKNOWN')}</td>
             <th>Sex</th><td>${escape(r.sex ?? 'UNKNOWN')}</td></tr>
@@ -233,7 +269,7 @@ export function renderNewInmateReport(
         <tr><th>Booking no.</th><td>${escape(r.externalBookingId ?? 'UNKNOWN')}</td>
             <th>Housing</th><td>${escape(r.housingLocation ?? 'UNKNOWN')}</td></tr>
         <tr><th>Bail</th><td>${r.bailAmount ? '$' + escape(r.bailAmount) : 'UNKNOWN'}</td>
-            <th>Identity confidence</th><td>${r.identityConfidence}%${r.matchTier ? ` (${escape(r.matchTier)})` : ''}</td></tr>
+            <th>Identity confidence</th><td>${r.identityConfidence}%${r.matchTier ? ` (${escape(r.matchTier)})` : ''}${r.identityConfidence < 90 ? ' — verify' : ''}</td></tr>
         <tr><th>Prior bookings</th><td colspan="3">${r.priorBookingCount === 0
           ? 'none on record'
           : `${r.priorBookingCount} — ${r.priorBookingDates.map(escape).join(', ')}`}</td></tr>
@@ -278,6 +314,8 @@ export function renderNewInmateReport(
   .facts td { padding: 2px 12px 2px 0; }
   .charges th, .charges td { border: 1px solid #bbb; padding: 3px 6px; text-align: left; }
   .charges thead th { background: #eee; }
+  .why-here { font-size: 10pt; margin: 0 0 8px; padding: 6px 8px; background: #f3f4f6; border-left: 3px solid #111; }
+  .truth-cue { float: right; font-size: 8pt; text-transform: uppercase; letter-spacing: .04em; color: #444; border: 1px solid #999; padding: 1px 5px; }
   .flags { margin: 4px 0; padding-left: 18px; font-size: 9.5pt; }
   .watch { background: #111; color: #fff; font-size: 8pt; padding: 1px 6px; vertical-align: middle; }
   .watch-reason { font-size: 9.5pt; }
@@ -291,7 +329,8 @@ export function renderNewInmateReport(
     <div class="meta">
       Scope: ${escape(scope)} · ${rows.length} record(s)<br>
       Generated ${escape(meta.generatedAt)} by ${escape(meta.generatedBy)}${meta.reportId ? ` · report ${escape(meta.reportId)}` : ''}<br>
-      Internal use only. Derived from jail rosters; every fact above cites the document it came from.
+      Every morning NIIS must tell the truth about who is newly booked into the Sacramento County Jail.<br>
+      Internal use only. Facts cite the roster PDF. Conclusions cite today's vs yesterday's certified roster. Bail/charges may be UNKNOWN — never invented.
     </div>
   </header>
   ${body}

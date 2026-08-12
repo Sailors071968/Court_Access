@@ -509,8 +509,17 @@ export interface MorningOperationsBoard {
   opsDate: string;
   priorDate: string;
   facility: string;
+  /** Engineering Law #0. */
+  northStar?: string;
   headline: string;
   posture: 'ok' | 'attention' | 'action_required';
+  /** Conditions that could change the report — never buried in logs. */
+  alerts?: {
+    id: string;
+    severity: 'critical' | 'warning' | 'info';
+    message: string;
+    href?: string;
+  }[];
   questions: {
     todaysPdfUploaded: { answer: boolean; detail: string };
     yesterdaysRosterIdentified: { answer: boolean; detail: string };
@@ -642,6 +651,8 @@ export interface LearningQueueItem {
   inmate: string;
   errorType: string;
   rootCause: string;
+  /** Canonical defect category when provided by API. */
+  defectCategory?: string;
   status: string;
   stage: string | null;
   rule: string | null;

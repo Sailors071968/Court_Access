@@ -276,9 +276,21 @@ export interface MorningOperationsBoard {
   opsDate: string;
   priorDate: string;
   facility: string;
+  /** Engineering Law #0 north star. */
+  northStar: string;
   /** One sentence: what to do next. */
   headline: string;
   posture: 'ok' | 'attention' | 'action_required';
+  /**
+   * Conditions that could change the report — never buried in logs.
+   * Critical/warning/info; human review shown as info (review is a feature).
+   */
+  alerts: {
+    id: string;
+    severity: 'critical' | 'warning' | 'info';
+    message: string;
+    href?: string;
+  }[];
   questions: {
     todaysPdfUploaded: { answer: boolean; detail: string };
     yesterdaysRosterIdentified: { answer: boolean; detail: string };
@@ -480,13 +492,28 @@ export async function getMorningOperationsBoard(
     && ['approved', 'printed', 'reviewed', 'draft'].includes(printableReport.approvalState),
   );
 
+  const { collectMorningAlerts } = await import('./morningAlerts.js');
+  const { OPERATIONAL_NORTH_STAR } = await import('./truthCategories.js');
+  const alerts = await collectMorningAlerts({
+    facility,
+    opsDate,
+    selfVerification,
+    reconcileOk: certification?.reconcileOk ?? null,
+    openLearningQueueItems: openLearning,
+    reviewCount: requireManualReview,
+  });
+
   let headline: string;
   let posture: MorningOperationsBoard['posture'];
+  const criticalAlerts = alerts.filter((a) => a.severity === 'critical');
   if (!todaysPdfUploaded) {
     headline = "Upload today's Sacramento PDF to begin the morning run.";
     posture = 'action_required';
   } else if (!yesterdaysRosterIdentified) {
     headline = "Yesterday's roster is not identified. Upload or link yesterday's PDF before trusting new-inmate counts.";
+    posture = 'action_required';
+  } else if (criticalAlerts.length > 0) {
+    headline = criticalAlerts[0]!.message;
     posture = 'action_required';
   } else if (!comparisonCompleted && todayPdfUpload && todayPdfUpload.status !== 'completed') {
     headline = "Today's PDF is uploaded but comparison has not finished. Process the import.";
@@ -495,7 +522,7 @@ export async function getMorningOperationsBoard(
     headline = `Provisional: self-verification found ${selfVerification.failedCount} fail(s) and ${selfVerification.unknownCount} UNKNOWN check(s). Do not treat as certified.`;
     posture = 'attention';
   } else if (requireManualReview > 0) {
-    headline = `Comparison ready: ${newInmatesFound} new inmates; ${requireManualReview} need manual review before the repository is complete.`;
+    headline = `Comparison ready: ${newInmatesFound} new inmates; ${requireManualReview} routed to human review (preserves truth — not a silent failure).`;
     posture = 'attention';
   } else if (reportCertification === 'certified') {
     headline = `Certified morning: ${newInmatesFound} newly booked. Report is ready to print.`;
@@ -512,8 +539,10 @@ export async function getMorningOperationsBoard(
     opsDate,
     priorDate,
     facility,
+    northStar: OPERATIONAL_NORTH_STAR,
     headline,
     posture,
+    alerts,
     questions: {
       todaysPdfUploaded: {
         answer: todaysPdfUploaded,
@@ -542,7 +571,7 @@ export async function getMorningOperationsBoard(
       requireManualReview: {
         answer: requireManualReview,
         detail: requireManualReview > 0
-          ? 'Review queue / CSV exceptions / identity deferrals'
+          ? 'Human review is a feature — evidence insufficient for an automatic decision'
           : 'Nothing waiting in review',
       },
       reportCertification: {

@@ -95,7 +95,48 @@ export function MorningOperationsDashboard() {
         }
       />
 
+      <p className="text-sm font-medium text-gray-800 border-l-4 border-gray-900 pl-3" data-testid="north-star">
+        {board.northStar
+          ?? 'Every morning NIIS must tell the truth about who is newly booked into the Sacramento County Jail.'}
+      </p>
+
       <Headline board={board} />
+
+      {(board.alerts?.length ?? 0) > 0 ? (
+        <Panel
+          title="Conditions that could change today's report"
+          description="Never buried in logs. Critical items require action before trusting the report. Human review is a feature — not a silent failure."
+        >
+          <ul className="space-y-2" data-testid="morning-alerts">
+            {board.alerts!.map((a) => (
+              <li
+                key={a.id}
+                className={
+                  a.severity === 'critical'
+                    ? 'rounded border border-red-300 bg-red-50 px-3 py-2 text-sm'
+                    : a.severity === 'warning'
+                      ? 'rounded border border-amber-300 bg-amber-50 px-3 py-2 text-sm'
+                      : 'rounded border border-blue-200 bg-blue-50 px-3 py-2 text-sm'
+                }
+              >
+                <div className="flex flex-wrap items-start gap-2">
+                  <Badge
+                    tone={a.severity === 'critical' ? 'bad' : a.severity === 'warning' ? 'warn' : 'info'}
+                  >
+                    {a.severity}
+                  </Badge>
+                  <span className="flex-1 text-gray-900">{a.message}</span>
+                  {a.href ? (
+                    <Link to={a.href} className="text-xs font-medium text-blue-700 underline">
+                      Open
+                    </Link>
+                  ) : null}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </Panel>
+      ) : null}
 
       <div className="grid gap-4 sm:grid-cols-2" data-testid="reliability-streaks">
         <ReliabilityMetric

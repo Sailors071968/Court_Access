@@ -187,6 +187,26 @@ export function Badge({
   );
 }
 
+/** Engineering Law #0 — visually distinguish Fact / Conclusion / Intelligence / UNKNOWN. */
+export function TruthBadge({
+  category,
+}: {
+  category: 'verified_fact' | 'verified_conclusion' | 'analytical_intelligence' | 'unknown' | string;
+}) {
+  switch (category) {
+    case 'verified_fact':
+      return <Badge tone="good">Fact</Badge>;
+    case 'verified_conclusion':
+      return <Badge tone="info">Conclusion</Badge>;
+    case 'analytical_intelligence':
+      return <Badge tone="warn">Intelligence · Not Fact</Badge>;
+    case 'unknown':
+      return <Badge tone="bad">UNKNOWN</Badge>;
+    default:
+      return <Badge tone="neutral">{category}</Badge>;
+  }
+}
+
 export function severityTone(severity: string): 'neutral' | 'good' | 'warn' | 'bad' | 'info' {
   switch (severity) {
     case 'critical': return 'bad';

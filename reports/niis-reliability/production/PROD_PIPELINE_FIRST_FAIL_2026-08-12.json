@@ -1,23 +1,24 @@
 {
-  "generatedAt": "2026-08-12T18:32:21.881667+00:00",
+  "generatedAt": "2026-08-12T18:34:54.211438+00:00",
+  "remeasured": true,
   "target": "https://courtaccess.net (production EC2 44.209.225.79)",
   "health": {
     "status": "ok",
-    "timestamp": "2026-08-12T18:32:21.770Z",
+    "timestamp": "2026-08-12T18:34:54.206Z",
     "version": "1.1.0",
     "commit": "b52e9aadfa35c3547327985bd13e411f217ae0e9",
     "service": "court-access-backend",
     "environment": "production",
-    "uptimeSeconds": 178242
+    "uptimeSeconds": 178395
   },
   "ready": {
     "status": "healthy",
-    "timestamp": "2026-08-12T18:32:21.781Z",
-    "uptimeSeconds": 178240,
+    "timestamp": "2026-08-12T18:34:37.623Z",
+    "uptimeSeconds": 178376,
     "components": {
       "postgres": {
         "status": "healthy",
-        "latencyMs": 2
+        "latencyMs": 1
       },
       "uploads": {
         "status": "healthy",
@@ -31,12 +32,101 @@
       }
     }
   },
+  "access": {
+    "adminApi": true,
+    "ssh": false,
+    "productionDatabaseUrl": false,
+    "note": "DEPLOY_SSH_KEY denied; agent DATABASE_URL points at local courtaccess_verify, not RDS"
+  },
   "firstFailingStage": {
     "id": "upload_bytes",
-    "name": "Upload \u2192 Queue (bytes transfer)",
+    "name": "Upload \u2192 Queue (bytes transfer / File stored)",
     "verdict": "FAIL",
-    "summary": "Import Job created for SACJAILSCAN08-12-2026.pdf but byte upload never started. Job file remains pending with uploadId=null; InmateRosterUpload row never written. Downstream stages cannot run."
+    "summary": "Import Job created for SACJAILSCAN08-12-2026.pdf but byte upload never started. JobFile pending, uploadId=null, uploadedBytes=0; zero InmateRosterUpload rows for this sha256. Downstream stages cannot run."
   },
+  "stageLedger": [
+    {
+      "stage": "Upload (job declared)",
+      "verdict": "PASS",
+      "evidence": "job 99bb599a\u2026 status=uploading autoProcess=true"
+    },
+    {
+      "stage": "File stored",
+      "verdict": "FAIL",
+      "evidence": "JobFile 1686f521\u2026 pending; uploadStartedAt=null; 0 InmateRosterUpload for sha"
+    },
+    {
+      "stage": "Queue",
+      "verdict": "NOT_REACHED_FOR_PDF",
+      "evidence": "no PDF in uploads queue; queue has 100 CSV rows stuck status=uploaded"
+    },
+    {
+      "stage": "Worker",
+      "verdict": "NOT_REACHED_FOR_PDF",
+      "evidence": "processStartedAt=null; secondary: 100 uploaded CSVs never processed"
+    },
+    {
+      "stage": "Parser",
+      "verdict": "NOT_REACHED",
+      "evidence": null
+    },
+    {
+      "stage": "Canonical Roster",
+      "verdict": "NOT_REACHED",
+      "evidence": null
+    },
+    {
+      "stage": "Comparison",
+      "verdict": "NOT_REACHED",
+      "evidence": null
+    },
+    {
+      "stage": "Morning Operations",
+      "verdict": "STALE",
+      "evidence": "No roster has been imported for 48 hours. Today's Sacramento export has not been processed."
+    },
+    {
+      "stage": "Today's New Inmates",
+      "verdict": "STALE_SEED",
+      "evidence": [
+        {
+          "name": "NGUYEN, LAN",
+          "discoveredOn": "2026-08-10T15:45:00.000Z",
+          "identityConfidence": 100,
+          "externalBookingId": "BK-260810-008"
+        },
+        {
+          "name": "BROWN, TYRELL",
+          "discoveredOn": "2026-08-10T13:30:00.000Z",
+          "identityConfidence": 100,
+          "externalBookingId": "BK-260810-007"
+        },
+        {
+          "name": "GARCIA, SOFIA",
+          "discoveredOn": "2026-08-10T11:10:00.000Z",
+          "identityConfidence": 100,
+          "externalBookingId": "BK-260810-006"
+        },
+        {
+          "name": "PATEL, RAJ",
+          "discoveredOn": "2026-08-10T09:55:00.000Z",
+          "identityConfidence": 100,
+          "externalBookingId": "BK-260810-005"
+        },
+        {
+          "name": "WILLIAMS, ANDREA",
+          "discoveredOn": "2026-08-10T08:20:00.000Z",
+          "identityConfidence": 100,
+          "externalBookingId": "BK-260810-004"
+        }
+      ]
+    },
+    {
+      "stage": "Report",
+      "verdict": "STALE",
+      "evidence": "HTML report still lists Aug 10 seed names"
+    }
+  ],
   "job_08_12": {
     "jobId": "99bb599a-9e08-4d23-b4ef-3388155a3570",
     "facility": "sacramento",
@@ -101,275 +191,94 @@
       }
     ]
   },
+  "upload_matches_for_sha": [],
   "stuck_sacjail_jobs": [
     {
       "jobId": "99bb599a-9e08-4d23-b4ef-3388155a3570",
-      "facility": "sacramento",
       "rosterDate": "2026-08-12",
-      "label": "1 file import",
-      "status": "uploading",
-      "autoProcess": true,
-      "createdById": "bc4e4eb2-7f02-44c7-89c2-f2913e03c791",
-      "createdByName": "admin@courtaccess.local",
-      "createdAt": "2026-08-12T14:26:53.067Z",
-      "updatedAt": "2026-08-12T14:26:53.094Z",
-      "uploadStartedAt": null,
-      "uploadFinishedAt": null,
-      "processStartedAt": null,
-      "processFinishedAt": null,
-      "cancelledAt": null,
-      "cancelReason": null,
-      "totalFiles": 1,
-      "filesPending": 1,
-      "filesUploading": 0,
-      "filesUploaded": 0,
-      "filesSkippedDuplicate": 0,
-      "filesFailedUpload": 0,
-      "filesQueued": 0,
-      "filesProcessing": 0,
-      "filesCompleted": 0,
-      "filesFailedProcessing": 0,
-      "totalBytes": 14815141,
-      "uploadedBytes": 0,
       "currentFilename": "SACJAILSCAN08-12-2026.pdf",
-      "failureReason": null,
-      "progressPercent": 0,
-      "metrics": {
-        "lastUpdatedAt": "2026-08-12T14:26:53.093Z",
-        "rowsPerSecond": null,
-        "totalRowsRead": 0,
-        "filesPerMinute": null,
-        "importQueueDepth": 1,
-        "uploadDurationMs": null,
-        "averageFileSizeBytes": 14815141,
-        "processingDurationMs": null,
-        "parserThroughputRowsPerSec": null
-      }
+      "status": "uploading",
+      "filesUploaded": 0,
+      "uploadedBytes": 0,
+      "totalBytes": 14815141,
+      "uploadStartedAt": null,
+      "createdAt": "2026-08-12T14:26:53.067Z"
     },
     {
       "jobId": "b1d3e755-b34e-477f-8fe8-0de0bd0bc250",
-      "facility": "sacramento",
       "rosterDate": "2026-08-11",
-      "label": "1 file import",
-      "status": "uploading",
-      "autoProcess": true,
-      "createdById": "bc4e4eb2-7f02-44c7-89c2-f2913e03c791",
-      "createdByName": "admin@courtaccess.local",
-      "createdAt": "2026-08-12T13:08:31.287Z",
-      "updatedAt": "2026-08-12T13:08:54.295Z",
-      "uploadStartedAt": null,
-      "uploadFinishedAt": null,
-      "processStartedAt": null,
-      "processFinishedAt": null,
-      "cancelledAt": null,
-      "cancelReason": null,
-      "totalFiles": 1,
-      "filesPending": 1,
-      "filesUploading": 0,
-      "filesUploaded": 0,
-      "filesSkippedDuplicate": 0,
-      "filesFailedUpload": 0,
-      "filesQueued": 0,
-      "filesProcessing": 0,
-      "filesCompleted": 0,
-      "filesFailedProcessing": 0,
-      "totalBytes": 17794968,
-      "uploadedBytes": 0,
       "currentFilename": "SACJAILSCAN08-11-2026.pdf",
-      "failureReason": null,
-      "progressPercent": 0,
-      "metrics": {
-        "lastUpdatedAt": "2026-08-12T13:08:54.295Z",
-        "rowsPerSecond": null,
-        "totalRowsRead": 0,
-        "filesPerMinute": null,
-        "importQueueDepth": 1,
-        "uploadDurationMs": null,
-        "averageFileSizeBytes": 17794968,
-        "processingDurationMs": null,
-        "parserThroughputRowsPerSec": null
-      }
+      "status": "uploading",
+      "filesUploaded": 0,
+      "uploadedBytes": 0,
+      "totalBytes": 17794968,
+      "uploadStartedAt": null,
+      "createdAt": "2026-08-12T13:08:31.287Z"
     },
     {
       "jobId": "c56f8e89-2545-4a87-889b-84be15b064d4",
-      "facility": "sacramento",
       "rosterDate": "2026-08-11",
-      "label": "1 file import",
-      "status": "uploading",
-      "autoProcess": true,
-      "createdById": "bc4e4eb2-7f02-44c7-89c2-f2913e03c791",
-      "createdByName": "admin@courtaccess.local",
-      "createdAt": "2026-08-11T14:24:01.102Z",
-      "updatedAt": "2026-08-12T13:07:51.950Z",
-      "uploadStartedAt": null,
-      "uploadFinishedAt": null,
-      "processStartedAt": null,
-      "processFinishedAt": null,
-      "cancelledAt": null,
-      "cancelReason": null,
-      "totalFiles": 1,
-      "filesPending": 1,
-      "filesUploading": 0,
-      "filesUploaded": 0,
-      "filesSkippedDuplicate": 0,
-      "filesFailedUpload": 0,
-      "filesQueued": 0,
-      "filesProcessing": 0,
-      "filesCompleted": 0,
-      "filesFailedProcessing": 0,
-      "totalBytes": 17794968,
-      "uploadedBytes": 0,
       "currentFilename": "SACJAILSCAN08-11-2026.pdf",
-      "failureReason": null,
-      "progressPercent": 0,
-      "metrics": {
-        "lastUpdatedAt": "2026-08-12T13:07:51.949Z",
-        "rowsPerSecond": null,
-        "totalRowsRead": 0,
-        "filesPerMinute": null,
-        "importQueueDepth": 1,
-        "uploadDurationMs": null,
-        "averageFileSizeBytes": 17794968,
-        "processingDurationMs": null,
-        "parserThroughputRowsPerSec": null
-      }
+      "status": "uploading",
+      "filesUploaded": 0,
+      "uploadedBytes": 0,
+      "totalBytes": 17794968,
+      "uploadStartedAt": null,
+      "createdAt": "2026-08-11T14:24:01.102Z"
     },
     {
       "jobId": "6ff96d9a-482c-421f-9b16-a099ae55dd49",
-      "facility": "sacramento",
       "rosterDate": "2026-08-10",
-      "label": "1 file import",
-      "status": "uploading",
-      "autoProcess": true,
-      "createdById": "bc4e4eb2-7f02-44c7-89c2-f2913e03c791",
-      "createdByName": "admin@courtaccess.local",
-      "createdAt": "2026-08-10T19:52:44.592Z",
-      "updatedAt": "2026-08-10T19:52:44.637Z",
-      "uploadStartedAt": null,
-      "uploadFinishedAt": null,
-      "processStartedAt": null,
-      "processFinishedAt": null,
-      "cancelledAt": null,
-      "cancelReason": null,
-      "totalFiles": 1,
-      "filesPending": 1,
-      "filesUploading": 0,
-      "filesUploaded": 0,
-      "filesSkippedDuplicate": 0,
-      "filesFailedUpload": 0,
-      "filesQueued": 0,
-      "filesProcessing": 0,
-      "filesCompleted": 0,
-      "filesFailedProcessing": 0,
-      "totalBytes": 28958063,
-      "uploadedBytes": 0,
       "currentFilename": "SACJAILSCAN08-09-2026.pdf",
-      "failureReason": null,
-      "progressPercent": 0,
-      "metrics": {
-        "lastUpdatedAt": "2026-08-10T19:52:44.636Z",
-        "rowsPerSecond": null,
-        "totalRowsRead": 0,
-        "filesPerMinute": null,
-        "importQueueDepth": 1,
-        "uploadDurationMs": null,
-        "averageFileSizeBytes": 28958063,
-        "processingDurationMs": null,
-        "parserThroughputRowsPerSec": null
-      }
+      "status": "uploading",
+      "filesUploaded": 0,
+      "uploadedBytes": 0,
+      "totalBytes": 28958063,
+      "uploadStartedAt": null,
+      "createdAt": "2026-08-10T19:52:44.592Z"
     },
     {
       "jobId": "f0bba4c6-4fa9-4603-aeb3-46d288437658",
-      "facility": "sacramento",
       "rosterDate": "2026-08-10",
-      "label": "1 file import",
-      "status": "uploading",
-      "autoProcess": true,
-      "createdById": "bc4e4eb2-7f02-44c7-89c2-f2913e03c791",
-      "createdByName": "admin@courtaccess.local",
-      "createdAt": "2026-08-10T18:13:49.961Z",
-      "updatedAt": "2026-08-10T18:19:11.821Z",
-      "uploadStartedAt": null,
-      "uploadFinishedAt": null,
-      "processStartedAt": null,
-      "processFinishedAt": null,
-      "cancelledAt": null,
-      "cancelReason": null,
-      "totalFiles": 1,
-      "filesPending": 1,
-      "filesUploading": 0,
-      "filesUploaded": 0,
-      "filesSkippedDuplicate": 0,
-      "filesFailedUpload": 0,
-      "filesQueued": 0,
-      "filesProcessing": 0,
-      "filesCompleted": 0,
-      "filesFailedProcessing": 0,
-      "totalBytes": 353304,
-      "uploadedBytes": 0,
       "currentFilename": "SACJAILSCAN08-10-2026.pdf",
-      "failureReason": null,
-      "progressPercent": 0,
-      "metrics": {
-        "lastUpdatedAt": "2026-08-10T18:19:11.820Z",
-        "rowsPerSecond": null,
-        "totalRowsRead": 0,
-        "filesPerMinute": null,
-        "importQueueDepth": 1,
-        "uploadDurationMs": null,
-        "averageFileSizeBytes": 353304,
-        "processingDurationMs": null,
-        "parserThroughputRowsPerSec": null
-      }
+      "status": "uploading",
+      "filesUploaded": 0,
+      "uploadedBytes": 0,
+      "totalBytes": 353304,
+      "uploadStartedAt": null,
+      "createdAt": "2026-08-10T18:13:49.961Z"
     },
     {
       "jobId": "6ee01597-da72-4fbe-aa63-afd38b8c0084",
-      "facility": "sacramento",
       "rosterDate": "2026-08-09",
-      "label": "1 file import",
-      "status": "uploading",
-      "autoProcess": true,
-      "createdById": "bc4e4eb2-7f02-44c7-89c2-f2913e03c791",
-      "createdByName": "admin@courtaccess.local",
-      "createdAt": "2026-08-10T18:13:02.961Z",
-      "updatedAt": "2026-08-10T18:13:26.124Z",
-      "uploadStartedAt": null,
-      "uploadFinishedAt": null,
-      "processStartedAt": null,
-      "processFinishedAt": null,
-      "cancelledAt": null,
-      "cancelReason": null,
-      "totalFiles": 1,
-      "filesPending": 1,
-      "filesUploading": 0,
-      "filesUploaded": 0,
-      "filesSkippedDuplicate": 0,
-      "filesFailedUpload": 0,
-      "filesQueued": 0,
-      "filesProcessing": 0,
-      "filesCompleted": 0,
-      "filesFailedProcessing": 0,
-      "totalBytes": 28958063,
-      "uploadedBytes": 0,
       "currentFilename": "SACJAILSCAN08-09-2026.pdf",
-      "failureReason": null,
-      "progressPercent": 0,
-      "metrics": {
-        "lastUpdatedAt": "2026-08-10T18:13:26.123Z",
-        "rowsPerSecond": null,
-        "totalRowsRead": 0,
-        "filesPerMinute": null,
-        "importQueueDepth": 1,
-        "uploadDurationMs": null,
-        "averageFileSizeBytes": 28958063,
-        "processingDurationMs": null,
-        "parserThroughputRowsPerSec": null
-      }
+      "status": "uploading",
+      "filesUploaded": 0,
+      "uploadedBytes": 0,
+      "totalBytes": 28958063,
+      "uploadStartedAt": null,
+      "createdAt": "2026-08-10T18:13:02.961Z"
     }
   ],
+  "queue_backlog": {
+    "activeCount": 100,
+    "byStatus": {
+      "uploaded": 100
+    },
+    "pdfCount": 0,
+    "note": "Secondary production defect after File stored: worker never drains status=uploaded CSVs (smoke/acceptance from 2026-08-10). Will block E2E even after SACJAIL bytes land."
+  },
   "morning": {
     "headline": "No roster has been imported for 48 hours. Today's Sacramento export has not been processed.",
     "posture": "action_required",
+    "lastSuccessfulImport": {
+      "batchId": "16934a18-9f60-4ecc-8e56-76a749152b37",
+      "at": "2026-08-10T18:01:18.880Z",
+      "rosterDate": "2026-08-10",
+      "filename": "7f039093-fa5d-47e4-aa23-4060eb941b96.csv",
+      "operator": "bc4e4eb2-7f02-44c7-89c2-f2913e03c791",
+      "hoursAgo": 48
+    },
     "today": {
       "date": "2026-08-12",
       "processed": false,
@@ -379,94 +288,126 @@
       "batchesInProgress": 0,
       "todaysRosterImported": false
     },
-    "lastSuccessfulImport": {
-      "batchId": "16934a18-9f60-4ecc-8e56-76a749152b37",
-      "at": "2026-08-10T18:01:18.880Z",
-      "rosterDate": "2026-08-10",
-      "filename": "7f039093-fa5d-47e4-aa23-4060eb941b96.csv",
-      "operator": "bc4e4eb2-7f02-44c7-89c2-f2913e03c791",
-      "hoursAgo": 48
+    "intelligence": {
+      "newInmates": 0,
+      "returningInmates": 0,
+      "watchListMatches": 0,
+      "unresolvedReviewItems": 0,
+      "unresolvedConflicts": 0,
+      "significantChanges": 0
     }
   },
-  "newInmatesSample": {
-    "total": 10,
-    "note": "Unscoped first-appearance dump \u2014 seed/demo names; not from 08-12 comparison (comparison never ran)",
-    "names": [
-      {
-        "name": "NGUYEN, LAN",
-        "discoveredOn": "2026-08-10T15:45:00.000Z"
-      },
-      {
-        "name": "BROWN, TYRELL",
-        "discoveredOn": "2026-08-10T13:30:00.000Z"
-      },
-      {
-        "name": "GARCIA, SOFIA",
-        "discoveredOn": "2026-08-10T11:10:00.000Z"
-      },
-      {
-        "name": "PATEL, RAJ",
-        "discoveredOn": "2026-08-10T09:55:00.000Z"
-      },
-      {
-        "name": "WILLIAMS, ANDREA",
-        "discoveredOn": "2026-08-10T08:20:00.000Z"
-      }
-    ]
-  },
-  "uploadLimitProbe": {
-    "status": 413,
-    "message": "Upload size (70MB) exceeds maximum (50MB)",
-    "maxSize": 52428800,
-    "pdfDeclaredSizeBytes": 14815141,
-    "pdfFitsUnderLimit": true,
-    "implication": "Size limit alone does not explain 14.1MB failure; transfer never began (uploadStartedAt=null)."
-  },
-  "pipeline": [
+  "new_inmates_sample": [
     {
-      "stage": "PDF received (UI/job created)",
-      "verdict": "PASS",
-      "evidence": "job 99bb599a exists; filename SACJAILSCAN08-12-2026.pdf; sha256 known; sizeBytes=14815141"
+      "name": "NGUYEN, LAN",
+      "discoveredOn": "2026-08-10T15:45:00.000Z",
+      "identityConfidence": 100,
+      "externalBookingId": "BK-260810-008"
     },
     {
-      "stage": "Import Job created",
-      "verdict": "PASS",
-      "evidence": "status=uploading; autoProcess=true; filesPending=1"
+      "name": "BROWN, TYRELL",
+      "discoveredOn": "2026-08-10T13:30:00.000Z",
+      "identityConfidence": 100,
+      "externalBookingId": "BK-260810-007"
     },
     {
-      "stage": "File stored (bytes on disk + InmateRosterUpload)",
-      "verdict": "FAIL",
-      "evidence": "jobFile.status=pending; uploadId=null; uploadedBytes=0; uploadStartedAt=null; no InmateRosterUpload for SACJAILSCAN08-12"
+      "name": "GARCIA, SOFIA",
+      "discoveredOn": "2026-08-10T11:10:00.000Z",
+      "identityConfidence": 100,
+      "externalBookingId": "BK-260810-006"
     },
     {
-      "stage": "Queue / Worker / Parser",
-      "verdict": "NOT_REACHED",
-      "evidence": "processStartedAt=null; DISABLE_WORKERS=true means in-process after upload"
+      "name": "PATEL, RAJ",
+      "discoveredOn": "2026-08-10T09:55:00.000Z",
+      "identityConfidence": 100,
+      "externalBookingId": "BK-260810-005"
     },
     {
-      "stage": "Canonical Roster",
-      "verdict": "NOT_REACHED",
-      "evidence": null
+      "name": "WILLIAMS, ANDREA",
+      "discoveredOn": "2026-08-10T08:20:00.000Z",
+      "identityConfidence": 100,
+      "externalBookingId": "BK-260810-004"
     },
     {
-      "stage": "Comparison",
-      "verdict": "NOT_REACHED",
-      "evidence": null
+      "name": "JOHNSON, MARCUS",
+      "discoveredOn": "2026-08-10T06:05:00.000Z",
+      "identityConfidence": 95,
+      "externalBookingId": "BK-260810-003"
     },
     {
-      "stage": "Morning Operations",
-      "verdict": "STALE",
-      "evidence": "No roster has been imported for 48 hours. Today's Sacramento export has not been processed."
+      "name": "CHEN, MEI",
+      "discoveredOn": "2026-08-10T04:40:00.000Z",
+      "identityConfidence": 100,
+      "externalBookingId": "BK-260810-002"
     },
     {
-      "stage": "Today's New Inmates",
-      "verdict": "STALE_SEED",
-      "evidence": "Shows NGUYEN/BROWN/GARCIA etc from Aug 10 CSV seed \u2014 not 08-12 set-diff"
+      "name": "RAMIREZ, JOSE",
+      "discoveredOn": "2026-08-10T02:15:00.000Z",
+      "identityConfidence": 100,
+      "externalBookingId": "BK-260810-001"
     },
     {
-      "stage": "Report",
-      "verdict": "NOT_REACHED",
-      "evidence": null
+      "name": "SMITH, KAREN",
+      "discoveredOn": "2026-07-28T16:50:00.000Z",
+      "identityConfidence": 100,
+      "externalBookingId": "BK-260728-022"
+    },
+    {
+      "name": "LOPEZ, DIEGO",
+      "discoveredOn": "2026-07-25T12:25:00.000Z",
+      "identityConfidence": 100,
+      "externalBookingId": "BK-260725-011"
     }
-  ]
+  ],
+  "inspection_08_12": {
+    "inspectionId": "d29a39fd-3ebb-4809-8fff-4a69afb0a8a3",
+    "file": {
+      "kind": "pdf",
+      "sha256": "1b4a8e346f55249b54a7c0c67901594346fef3a1d6f3b95eb6822d3c4eb299e8",
+      "filename": "SACJAILSCAN08-12-2026.pdf",
+      "sizeBytes": 14815141
+    },
+    "compatibility": {
+      "reasons": [
+        "59 page(s) with a usable text layer, about 1666 characters per page. No OCR needed.",
+        "1 of 17015 line(s) carry both a date and a name, so the layout is probably row-per-inmate.",
+        "A header line was found: \"alphabetically by last name\" (3 recognised column names)."
+      ],
+      "verdict": "would_import",
+      "parserConfidence": 75
+    },
+    "structure": {
+      "pageCount": 59,
+      "hasTextLayer": true,
+      "parserConfidence": null,
+      "verdict": null
+    },
+    "verdict": "would_import",
+    "pageCount": 59,
+    "structureKeys": [
+      "ragged",
+      "headerRow",
+      "linesRead",
+      "pageCount",
+      "rowsSampled",
+      "sampleLines",
+      "hasTextLayer",
+      "ocrWouldBeUsed",
+      "encodingWarnings"
+    ],
+    "compatibilityKeys": [
+      "reasons",
+      "verdict",
+      "parserConfidence"
+    ],
+    "compatibilitySnippet": {
+      "reasons": [
+        "59 page(s) with a usable text layer, about 1666 characters per page. No OCR needed.",
+        "1 of 17015 line(s) carry both a date and a name, so the layout is probably row-per-inmate.",
+        "A header line was found: \"alphabetically by last name\" (3 recognised column names)."
+      ],
+      "verdict": "would_import",
+      "parserConfidence": 75
+    }
+  }
 }

@@ -120,6 +120,37 @@ export interface NewInmateRow {
   provenance: { batchId: string; filename: string; rosterDate: string | null };
 }
 
+/** Shared Daily Case pipeline — Upload / Morning Ops / New Inmates / Reports. */
+export interface DailyCasePipelineState {
+  facility: string;
+  opsDate: string;
+  priorDate: string;
+  flags: {
+    pdfUploaded: boolean;
+    pdfParsed: boolean;
+    canonicalRosterBuilt: boolean;
+    yesterdayLoaded: boolean;
+    comparisonFinished: boolean;
+    reportGenerated: boolean;
+    certified: boolean;
+  };
+  dailyCaseStatus: string | null;
+  caseId: string | null;
+  blockedAt: string | null;
+  operatorMessage: string;
+  mayShowNewInmates: boolean;
+  stages: {
+    id: string;
+    label: string;
+    verdict: 'PASS' | 'FAIL' | 'PENDING' | 'UNKNOWN';
+    timestamp: string | null;
+    tables: string[];
+    recordCounts: Record<string, number | string | null>;
+    evidence: string[];
+  }[];
+  generatedAt: string;
+}
+
 export interface PersonSearchRow {
   inmateId: string;
   name: string;
@@ -502,6 +533,7 @@ export interface MorningSummary {
     repository: { people: number; bookings: number; observations: number };
   };
   reports: { draft: number; reviewed: number; approvedNotPrinted: number };
+  dailyCasePipeline?: DailyCasePipelineState;
 }
 
 /** Seven morning questions for the operational command center. */
@@ -579,6 +611,7 @@ export interface MorningOperationsBoard {
     required: number;
     message: string;
   };
+  dailyCasePipeline?: DailyCasePipelineState;
   operationalMetrics?: {
     todayRosterSize: number | null;
     yesterdayRosterSize: number | null;
@@ -1049,7 +1082,22 @@ export const intelligenceApi = {
     }),
 
   newInmates: (params: { from?: string; to?: string; facility?: string; limit?: number; offset?: number } = {}) =>
-    call<{ total: number; results: NewInmateRow[] }>(`/new-inmates${query(params)}`),
+    call<{
+      total: number;
+      results: NewInmateRow[];
+      source?: 'daily_case_set_diff' | 'unavailable';
+      unavailableReason?: string | null;
+      facility?: string | null;
+      opsDate?: string | null;
+      dailyCaseStatus?: string | null;
+      pipelineMessage?: string | null;
+    }>(`/new-inmates${query(params)}`),
+
+  /** Shared Daily Case pipeline — single source of truth for all NIIS screens. */
+  dailyCasePipeline: (facility = 'sacramento', opsDate?: string) =>
+    call<DailyCasePipelineState>(
+      `/daily-case-pipeline${query({ facility, opsDate: opsDate || undefined })}`,
+    ),
 
   person: (inmateId: string) => call<PersonDetail>(`/persons/${inmateId}`),
 

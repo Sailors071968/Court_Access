@@ -206,41 +206,74 @@ export interface NewInmateParams {
 /**
  * Newly booked inmates for the morning revenue report.
  *
- * Prefer PDF roster set-diff (on today ∧ not on yesterday) when a prior/current
- * PDF pair exists for the facility+date. That matches manual investigator
- * comparison. Fall back to `isFirstAppearance` only when no pair is available.
+ * Production path (required): facility + ops date → DailyCase / PDF set-diff.
+ * NEVER return a global `isFirstAppearance` dump — that surfaces seed/demo
+ * bookings (NGUYEN @ 100%, old dates) as if they were today's operational truth.
  */
 export async function getNewInmates(params: NewInmateParams) {
-  let where: Record<string, unknown> = { isFirstAppearance: true };
+  const facility = params.facility?.trim() || null;
+  const opsDate = params.from?.trim() || null;
 
-  if (params.facility && params.from) {
-    const { resolvePdfRosterPair, compareRosterBatches, isReportableNew } =
-      await import('./rosterComparison.js');
-    const pair = await resolvePdfRosterPair(params.facility, params.from);
-    if (pair) {
-      const comparison = await compareRosterBatches(pair);
-      const bookingIds = comparison.current
-        .filter((row) => isReportableNew(row.disposition) && row.bookingId)
-        .map((row) => row.bookingId!);
-      where = { bookingId: { in: bookingIds.length > 0 ? bookingIds : ['__none__'] } };
-    } else {
-      if (params.facility) where.facility = params.facility;
-      if (params.from || params.to) {
-        where.bookedAt = {
-          ...(params.from ? { gte: new Date(params.from) } : {}),
-          ...(params.to ? { lte: new Date(params.to) } : {}),
-        };
-      }
-    }
-  } else {
-    if (params.facility) where.facility = params.facility;
-    if (params.from || params.to) {
-      where.bookedAt = {
-        ...(params.from ? { gte: new Date(params.from) } : {}),
-        ...(params.to ? { lte: new Date(params.to) } : {}),
-      };
-    }
+  if (!facility || !opsDate) {
+    return {
+      total: 0,
+      results: [] as Awaited<ReturnType<typeof mapNewInmateRows>>,
+      source: 'unavailable' as const,
+      unavailableReason:
+        'Facility and ops date are required. Refusing unscoped first-appearance history (prevents seed/demo rows on Today\'s New Inmates).',
+      facility,
+      opsDate,
+      dailyCaseStatus: null as string | null,
+      pipelineMessage: 'No certified results available',
+    };
   }
+
+  const { getDailyCasePipelineState } = await import('./dailyCasePipeline.js');
+  const pipeline = await getDailyCasePipelineState(facility, opsDate);
+
+  if (!pipeline.mayShowNewInmates) {
+    return {
+      total: 0,
+      results: [] as Awaited<ReturnType<typeof mapNewInmateRows>>,
+      source: 'unavailable' as const,
+      unavailableReason: pipeline.operatorMessage,
+      facility,
+      opsDate,
+      dailyCaseStatus: pipeline.dailyCaseStatus,
+      pipelineMessage: pipeline.flags.pdfUploaded
+        ? (pipeline.flags.pdfParsed
+          ? (pipeline.flags.comparisonFinished ? 'No certified results available' : 'Awaiting comparison…')
+          : 'Processing…')
+        : 'No certified results available',
+      pipeline,
+    };
+  }
+
+  const { resolvePdfRosterPair, compareRosterBatches, isReportableNew } =
+    await import('./rosterComparison.js');
+  const pair = await resolvePdfRosterPair(facility, opsDate);
+  if (!pair) {
+    return {
+      total: 0,
+      results: [] as Awaited<ReturnType<typeof mapNewInmateRows>>,
+      source: 'unavailable' as const,
+      unavailableReason:
+        'DailyCase marked compared but PDF roster pair could not be resolved. No fabricated rows will be shown.',
+      facility,
+      opsDate,
+      dailyCaseStatus: pipeline.dailyCaseStatus,
+      pipelineMessage: 'No certified results available',
+      pipeline,
+    };
+  }
+
+  const comparison = await compareRosterBatches(pair);
+  const bookingIds = comparison.current
+    .filter((row) => isReportableNew(row.disposition) && row.bookingId)
+    .map((row) => row.bookingId!);
+  const where = {
+    bookingId: { in: bookingIds.length > 0 ? bookingIds : ['__none__'] },
+  };
 
   const [total, bookings] = await Promise.all([
     prisma.inmateBooking.count({ where }),
@@ -255,37 +288,76 @@ export async function getNewInmates(params: NewInmateParams) {
 
   return {
     total,
-    results: await Promise.all(bookings.map(async (b) => ({
-      inmateId: b.inmateId,
-      name: `${b.inmate.displayLast ?? b.inmate.canonicalLast}, ${b.inmate.displayFirst ?? b.inmate.canonicalFirst}`,
-      dateOfBirth: b.inmate.dateOfBirth?.toISOString().slice(0, 10) ?? null,
-      sex: b.inmate.sex,
-      race: b.inmate.race,
-      identityConfidence: b.inmate.identityConfidence,
-      discoveredOn: b.bookedAt.toISOString(),
-      facility: b.facility,
-      externalBookingId: b.externalBookingId,
-      arrestingAgency: b.arrestingAgency,
-      bailAmount: money(b.bailAmountCents),
-      charges: b.charges.map((c) => ({
-        statute: c.statuteCode && c.statuteSection ? `${c.statuteCode} ${c.statuteSection}` : null,
-        description: c.description,
-        severity: c.severity,
-        counts: c.counts,
-        rawText: c.rawText,
-      })),
-      /** Non-zero when they have been booked again since being discovered. */
-      priorArrestCount: Math.max(0, await prisma.inmateBooking.count({
-        where: { inmateId: b.inmateId, bookedAt: { lt: b.bookedAt } },
-      })),
-      totalArrestCount: b.inmate.bookingCount,
-      provenance: {
-        batchId: b.sourceBatch.batchId,
-        filename: b.sourceBatch.sourceFilename,
-        rosterDate: b.sourceBatch.rosterDate?.toISOString().slice(0, 10) ?? null,
-      },
-    }))),
+    results: await mapNewInmateRows(bookings as Parameters<typeof mapNewInmateRows>[0]),
+    source: 'daily_case_set_diff' as const,
+    unavailableReason: null as string | null,
+    facility,
+    opsDate,
+    dailyCaseStatus: pipeline.dailyCaseStatus,
+    pipelineMessage: null as string | null,
+    pipeline,
   };
+}
+
+async function mapNewInmateRows(
+  bookings: Array<{
+    inmateId: string;
+    bookedAt: Date;
+    facility: string;
+    externalBookingId: string | null;
+    arrestingAgency: string | null;
+    bailAmountCents: bigint | number | null;
+    charges: Array<{
+      statuteCode: string | null;
+      statuteSection: string | null;
+      description: string | null;
+      severity: string | null;
+      counts: number;
+      rawText: string;
+    }>;
+    sourceBatch: { batchId: string; sourceFilename: string; rosterDate: Date | null };
+    inmate: {
+      displayLast: string | null;
+      canonicalLast: string;
+      displayFirst: string | null;
+      canonicalFirst: string;
+      dateOfBirth: Date | null;
+      sex: string | null;
+      race: string | null;
+      identityConfidence: number;
+      bookingCount: number;
+    };
+  }>,
+) {
+  return Promise.all(bookings.map(async (b) => ({
+    inmateId: b.inmateId,
+    name: `${b.inmate.displayLast ?? b.inmate.canonicalLast}, ${b.inmate.displayFirst ?? b.inmate.canonicalFirst}`,
+    dateOfBirth: b.inmate.dateOfBirth?.toISOString().slice(0, 10) ?? null,
+    sex: b.inmate.sex,
+    race: b.inmate.race,
+    identityConfidence: b.inmate.identityConfidence,
+    discoveredOn: b.bookedAt.toISOString(),
+    facility: b.facility,
+    externalBookingId: b.externalBookingId,
+    arrestingAgency: b.arrestingAgency,
+    bailAmount: money(b.bailAmountCents as bigint | null),
+    charges: b.charges.map((c) => ({
+      statute: c.statuteCode && c.statuteSection ? `${c.statuteCode} ${c.statuteSection}` : null,
+      description: c.description,
+      severity: c.severity,
+      counts: c.counts,
+      rawText: c.rawText,
+    })),
+    priorArrestCount: Math.max(0, await prisma.inmateBooking.count({
+      where: { inmateId: b.inmateId, bookedAt: { lt: b.bookedAt } },
+    })),
+    totalArrestCount: b.inmate.bookingCount,
+    provenance: {
+      batchId: b.sourceBatch.batchId,
+      filename: b.sourceBatch.sourceFilename,
+      rosterDate: b.sourceBatch.rosterDate?.toISOString().slice(0, 10) ?? null,
+    },
+  })));
 }
 
 /** Rows a person must look at before they change the repository. */

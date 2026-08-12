@@ -83,6 +83,9 @@ export interface MorningSummary {
 
   /** Reports awaiting a decision. */
   reports: { draft: number; reviewed: number; approvedNotPrinted: number };
+
+  /** Shared Daily Case pipeline — single source of truth across NIIS screens. */
+  dailyCasePipeline?: import('./dailyCasePipeline.js').DailyCasePipelineState;
 }
 
 export async function getMorningSummary(): Promise<MorningSummary> {
@@ -195,6 +198,39 @@ export async function getMorningSummary(): Promise<MorningSummary> {
     });
   }
 
+  // Single source of truth: Daily Case pipeline (not last-batch-anywhere heuristics).
+  const { getDailyCasePipelineState } = await import('./dailyCasePipeline.js');
+  const pipeline = await getDailyCasePipelineState('sacramento', today);
+
+  const todayUpload = await prisma.inmateRosterUpload.findFirst({
+    where: {
+      facility: 'sacramento',
+      OR: [
+        { rosterDate: { gte: dayStart, lt: dayEnd } },
+        { uploadedAt: { gte: dayStart, lt: dayEnd }, fileKind: 'pdf' },
+      ],
+    },
+    orderBy: { uploadedAt: 'desc' },
+    select: {
+      uploadId: true,
+      originalName: true,
+      status: true,
+      stage: true,
+      uploadedAt: true,
+      batchId: true,
+    },
+  });
+
+  // Prefer DailyCase counts over isFirstAppearance-on-startedAt-batches.
+  const dailyNew = pipeline.flags.comparisonFinished
+    ? (await prisma.inmateDailyCase.findUnique({
+        where: { facility_opsDate: { facility: 'sacramento', opsDate: dayStart } },
+        select: { newInmateCount: true, returningInmateCount: true },
+      }).catch(() => null))
+    : null;
+  const newFromCase = dailyNew?.newInmateCount;
+  const returningFromCase = dailyNew?.returningInmateCount;
+
   // The headline. One sentence, chosen by what would change what the operator does.
   let headline: string;
   let posture: MorningSummary['posture'];
@@ -202,13 +238,17 @@ export async function getMorningSummary(): Promise<MorningSummary> {
   if (!databaseOk) {
     headline = 'The database is not answering. Nothing can be imported until it is.';
     posture = 'action_required';
+  } else if (todayUpload && !pipeline.flags.pdfParsed) {
+    headline = pipeline.operatorMessage;
+    posture = 'action_required';
   } else if (failedToday > 0) {
     headline = `${failedToday} import(s) failed today. Open Import History for the reason before re-uploading.`;
     posture = 'action_required';
-  } else if (inProgress > 0) {
-    headline = `${inProgress} import(s) still processing. The numbers below will fill in as they finish.`;
+  } else if (inProgress > 0 || (todayUpload && !pipeline.flags.comparisonFinished)) {
+    headline = pipeline.operatorMessage;
     posture = 'attention';
-  } else if (todaysRoster === 0 && completedToday === 0) {
+  } else if (!pipeline.flags.pdfUploaded && todaysRoster === 0 && completedToday === 0) {
+    // Only claim "no roster for N hours" when there is truly no upload for today.
     headline = hoursAgo >= 24
       ? `No roster has been imported for ${hoursAgo} hours. Today's Sacramento export has not been processed.`
       : "Today's Sacramento roster has not been imported yet.";
@@ -216,13 +256,16 @@ export async function getMorningSummary(): Promise<MorningSummary> {
   } else if (unresolvedReviews > 0) {
     headline = `Today's roster is processed. ${unresolvedReviews} record(s) need a decision — until they are decided their bookings do not exist in the repository.`;
     posture = 'attention';
-  } else if (newToday > 0) {
-    headline = `Today's roster is processed: ${newToday} newly booked, ${returningToday} returning${
+  } else if ((newFromCase ?? newToday) > 0) {
+    headline = `Today's roster is processed: ${newFromCase ?? newToday} newly booked, ${returningFromCase ?? returningToday} returning${
       watchToday > 0 ? `, ${watchToday} watch list match(es)` : ''}. Nothing is waiting for you.`;
     posture = 'ok';
-  } else {
+  } else if (pipeline.flags.comparisonFinished) {
     headline = "Today's roster is processed and nobody new was booked. Nothing is waiting for you.";
     posture = 'ok';
+  } else {
+    headline = pipeline.operatorMessage;
+    posture = 'action_required';
   }
 
   return {
@@ -238,16 +281,17 @@ export async function getMorningSummary(): Promise<MorningSummary> {
     } : null,
     today: {
       date: today,
-      processed: completedToday > 0,
+      processed: pipeline.flags.pdfParsed || completedToday > 0,
       batchesStarted: todaysBatches.length,
       batchesCompleted: completedToday,
       batchesFailed: failedToday,
-      batchesInProgress: inProgress,
-      todaysRosterImported: todaysRoster > 0,
+      batchesInProgress: inProgress || (todayUpload && !pipeline.flags.pdfParsed ? 1 : 0),
+      // Upload OR completed batch — never claim "not imported" while a PDF row exists.
+      todaysRosterImported: pipeline.flags.pdfParsed || todaysRoster > 0,
     },
     intelligence: {
-      newInmates: newToday,
-      returningInmates: returningToday,
+      newInmates: newFromCase ?? (pipeline.mayShowNewInmates ? newToday : 0),
+      returningInmates: returningFromCase ?? (pipeline.mayShowNewInmates ? returningToday : 0),
       watchListMatches: watchToday,
       unresolvedReviewItems: unresolvedReviews,
       unresolvedConflicts,
@@ -265,6 +309,8 @@ export async function getMorningSummary(): Promise<MorningSummary> {
       repository: { people, bookings, observations },
     },
     reports: { draft: reportsDraft, reviewed: reportsReviewed, approvedNotPrinted: reportsApproved },
+    /** Shared Daily Case pipeline — same object Morning Board / New Inmates use. */
+    dailyCasePipeline: pipeline,
   };
 }
 
@@ -392,6 +438,8 @@ export interface MorningOperationsBoard {
   };
   /** Fixed Priority 1–5 from the Operational Excellence Charter. */
   operationalPriorities: readonly string[];
+  /** Shared Daily Case pipeline — same object used by New Inmates / Ops Console. */
+  dailyCasePipeline: import('./dailyCasePipeline.js').DailyCasePipelineState;
   links: {
     upload: string;
     newInmates: string;
@@ -695,9 +743,15 @@ export async function getMorningOperationsBoard(
     elapsedMs: processingTimeMs,
   });
 
+  const { getDailyCasePipelineState } = await import('./dailyCasePipeline.js');
+  const dailyCasePipeline = await getDailyCasePipelineState(facility, opsDate);
+
   let headline: string;
   let posture: MorningOperationsBoard['posture'];
-  if (!todaysPdfUploaded) {
+  if (todaysPdfUploaded && !dailyCasePipeline.flags.pdfParsed) {
+    headline = dailyCasePipeline.operatorMessage;
+    posture = 'action_required';
+  } else if (!todaysPdfUploaded) {
     headline = "Upload today's Sacramento PDF to begin the morning run.";
     posture = 'action_required';
   } else if (!yesterdaysRosterIdentified) {
@@ -830,6 +884,7 @@ export async function getMorningOperationsBoard(
     businessMetrics,
     morningSla,
     operationalPriorities: OPERATIONAL_PRIORITIES,
+    dailyCasePipeline,
     links: {
       upload: '/admin/intelligence/upload',
       newInmates: '/admin/intelligence/new-inmates',

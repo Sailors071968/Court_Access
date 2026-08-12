@@ -105,6 +105,44 @@ export function MorningOperationsDashboard() {
 
       <Headline board={board} />
 
+      {board.dailyCasePipeline ? (
+        <Panel
+          title="Daily Case pipeline"
+          description={board.dailyCasePipeline.operatorMessage}
+        >
+          <div className="mb-3 flex flex-wrap gap-2 text-xs" data-testid="daily-case-flags">
+            {Object.entries(board.dailyCasePipeline.flags).map(([k, v]) => (
+              <Badge key={k} tone={v ? 'good' : 'bad'}>{k}: {v ? 'YES' : 'NO'}</Badge>
+            ))}
+          </div>
+          <ul className="space-y-1.5 text-sm" data-testid="daily-case-stages">
+            {board.dailyCasePipeline.stages.map((s) => (
+              <li key={s.id} className="flex flex-wrap items-start gap-2">
+                <Badge
+                  tone={
+                    s.verdict === 'PASS' ? 'good' : s.verdict === 'FAIL' ? 'bad' : 'warn'
+                  }
+                >
+                  {s.verdict}
+                </Badge>
+                <span className="font-medium text-gray-900">{s.label}</span>
+                {s.timestamp ? (
+                  <span className="text-xs text-gray-500">{new Date(s.timestamp).toLocaleString()}</span>
+                ) : null}
+                <span className="w-full text-xs text-gray-500 pl-14">
+                  {s.evidence.filter(Boolean).slice(0, 2).join(' · ')}
+                </span>
+              </li>
+            ))}
+          </ul>
+          {board.dailyCasePipeline.blockedAt ? (
+            <p className="mt-3 text-sm text-amber-900">
+              Pipeline blocked at: <strong>{board.dailyCasePipeline.blockedAt}</strong>
+            </p>
+          ) : null}
+        </Panel>
+      ) : null}
+
       {board.businessMetrics ? (
         <Panel
           title="Business metrics"

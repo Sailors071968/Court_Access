@@ -31,6 +31,7 @@
     "cert:replay": "tsx scripts/niis-replay.ts",
     "cert:release": "tsx scripts/release-certification.ts",
     "cert:rebuild": "tsx scripts/rebuild-from-evidence.ts",
+    "ops:trace-pipeline": "tsx scripts/trace-daily-case-pipeline.ts",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "bash scripts/db-safe-migrate.sh deploy",

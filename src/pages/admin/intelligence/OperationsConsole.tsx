@@ -100,6 +100,21 @@ export function OperationsConsole() {
 
       <Headline summary={summary} />
 
+      {summary.dailyCasePipeline ? (
+        <Panel title="Daily Case pipeline" description={summary.dailyCasePipeline.operatorMessage}>
+          <div className="flex flex-wrap gap-2 text-xs" data-testid="ops-console-pipeline">
+            {Object.entries(summary.dailyCasePipeline.flags).map(([k, v]) => (
+              <Badge key={k} tone={v ? 'good' : 'bad'}>{k}: {v ? 'YES' : 'NO'}</Badge>
+            ))}
+          </div>
+          {summary.dailyCasePipeline.blockedAt ? (
+            <p className="mt-2 text-sm text-amber-900">
+              Blocked at: {summary.dailyCasePipeline.blockedAt}
+            </p>
+          ) : null}
+        </Panel>
+      ) : null}
+
       <div className="grid gap-4 lg:grid-cols-3">
         <Panel title="Today" className="lg:col-span-1">
           <dl className="space-y-2.5 text-sm">

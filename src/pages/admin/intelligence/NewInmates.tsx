@@ -1,9 +1,7 @@
-// Today's new inmates. The most important screen in the subsystem.
+// Today's new inmates — Daily Case set-diff only.
 //
-// Sortable, searchable, printable. Sorting and filtering happen on the rows already
-// fetched rather than by re-querying: the page's job is to let an operator work
-// through one day's discoveries, and a round trip per column click would make that
-// worse, not better. The page size is generous for the same reason.
+// Never shows seed/demo/first-appearance history. If comparison is not finished,
+// the page shows Processing / Awaiting comparison / No certified results available.
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -11,7 +9,7 @@ import { Search } from 'lucide-react';
 
 import { intelligenceApi, type NewInmateRow } from '@/services/inmateIntelligenceApi';
 import {
-  Badge, Button, Confidence, EmptyState, ErrorNotice, Loading, PageHeader, Panel,
+  Button, Confidence, EmptyState, ErrorNotice, Loading, PageHeader, Panel,
   PrintButton, TableShell, Td, Th, formatDay, formatMoney, printHtmlDocument,
 } from './shared';
 
@@ -20,6 +18,11 @@ type SortKey =
   | 'bail' | 'facility' | 'priorBookings' | 'confidence';
 
 const PAGE_SIZE = 200;
+const FACILITY = 'sacramento';
+
+function todayIso(): string {
+  return new Date().toISOString().slice(0, 10);
+}
 
 export function NewInmates() {
   const [rows, setRows] = useState<NewInmateRow[]>([]);
@@ -28,9 +31,12 @@ export function NewInmates() {
   const [error, setError] = useState<string | null>(null);
   const [printError, setPrintError] = useState<string | null>(null);
   const [printing, setPrinting] = useState(false);
+  const [pipelineMessage, setPipelineMessage] = useState<string | null>(null);
+  const [unavailableReason, setUnavailableReason] = useState<string | null>(null);
+  const [source, setSource] = useState<string | null>(null);
+  const [dailyCaseStatus, setDailyCaseStatus] = useState<string | null>(null);
 
-  const [from, setFrom] = useState('');
-  const [to, setTo] = useState('');
+  const [opsDate, setOpsDate] = useState(todayIso);
   const [term, setTerm] = useState('');
   const [reviewOnly, setReviewOnly] = useState(false);
   const [sortKey, setSortKey] = useState<SortKey>('bookedAt');
@@ -40,19 +46,24 @@ export function NewInmates() {
     setLoading(true);
     try {
       const result = await intelligenceApi.newInmates({
-        from: from || undefined,
-        to: to || undefined,
+        facility: FACILITY,
+        from: opsDate,
+        to: opsDate,
         limit: PAGE_SIZE,
       });
       setRows(result.results);
       setTotal(result.total);
+      setSource(result.source ?? null);
+      setPipelineMessage(result.pipelineMessage ?? null);
+      setUnavailableReason(result.unavailableReason ?? null);
+      setDailyCaseStatus(result.dailyCaseStatus ?? null);
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'The new inmate list could not be loaded.');
     } finally {
       setLoading(false);
     }
-  }, [from, to]);
+  }, [opsDate]);
 
   useEffect(() => {
     void load();
@@ -63,8 +74,6 @@ export function NewInmates() {
       setDirection((current) => (current === 'asc' ? 'desc' : 'asc'));
     } else {
       setSortKey(key);
-      // Names read better ascending; everything else is more useful newest or
-      // largest first.
       setDirection(key === 'last' || key === 'first' || key === 'facility' ? 'asc' : 'desc');
     }
   };
@@ -102,7 +111,6 @@ export function NewInmates() {
       }
     };
 
-    // Stable secondary sort by name, so equal values do not reorder between renders.
     return [...filtered].sort((a, b) => compare(a, b) || a.name.localeCompare(b.name));
   }, [rows, term, reviewOnly, sortKey, direction]);
 
@@ -110,7 +118,7 @@ export function NewInmates() {
     setPrinting(true);
     setPrintError(null);
     try {
-      const html = await intelligenceApi.report({ date: from || undefined });
+      const html = await intelligenceApi.report({ date: opsDate, facility: FACILITY });
       printHtmlDocument(html, setPrintError);
     } catch (err) {
       setPrintError(err instanceof Error ? err.message : 'The report could not be generated.');
@@ -119,11 +127,16 @@ export function NewInmates() {
     }
   };
 
+  const emptyTitle = pipelineMessage ?? 'No certified results available';
+  const emptyDetail =
+    unavailableReason
+    ?? 'This page only shows Daily Case set-diff results for Sacramento. Seed or historical first-appearance rows are never shown here.';
+
   return (
-    <div className="mx-auto max-w-[110rem] space-y-6">
+    <div className="mx-auto max-w-[110rem] space-y-6" data-testid="new-inmates-page">
       <PageHeader
         title="Today's new inmates"
-        subtitle="People the jail booked who have no prior record in this repository. Newly discovered, recorded at import time and never recomputed."
+        subtitle={`Sacramento · ${opsDate} · Daily Case set-diff only (never seed/demo history)`}
         actions={<PrintButton onClick={() => void print()} label={printing ? 'Preparing…' : 'Print report'} />}
       />
 
@@ -133,21 +146,13 @@ export function NewInmates() {
       <Panel>
         <div className="flex flex-wrap items-end gap-4">
           <label className="text-sm">
-            <span className="block text-xs font-medium uppercase tracking-wide text-gray-500">Booked from</span>
+            <span className="block text-xs font-medium uppercase tracking-wide text-gray-500">Ops date</span>
             <input
               type="date"
-              value={from}
-              onChange={(event) => setFrom(event.target.value)}
+              value={opsDate}
+              onChange={(event) => setOpsDate(event.target.value || todayIso())}
               className="mt-1 rounded-lg border border-gray-300 px-3 py-1.5 text-sm"
-            />
-          </label>
-          <label className="text-sm">
-            <span className="block text-xs font-medium uppercase tracking-wide text-gray-500">to</span>
-            <input
-              type="date"
-              value={to}
-              onChange={(event) => setTo(event.target.value)}
-              className="mt-1 rounded-lg border border-gray-300 px-3 py-1.5 text-sm"
+              data-testid="new-inmates-ops-date"
             />
           </label>
           <label className="min-w-[16rem] flex-1 text-sm">
@@ -173,105 +178,84 @@ export function NewInmates() {
             />
             Review required only
           </label>
-          {(from || to || term || reviewOnly) ? (
+          <Link to="/admin/intelligence" className="pb-1.5 text-sm font-medium text-blue-700 underline">
+            Morning Operations
+          </Link>
+          {(term || reviewOnly || opsDate !== todayIso()) ? (
             <Button
               variant="ghost"
               onClick={() => {
-                setFrom('');
-                setTo('');
+                setOpsDate(todayIso());
                 setTerm('');
                 setReviewOnly(false);
               }}
             >
-              Clear
+              Reset to today
             </Button>
           ) : null}
         </div>
+        <p className="mt-3 text-xs text-gray-500" data-testid="new-inmates-source">
+          Source: {source ?? '—'}
+          {dailyCaseStatus ? ` · DailyCase ${dailyCaseStatus}` : ''}
+        </p>
       </Panel>
 
       <Panel
-        title={`${visible.length} of ${total} newly discovered`}
+        title={
+          source === 'unavailable'
+            ? emptyTitle
+            : `${visible.length} of ${total} newly booked (set-diff)`
+        }
         description={
-          total > PAGE_SIZE
-            ? `Showing the most recent ${PAGE_SIZE}. Narrow the date range to see earlier discoveries.`
-            : undefined
+          source === 'unavailable'
+            ? emptyDetail
+            : total > PAGE_SIZE
+              ? `Showing the most recent ${PAGE_SIZE}.`
+              : undefined
         }
       >
         {loading ? (
           <Loading label="Loading new inmates" />
-        ) : visible.length === 0 ? (
+        ) : source === 'unavailable' || visible.length === 0 ? (
           <EmptyState
-            title={rows.length === 0 ? 'No new inmates in this range' : 'Nothing matches that search'}
-            detail={
-              rows.length === 0
-                ? 'Either no roster has been processed for these dates, or everyone on it was already known.'
-                : undefined
-            }
+            title={source === 'unavailable' ? emptyTitle : 'No new inmates for this Daily Case'}
+            detail={emptyDetail}
           />
         ) : (
           <TableShell>
             <thead>
               <tr>
-                <Th onClick={() => sortOn('bookedAt')} active={sortKey === 'bookedAt'} direction={direction}>Booking date</Th>
+                <Th onClick={() => sortOn('bookedAt')} active={sortKey === 'bookedAt'} direction={direction}>Roster date</Th>
                 <Th onClick={() => sortOn('last')} active={sortKey === 'last'} direction={direction}>Last name</Th>
                 <Th onClick={() => sortOn('first')} active={sortKey === 'first'} direction={direction}>First name</Th>
                 <Th onClick={() => sortOn('dateOfBirth')} active={sortKey === 'dateOfBirth'} direction={direction}>DOB</Th>
                 <Th onClick={() => sortOn('bookingNumber')} active={sortKey === 'bookingNumber'} direction={direction}>Booking number</Th>
                 <Th>Charges</Th>
-                <Th onClick={() => sortOn('bail')} active={sortKey === 'bail'} direction={direction} align="right">Bail</Th>
-                <Th onClick={() => sortOn('facility')} active={sortKey === 'facility'} direction={direction}>Facility</Th>
-                <Th onClick={() => sortOn('priorBookings')} active={sortKey === 'priorBookings'} direction={direction} align="right">Prior bookings</Th>
-                <Th onClick={() => sortOn('confidence')} active={sortKey === 'confidence'} direction={direction} align="center">Confidence</Th>
-                <Th align="center">Review</Th>
+                <Th onClick={() => sortOn('bail')} active={sortKey === 'bail'} direction={direction}>Bail</Th>
+                <Th onClick={() => sortOn('confidence')} active={sortKey === 'confidence'} direction={direction}>Confidence</Th>
+                <Th />
               </tr>
             </thead>
             <tbody>
               {visible.map((row) => (
-                <tr key={`${row.inmateId}-${row.provenance.batchId}-${row.externalBookingId ?? row.discoveredOn}`} className="hover:bg-blue-50/40">
-                  <Td className="whitespace-nowrap tabular-nums">{formatDay(row.discoveredOn)}</Td>
+                <tr key={row.inmateId} className="border-t border-gray-100">
+                  <Td>{formatDay(row.discoveredOn)}</Td>
+                  <Td className="font-medium text-gray-900">{row.name.split(',')[0]}</Td>
+                  <Td>{givenName(row)}</Td>
+                  <Td>{row.dateOfBirth ?? '—'}</Td>
+                  <Td>{row.externalBookingId ?? '—'}</Td>
+                  <Td className="max-w-[18rem] truncate text-xs text-gray-600">
+                    {row.charges.map((c) => c.statute ?? c.rawText).filter(Boolean).join('; ') || '—'}
+                  </Td>
+                  <Td>{formatMoney(row.bailAmount)}</Td>
+                  <Td><Confidence value={row.identityConfidence} /></Td>
                   <Td>
                     <Link
-                      to={`/admin/intelligence/persons/${row.inmateId}`}
-                      className="font-medium text-blue-700 hover:underline"
+                      to={`/admin/intelligence/inmates/${row.inmateId}`}
+                      className="text-xs font-medium text-blue-700 underline"
                     >
-                      {surname(row)}
+                      Open
                     </Link>
-                  </Td>
-                  <Td>{givenName(row)}</Td>
-                  <Td className="whitespace-nowrap tabular-nums">{row.dateOfBirth ?? '—'}</Td>
-                  <Td className="whitespace-nowrap font-mono text-xs">{row.externalBookingId ?? '—'}</Td>
-                  <Td className="max-w-md">
-                    {row.charges.length === 0 ? (
-                      <span className="text-gray-400">No charges published</span>
-                    ) : (
-                      <ul className="space-y-0.5">
-                        {row.charges.slice(0, 3).map((charge, index) => (
-                          <li key={index} className="text-xs">
-                            <span className="font-medium text-gray-900">{charge.statute ?? '—'}</span>
-                            {charge.description ? <span className="text-gray-600"> · {charge.description}</span> : null}
-                            {charge.severity !== 'unknown' ? (
-                              <span className="ml-1 text-gray-400">({charge.severity})</span>
-                            ) : null}
-                          </li>
-                        ))}
-                        {row.charges.length > 3 ? (
-                          <li className="text-xs text-gray-400">and {row.charges.length - 3} more</li>
-                        ) : null}
-                      </ul>
-                    )}
-                  </Td>
-                  <Td align="right" className="whitespace-nowrap tabular-nums">{formatMoney(row.bailAmount)}</Td>
-                  <Td className="whitespace-nowrap">{row.facility}</Td>
-                  <Td align="right" className="tabular-nums">
-                    {row.priorArrestCount > 0 ? (
-                      <Badge tone="info">{row.priorArrestCount}</Badge>
-                    ) : (
-                      <span className="text-gray-400">0</span>
-                    )}
-                  </Td>
-                  <Td align="center"><Confidence value={row.identityConfidence} /></Td>
-                  <Td align="center">
-                    {row.identityConfidence < 90 ? <Badge tone="warn">Yes</Badge> : <span className="text-gray-300">—</span>}
                   </Td>
                 </tr>
               ))}
@@ -283,18 +267,15 @@ export function NewInmates() {
   );
 }
 
-/** The list stores "LAST, FIRST"; the grid needs the halves separately. */
-function surname(row: NewInmateRow): string {
-  return row.name.split(',')[0]?.trim() || row.name;
-}
 function givenName(row: NewInmateRow): string {
-  return row.name.split(',')[1]?.trim() || '—';
+  const parts = row.name.split(',');
+  return (parts[1] ?? '').trim();
 }
 
-function numeric(amount: string | null): number {
-  if (amount === null) return -1;
-  const value = Number(amount);
-  return Number.isNaN(value) ? -1 : value;
+function numeric(value: string | null | undefined): number {
+  if (!value) return 0;
+  const n = Number(String(value).replace(/[^0-9.-]/g, ''));
+  return Number.isFinite(n) ? n : 0;
 }
 
 export default NewInmates;

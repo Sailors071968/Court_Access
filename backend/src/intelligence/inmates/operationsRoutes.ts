@@ -897,6 +897,17 @@ export async function registerInmateOperationsRoutes(app: FastifyInstance): Prom
     return reply.send(row);
   });
 
+  /** Stage-by-stage Daily Case pipeline — single source of truth for all NIIS screens. */
+  app.get('/api/admin/intelligence/daily-case-pipeline', async (request, reply) => {
+    if (!requireAdministrator(request as AuthenticatedRequest, reply)) return;
+    const query = request.query as { facility?: string; opsDate?: string };
+    const { getDailyCasePipelineState } = await import('./dailyCasePipeline.js');
+    return reply.send(await getDailyCasePipelineState(
+      query.facility ?? 'sacramento',
+      query.opsDate ?? new Date().toISOString().slice(0, 10),
+    ));
+  });
+
   // -------------------------------------------------------------------------
   // Continuous Operational Validation — Learning Queue + engineering certs
   // (admin/developer only; not the staff revenue report)

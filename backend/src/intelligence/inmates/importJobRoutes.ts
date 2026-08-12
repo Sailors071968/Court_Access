@@ -153,15 +153,31 @@ export async function registerImportJobRoutes(app: FastifyInstance): Promise<voi
       const rejected: { jobFileId?: string; filename: string; reason: string }[] = [];
       const jobFileIds: string[] = [];
       let batchIndex = 0;
+      const batchStartedAt = Date.now();
 
-      // First pass: collect field parts for jobFileId mapping — fastify multipart
-      // interleaves fields and files. We accept either:
-      //   files + jobFileIds[] fields in parallel order, or
-      //   filename field "jobFileId:<uuid>" as the part filename prefix is not used;
-      // instead each file part is paired with a preceding/adjacent field jobFileId.
-      type Pending = { jobFileId: string; filename: string; file: NodeJS.ReadableStream };
-      const pending: Pending[] = [];
+      // INC-001: Multipart fields and files are interleaved. Each file stream MUST be
+      // consumed (piped to durable storage) before the parts() iterator advances.
+      // Holding streams for a second pass deadlocks busboy once the part exceeds the
+      // internal buffer (~100 KB): markBatchUploading never runs, uploadStartedAt stays
+      // null, uploadedBytes stays 0, and the browser eventually aborts.
+      // Pairing rule: each file part is preceded by a jobFileId field (BulkImportPanel).
       const fieldQueue: string[] = [];
+
+      const trace = (transition: string, fields: Record<string, unknown>) => {
+        console.log(JSON.stringify({
+          incident: 'INC-001',
+          transition,
+          ts: new Date().toISOString(),
+          durationMs: Date.now() - batchStartedAt,
+          jobId,
+          ...fields,
+        }));
+      };
+
+      trace('multipart_request_open', {
+        contentType: request.headers['content-type'] ?? null,
+        contentLength: request.headers['content-length'] ?? null,
+      });
 
       try {
         for await (const part of request.parts()) {
@@ -174,36 +190,61 @@ export async function registerImportJobRoutes(app: FastifyInstance): Promise<voi
             continue;
           }
           if (part.type !== 'file') continue;
+
           const jobFileId = fieldQueue.shift();
           if (!jobFileId) {
             rejected.push({ filename: part.filename, reason: 'Missing jobFileId for this file part.' });
             part.file.resume();
             continue;
           }
-          pending.push({ jobFileId, filename: part.filename, file: part.file });
+
           jobFileIds.push(jobFileId);
-        }
+          trace('multipart_file_part', {
+            jobFileId,
+            filename: part.filename,
+            batchIndex,
+          });
 
-        if (pending.length > 0) {
-          await markBatchUploading(jobId, jobFileIds, batchIndex);
-        }
+          // Mark uploading before draining bytes so operators see progress if the
+          // transfer is slow — and so aborted mid-stream jobs are not left "pending".
+          await markBatchUploading(jobId, [jobFileId], batchIndex);
+          trace('jobfile_uploading', { jobFileId, filename: part.filename });
 
-        for (const item of pending) {
+          const fileStartedAt = Date.now();
           const stored = await storeJobFileUpload({
             jobId,
-            jobFileId: item.jobFileId,
-            stream: item.file,
+            jobFileId,
+            stream: part.file,
             uploadedById: request.user!.userId,
             uploadedByName: request.user!.email ?? undefined,
           });
+
           if ('error' in stored && stored.error) {
-            rejected.push({ jobFileId: item.jobFileId, filename: item.filename, reason: stored.error });
+            // Drain any remainder so subsequent parts are not blocked.
+            part.file.resume();
+            rejected.push({ jobFileId, filename: part.filename, reason: stored.error });
+            trace('file_store_fail', {
+              jobFileId,
+              filename: part.filename,
+              error: stored.error,
+              durationMs: Date.now() - fileStartedAt,
+            });
           } else {
-            accepted.push({ ...stored, filename: item.filename, jobFileId: item.jobFileId });
+            accepted.push({ ...stored, filename: part.filename, jobFileId });
+            const sizeBytes = 'sizeBytes' in stored ? stored.sizeBytes : null;
+            const uploadId = 'uploadId' in stored ? stored.uploadId : null;
+            trace('file_store_ok', {
+              jobFileId,
+              filename: part.filename,
+              uploadId,
+              bytes: sizeBytes,
+              durationMs: Date.now() - fileStartedAt,
+            });
           }
         }
       } catch (err) {
         const reason = err instanceof Error ? err.message : String(err);
+        trace('multipart_abort', { reason, jobFileIds });
         if (jobFileIds.length > 0) {
           await markBatchUploadFailed(jobId, jobFileIds, reason);
         }
@@ -217,6 +258,17 @@ export async function registerImportJobRoutes(app: FastifyInstance): Promise<voi
 
       // Kick async processing when the client has finished the last pending file.
       const auto = await maybeAutoProcess(jobId, request.user!.userId);
+      const job = await getImportJob(jobId);
+      trace('batch_complete', {
+        batchIndex,
+        accepted: accepted.length,
+        rejected: rejected.length,
+        uploadedBytes: job?.uploadedBytes ?? null,
+        uploadStartedAt: job?.uploadStartedAt ?? null,
+        uploadFinishedAt: job?.uploadFinishedAt ?? null,
+        status: job?.status ?? null,
+        autoProcessStarted: Boolean(auto && 'started' in auto && auto.started.length > 0),
+      });
 
       await recordAccess({
         userId: request.user!.userId,
@@ -229,7 +281,7 @@ export async function registerImportJobRoutes(app: FastifyInstance): Promise<voi
         accepted,
         rejected,
         autoProcessStarted: Boolean(auto && 'started' in auto && auto.started.length > 0),
-        job: await getImportJob(jobId),
+        job,
       });
     });
   });

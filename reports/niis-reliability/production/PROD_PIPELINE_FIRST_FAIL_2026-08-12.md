@@ -12,6 +12,8 @@
 **First failing stage: File stored (byte upload)**  
 Import Job was created. PDF bytes were never written. Everything downstream is stale or seed data.
 
+**Root cause (measured in INC-001):** Import Job multipart handler deferred stream consumption and deadlocked busboy for files ≳100 KB. Direct `/uploads` stores a 15 MB PDF in 0.2s on the same host. See `PRODUCTION_INCIDENT_001.md`.
+
 No new features. No cloud-agent / fixture / local acceptance work. Production EC2 only.
 
 ## Stage ledger (production evidence only)

@@ -59,3 +59,21 @@ Likely client abandon / multipart failure / browser session loss after job creat
 4. Only then re-check Morning Ops / New Inmates / Report against one Daily Case.
 
 Raw JSON: `PROD_PIPELINE_FIRST_FAIL_2026-08-12.json`
+
+
+## Import Inspection (same PDF — bytes not retained)
+
+Inspection `d29a39fd-3ebb-4809-8fff-4a69afb0a8a3` at `2026-08-12T17:47:40.017Z`:
+
+| Field | Value |
+|---|---|
+| filename | SACJAILSCAN08-12-2026.pdf |
+| sha256 | 1b4a8e346f55249b54a7c0c67901594346fef3a1d6f3b95eb6822d3c4eb299e8 |
+| sizeBytes | 14815141 |
+| pageCount | 59 |
+| hasTextLayer | true |
+| verdict | **would_import** |
+| parserConfidence | 75 |
+| download endpoints | **404** (inspection does not retain durable bytes) |
+
+So: parser path was proven viable via Inspect. Durable **Upload Files / Import Job** path never stored the file. That is the break.

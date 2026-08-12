@@ -3,8 +3,9 @@
 > **Every morning NIIS must tell the truth about who is newly booked into the Sacramento County Jail.**  
 > Everything else is secondary.
 
-**OPERATIONAL LOCK — Architecture COMPLETE · V1.0 Design FROZEN**  
-→ [OPERATIONAL_LOCK.md](./OPERATIONAL_LOCK.md) — success = operational performance only; no new architecture unless fixing a verified defect.
+**OPERATIONAL LOCK — Architecture COMPLETE · V1.0 Design FROZEN** (sealed 2026-08-12)  
+→ [OPERATIONAL_LOCK.md](./OPERATIONAL_LOCK.md) — success = operational performance only; no new architecture unless fixing a verified defect.  
+**Primary role going forward: operator** — upload PDF → review exceptions → grow corpus. Architecture instruction has stopped.
 
 **Supreme law:** [ENGINEERING_LAW_0.md](./ENGINEERING_LAW_0.md) — The System Must Never Lie.  
 **V1.0 contract:** [NIIS_V1_ENGINEERING_CONTRACT.md](./NIIS_V1_ENGINEERING_CONTRACT.md).  

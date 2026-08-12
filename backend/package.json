@@ -32,6 +32,8 @@
     "cert:release": "tsx scripts/release-certification.ts",
     "cert:rebuild": "tsx scripts/rebuild-from-evidence.ts",
     "ops:trace-pipeline": "tsx scripts/trace-daily-case-pipeline.ts",
+    "ops:accept": "tsx scripts/niis-operational-acceptance.ts",
+    "ops:purge-seed": "tsx scripts/purge-seed-demo-inmates.ts",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "bash scripts/db-safe-migrate.sh deploy",

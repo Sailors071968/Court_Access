@@ -1,0 +1,93 @@
+{
+  "document": "INC-001 Production Deployment State",
+  "measuredAt": "2026-08-12T19:35:15.013443+00:00",
+  "incident": "INC-001",
+  "status": "OPEN",
+  "phaseSummary": [
+    "ROOT CAUSE VERIFIED",
+    "FIX WRITTEN",
+    "FIX TESTED",
+    "FIX NOT DEPLOYED",
+    "PRODUCTION STILL RUNNING PREVIOUS BUILD"
+  ],
+  "resolved": false,
+  "directEvidence": {
+    "productionGitCommit": {
+      "source": "GET https://courtaccess.net/api/health \u2192 commit",
+      "value": "b52e9aadfa35c3547327985bd13e411f217ae0e9",
+      "version": "1.1.0",
+      "environment": "production",
+      "service": "court-access-backend",
+      "healthTimestamp": "2026-08-12T19:34:49.273Z"
+    },
+    "productionProcessUptime": {
+      "source": "GET /api/health \u2192 uptimeSeconds",
+      "uptimeSeconds": 181990,
+      "inferredProcessStartUtc": "2026-08-10T17:02:05.013415+00:00",
+      "note": "Process has been up ~50.5h; no restart coincident with PR #167 fix commits."
+    },
+    "frontendArtifactTimestamp": {
+      "source": "HEAD https://courtaccess.net/ \u2192 Last-Modified",
+      "lastModified": "Mon, 10 Aug 2026 17:00:28 GMT"
+    },
+    "pr167": {
+      "url": "https://github.com/Sailors071968/Court_Access/pull/167",
+      "head": "5e012e99d2d08fc4fa185328de7641d27c87a7a1",
+      "base": "cursor/gold-standard-upload-portal-9f94",
+      "state": "OPEN",
+      "fixCommit": "cdaa823e09eecf52c2099589ff5523fff0aecb83",
+      "fixCommitSubject": "fix(niis): INC-001 \u2014 consume Import Job multipart streams in-loop",
+      "fixCommitCommittedAt": "2026-08-12T19:04:06+00:00"
+    },
+    "commitContainment": {
+      "method": "git merge-base --is-ancestor <fix> <prod>",
+      "fixCommitContainedInProductionCommit": false,
+      "productionCommitIsAncestorOfPrBranch": true,
+      "conclusion": "Production tip does not include the INC-001 fix commit."
+    },
+    "importJobRoutesTsAtProductionCommit": {
+      "method": "git show b52e9aad:backend/src/intelligence/inmates/importJobRoutes.ts",
+      "contains_processImportJobMultipartUpload": false,
+      "contains_deferred_pending_push_bug": true,
+      "markers": [
+        "for await (const part of request.parts())",
+        "pending.push({ jobFileId, filename: part.filename, file: part.file })"
+      ],
+      "conclusion": "Production commit still has the pre-fix deferred-stream multipart handler."
+    },
+    "importJobMultipartUploadTsAtProductionCommit": {
+      "method": "git cat-file -e b52e9aad:backend/src/intelligence/inmates/importJobMultipartUpload.ts",
+      "present": false,
+      "conclusion": "New multipart module from PR #167 is absent at the production commit."
+    },
+    "importJobRoutesTsAtPrHead": {
+      "method": "git show 5e012e99:backend/src/intelligence/inmates/importJobRoutes.ts",
+      "contains_processImportJobMultipartUpload": true,
+      "contains_deferred_pending_push_bug": false
+    },
+    "pm2RestartTimestamp": {
+      "available": false,
+      "reason": "Host SSH not available to this verification agent; not required to conclude FIX NOT DEPLOYED given self-reported production commit hash."
+    },
+    "buildArtifactTimestampOnHost": {
+      "available": false,
+      "reason": "Host SSH not available; frontend Last-Modified and API commit hash are the available direct signals."
+    },
+    "runningNodeProcessUsesNewBuild": {
+      "value": false,
+      "basis": [
+        "API self-reports commit b52e9aad",
+        "b52e9aad tree lacks importJobMultipartUpload.ts",
+        "b52e9aad importJobRoutes.ts still contains pending.push deferred-stream pattern",
+        "PR #167 head 5e012e99 contains processImportJobMultipartUpload"
+      ]
+    }
+  },
+  "engineeringQuestion": {
+    "not": "Why is uploadedBytes zero?",
+    "is": "Why is production still running code that produces uploadedBytes = 0?",
+    "answerFromEvidence": "Production Node service advertises commit b52e9aad, which predates and does not contain PR #167 fix commit cdaa823."
+  },
+  "stop": true,
+  "nextAllowedAction": "Deploy PR #167 (or at minimum fix commit cdaa823+) to production by any mechanism. Then re-verify commit hash, upload SACJAILSCAN08-12-2026.pdf, run closure Tests 1\u201311, publish consolidated evidence report. No further debugging of upload symptoms on the old build."
+}

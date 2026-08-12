@@ -284,6 +284,8 @@ export async function finalizePdfComparison(args: {
       departures: comparison.departed.length,
       detail: {
         engine: 'roster_set_diff',
+        baselineSource: comparison.baselineSource,
+        priorSnapshotId: comparison.priorSnapshotId,
         counts: comparison.counts,
         reconcileOk: comparison.reconcileOk,
         newInmateNames: comparison.newInmateNames,
@@ -305,6 +307,8 @@ export async function finalizePdfComparison(args: {
       departures: comparison.departed.length,
       detail: {
         engine: 'roster_set_diff',
+        baselineSource: comparison.baselineSource,
+        priorSnapshotId: comparison.priorSnapshotId,
         counts: comparison.counts,
         reconcileOk: comparison.reconcileOk,
         newInmateNames: comparison.newInmateNames,
@@ -320,6 +324,15 @@ export async function finalizePdfComparison(args: {
       detailTruncated: comparison.current.length > 500,
       generatedById: args.userId ?? null,
     },
+  });
+
+  // Zero Assumption: attempt to disprove today's output before any cert claim.
+  const { runSelfVerification } = await import('./selfVerification.js');
+  const selfCheck = await runSelfVerification({
+    facility: daily.facility,
+    opsDate: ops,
+    currentBatchId: daily.currentPdfBatchId,
+    priorBatchId: daily.priorPdfBatchId,
   });
 
   let status: DailyCaseStatus = 'compared';
@@ -342,6 +355,16 @@ export async function finalizePdfComparison(args: {
     returningInmateCount: comparison.counts.returning,
     existingInmateCount: comparison.counts.existing,
     reviewCount: comparison.counts.review,
+  });
+
+  await appendAudit(daily.caseId, {
+    at: new Date().toISOString(),
+    kind: 'self_verification',
+    detail:
+      `provisional=${selfCheck.provisional} pass=${selfCheck.passedCount} `
+      + `fail=${selfCheck.failedCount} unknown=${selfCheck.unknownCount} — `
+      + selfCheck.checks.map((c) => `${c.id}:${c.verdict}`).join(', '),
+    actorId: args.userId ?? null,
   });
 
   if (args.autoReport !== false && !daily.initialReportId) {

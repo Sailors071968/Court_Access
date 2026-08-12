@@ -296,6 +296,24 @@ export interface MorningOperationsBoard {
     required: number;
     productionReady: boolean;
   };
+  /**
+   * The metrics that matter more than feature count.
+   * Values may be the string "UNKNOWN" when history is insufficient.
+   */
+  reliability: {
+    daysSinceLastMissedNew: number | 'UNKNOWN';
+    daysSinceLastFalseNew: number | 'UNKNOWN';
+    lastMissedDate: string | 'UNKNOWN';
+    lastFalseNewDate: string | 'UNKNOWN';
+    evidence: string;
+  };
+  selfVerification: {
+    provisional: boolean;
+    failedCount: number;
+    unknownCount: number;
+    passedCount: number;
+    checks: { id: string; question: string; verdict: string; detail: string }[];
+  } | null;
   openLearningQueueItems: number;
   links: {
     upload: string;
@@ -413,10 +431,49 @@ export async function getMorningOperationsBoard(
     ?? todayPdfBatch?.recordsForReview
     ?? reviewPending;
 
+  const { reliabilityStreaks, runSelfVerification } = await import('./selfVerification.js');
+  const reliability = await reliabilityStreaks(facility, opsDate);
+
+  let selfVerification: MorningOperationsBoard['selfVerification'] = null;
+  if (todayPdfBatch?.batchId && comparisonCompleted) {
+    try {
+      const sv = await runSelfVerification({
+        facility,
+        opsDate,
+        currentBatchId: todayPdfBatch.batchId,
+        priorBatchId: yesterdayPdfBatch?.batchId ?? dailyCase?.priorPdfBatchId ?? null,
+      });
+      selfVerification = {
+        provisional: sv.provisional,
+        failedCount: sv.failedCount,
+        unknownCount: sv.unknownCount,
+        passedCount: sv.passedCount,
+        checks: sv.checks,
+      };
+    } catch {
+      selfVerification = {
+        provisional: true,
+        failedCount: 0,
+        unknownCount: 1,
+        passedCount: 0,
+        checks: [{
+          id: 'self_verification',
+          question: 'Could self-verification run?',
+          verdict: 'unknown',
+          detail: 'Self-verification threw — treating report as Provisional (UNKNOWN).',
+        }],
+      };
+    }
+  }
+
   let reportCertification: MorningOperationsBoard['questions']['reportCertification']['answer'] = 'missing';
-  if (certification?.status === 'pass') reportCertification = 'certified';
-  else if (certification?.status === 'fail') reportCertification = 'failed';
-  else if (printableReport || todayPdfBatch) reportCertification = 'provisional';
+  if (certification?.status === 'pass' && !selfVerification?.provisional) {
+    reportCertification = 'certified';
+  } else if (certification?.status === 'fail') {
+    reportCertification = 'failed';
+  } else if (printableReport || todayPdfBatch || selfVerification?.provisional) {
+    reportCertification = 'provisional';
+  }
 
   const canPrint = Boolean(
     printableReport
@@ -433,6 +490,9 @@ export async function getMorningOperationsBoard(
     posture = 'action_required';
   } else if (!comparisonCompleted && todayPdfUpload && todayPdfUpload.status !== 'completed') {
     headline = "Today's PDF is uploaded but comparison has not finished. Process the import.";
+    posture = 'attention';
+  } else if (selfVerification?.provisional) {
+    headline = `Provisional: self-verification found ${selfVerification.failedCount} fail(s) and ${selfVerification.unknownCount} UNKNOWN check(s). Do not treat as certified.`;
     posture = 'attention';
   } else if (requireManualReview > 0) {
     headline = `Comparison ready: ${newInmatesFound} new inmates; ${requireManualReview} need manual review before the repository is complete.`;
@@ -477,7 +537,7 @@ export async function getMorningOperationsBoard(
       },
       newInmatesFound: {
         answer: newInmatesFound,
-        detail: 'First-appearance bookings for today (PDF-primary path)',
+        detail: 'On today ∧ not on yesterday (roster set-diff / certified snapshot)',
       },
       requireManualReview: {
         answer: requireManualReview,
@@ -509,6 +569,14 @@ export async function getMorningOperationsBoard(
       required: streak.required,
       productionReady: streak.productionReady,
     },
+    reliability: {
+      daysSinceLastMissedNew: reliability.daysSinceLastMissedNew,
+      daysSinceLastFalseNew: reliability.daysSinceLastFalseNew,
+      lastMissedDate: reliability.lastMissedDate,
+      lastFalseNewDate: reliability.lastFalseNewDate,
+      evidence: reliability.evidence,
+    },
+    selfVerification,
     openLearningQueueItems: openLearning,
     links: {
       upload: '/admin/intelligence/upload',

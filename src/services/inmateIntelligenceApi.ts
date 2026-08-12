@@ -528,6 +528,20 @@ export interface MorningOperationsBoard {
     required: number;
     productionReady: boolean;
   };
+  reliability: {
+    daysSinceLastMissedNew: number | 'UNKNOWN';
+    daysSinceLastFalseNew: number | 'UNKNOWN';
+    lastMissedDate: string | 'UNKNOWN';
+    lastFalseNewDate: string | 'UNKNOWN';
+    evidence: string;
+  };
+  selfVerification: {
+    provisional: boolean;
+    failedCount: number;
+    unknownCount: number;
+    passedCount: number;
+    checks: { id: string; question: string; verdict: string; detail: string }[];
+  } | null;
   openLearningQueueItems: number;
   links: {
     upload: string;

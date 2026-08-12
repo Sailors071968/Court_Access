@@ -1,6 +1,9 @@
 # COURTACCESS NIIS — Primary Engineering Directive
 
-**This document supersedes every previous architectural directive.**
+> CourtAccess NIIS is an evidence-governed criminal intelligence system. It does not guess. It does not fabricate. It does not infer facts without evidence. Every conclusion must be traceable to preserved evidence and reproducible by independent verification. The only acceptable measure of success is sustained agreement with verified investigator ground truth.
+
+**This document supersedes every previous architectural directive** for *what* NIIS must discover.  
+How claims are proven: [ZERO_ASSUMPTION_ENGINEERING_DIRECTIVE.md](./ZERO_ASSUMPTION_ENGINEERING_DIRECTIVE.md).
 
 The entire purpose of NIIS is to accurately discover every newly booked inmate appearing on today's Sacramento County jail roster.
 

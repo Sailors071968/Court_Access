@@ -332,6 +332,119 @@ export async function registerInmateOperationsRoutes(app: FastifyInstance): Prom
     return reply.send(await getMorningOperationsBoard(query.facility ?? 'sacramento'));
   });
 
+  /** Stage metrics for evidence-governed certification (parser/identity/comparison/cert). */
+  app.get('/api/admin/intelligence/stage-metrics', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!requireAdministrator(request, reply)) return;
+    const query = request.query as { facility?: string; opsDate?: string; batchId?: string };
+    const opsDate = query.opsDate ?? new Date().toISOString().slice(0, 10);
+    const { collectDailyStageMetrics } = await import('./stageMetrics.js');
+    return reply.send(await collectDailyStageMetrics({
+      facility: query.facility ?? 'sacramento',
+      opsDate,
+      currentBatchId: query.batchId,
+    }));
+  });
+
+  /** Self-verification — attempt to disprove today's output. */
+  app.get('/api/admin/intelligence/self-verification', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!requireAdministrator(request, reply)) return;
+    const query = request.query as {
+      facility?: string; opsDate?: string; currentBatchId?: string; priorBatchId?: string;
+    };
+    const { runSelfVerification, reliabilityStreaks } = await import('./selfVerification.js');
+    const opsDate = query.opsDate ?? new Date().toISOString().slice(0, 10);
+    const facility = query.facility ?? 'sacramento';
+    const [verification, reliability] = await Promise.all([
+      runSelfVerification({
+        facility,
+        opsDate,
+        currentBatchId: query.currentBatchId,
+        priorBatchId: query.priorBatchId,
+      }),
+      reliabilityStreaks(facility, opsDate),
+    ]);
+    return reply.send({ verification, reliability });
+  });
+
+  /**
+   * Replay Mode — re-run set-diff on two stored uploads / batch IDs.
+   * Does not claim CERTIFIED without investigator gold names in the body.
+   */
+  app.post('/api/admin/intelligence/replay', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!requireAdministrator(request, reply)) return;
+    const body = (request.body ?? {}) as {
+      priorBatchId?: string;
+      currentBatchId?: string;
+      facility?: string;
+      /** Investigator ground-truth names (LAST, FIRST). Required for CERTIFIED. */
+      goldNames?: string[];
+    };
+    if (!body.priorBatchId || !body.currentBatchId) {
+      return reply.code(400).send({
+        error: 'priorBatchId and currentBatchId are required',
+        status: 'UNKNOWN',
+      });
+    }
+    const { compareRosterBatches, isReportableNew, normalizeRosterName } =
+      await import('./rosterComparison.js');
+    const { formatCertificationEvidence } = await import('./unknown.js');
+    const diff = await compareRosterBatches({
+      priorBatchId: body.priorBatchId,
+      currentBatchId: body.currentBatchId,
+    });
+    const niisNames = diff.current
+      .filter((r) => isReportableNew(r.disposition))
+      .map((r) => r.name);
+    const gold = (body.goldNames ?? []).map((n) => normalizeRosterName(n));
+    let status: 'CERTIFIED' | 'FAIL' | 'PROVISIONAL' | 'UNKNOWN' = 'UNKNOWN';
+    let falsePositives: string[] = [];
+    let falseNegatives: string[] = [];
+    let precision: number | null = null;
+    let recall: number | null = null;
+    if (gold.length > 0) {
+      const goldSet = new Set(gold);
+      const niisSet = new Set(niisNames);
+      falsePositives = niisNames.filter((n) => !goldSet.has(n));
+      falseNegatives = gold.filter((n) => !niisSet.has(n));
+      const tp = gold.filter((n) => niisSet.has(n)).length;
+      precision = tp + falsePositives.length === 0 ? 0 : tp / (tp + falsePositives.length);
+      recall = tp + falseNegatives.length === 0 ? 0 : tp / (tp + falseNegatives.length);
+      status = !diff.reconcileOk
+        ? 'PROVISIONAL'
+        : precision === 1 && recall === 1
+          ? 'CERTIFIED'
+          : 'FAIL';
+    }
+    const evidence = formatCertificationEvidence({
+      engine: 'Replay Mode (API)',
+      testDataset: `batch ${body.priorBatchId} → ${body.currentBatchId}`,
+      rosterDate: diff.currentDate,
+      manualGroundTruthNew: gold.length > 0 ? gold.length : null,
+      niisResultNew: niisNames.length,
+      falsePositives: gold.length > 0 ? falsePositives.length : null,
+      falseNegatives: gold.length > 0 ? falseNegatives.length : null,
+      precision,
+      recall,
+      status,
+    });
+    return reply.send({
+      status,
+      evidence,
+      comparison: {
+        priorCount: diff.priorCount,
+        currentCount: diff.currentCount,
+        counts: diff.counts,
+        reconcileOk: diff.reconcileOk,
+        baselineSource: diff.baselineSource,
+      },
+      niisNames,
+      falsePositives,
+      falseNegatives,
+      precision,
+      recall,
+    });
+  });
+
   /**
    * Daily Difference Viewer — prior vs current roster with classification colors
    * and per-inmate "why" + evidence links. Operator verification / diagnostics only.

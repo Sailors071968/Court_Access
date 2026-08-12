@@ -97,6 +97,52 @@ export function MorningOperationsDashboard() {
 
       <Headline board={board} />
 
+      <div className="grid gap-4 sm:grid-cols-2" data-testid="reliability-streaks">
+        <ReliabilityMetric
+          label="Days Since Last Missed New Inmate"
+          value={board.reliability?.daysSinceLastMissedNew ?? 'UNKNOWN'}
+          hint={
+            board.reliability?.lastMissedDate && board.reliability.lastMissedDate !== 'UNKNOWN'
+              ? `Last miss ${board.reliability.lastMissedDate}`
+              : board.reliability?.evidence ?? 'Evidence-governed streak'
+          }
+        />
+        <ReliabilityMetric
+          label="Days Since Last False New Inmate"
+          value={board.reliability?.daysSinceLastFalseNew ?? 'UNKNOWN'}
+          hint={
+            board.reliability?.lastFalseNewDate && board.reliability.lastFalseNewDate !== 'UNKNOWN'
+              ? `Last false new ${board.reliability.lastFalseNewDate}`
+              : board.reliability?.evidence ?? 'Evidence-governed streak'
+          }
+        />
+      </div>
+
+      {board.selfVerification ? (
+        <Panel
+          title="Self-verification"
+          description={
+            board.selfVerification.provisional
+              ? 'Provisional — fail or UNKNOWN checks present. Not silently certified.'
+              : 'All self-checks passed.'
+          }
+        >
+          <ul className="space-y-1.5 text-sm">
+            {board.selfVerification.checks.map((c) => (
+              <li key={c.id} className="flex flex-wrap items-start gap-2">
+                <Badge
+                  tone={c.verdict === 'pass' ? 'good' : c.verdict === 'fail' ? 'bad' : 'warn'}
+                >
+                  {c.verdict}
+                </Badge>
+                <span className="font-medium text-gray-900">{c.question}</span>
+                <span className="text-xs text-gray-500">{c.detail}</span>
+              </li>
+            ))}
+          </ul>
+        </Panel>
+      ) : null}
+
       <Panel
         title="Today's checklist"
         description="Seven answers for the New Inmate Report cycle."
@@ -272,6 +318,27 @@ function QuestionRow({
         ) : null}
       </div>
     </li>
+  );
+}
+
+function ReliabilityMetric({
+  label,
+  value,
+  hint,
+}: {
+  label: string;
+  value: number | 'UNKNOWN';
+  hint: string;
+}) {
+  const unknown = value === 'UNKNOWN';
+  return (
+    <div className="rounded-xl border border-gray-900 bg-gray-950 px-5 py-4 text-white">
+      <p className="text-xs font-medium uppercase tracking-wide text-gray-400">{label}</p>
+      <p className={`mt-1 text-4xl font-semibold tabular-nums ${unknown ? 'text-amber-300' : 'text-white'}`}>
+        {unknown ? 'UNKNOWN' : value}
+      </p>
+      <p className="mt-2 text-xs text-gray-400">{unknown ? 'No certified history yet — not fabricated' : hint}</p>
+    </div>
   );
 }
 

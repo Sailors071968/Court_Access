@@ -102,6 +102,8 @@ import { OperationsConsole } from './pages/admin/intelligence/OperationsConsole'
 import { MorningOperationsDashboard } from './pages/admin/intelligence/MorningOperationsDashboard';
 import { DailyDifferenceViewer } from './pages/admin/intelligence/DailyDifferenceViewer';
 import { LearningQueue } from './pages/admin/intelligence/LearningQueue';
+import { InvestigatorWorkspace } from './pages/admin/intelligence/InvestigatorWorkspace';
+import { OperationalHealth } from './pages/admin/intelligence/OperationalHealth';
 import { Reports } from './pages/admin/intelligence/Reports';
 import { StatutoryIntelligence } from './pages/admin/StatutoryIntelligence';
 import { GoldStandardCertification } from './pages/admin/GoldStandardCertification';
@@ -517,6 +519,22 @@ function App() {
             element={
               <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
                 <DailyDifferenceViewer />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/intelligence/investigator-workspace"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <InvestigatorWorkspace />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/intelligence/operational-health"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <OperationalHealth />
               </ProtectedRoute>
             }
           />

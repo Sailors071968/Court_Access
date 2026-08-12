@@ -334,6 +334,8 @@ export interface MorningOperationsBoard {
     reports: string;
     learningQueue: string;
     dailyDifference: string;
+    investigatorWorkspace: string;
+    operationalHealth: string;
   };
 }
 
@@ -614,6 +616,8 @@ export async function getMorningOperationsBoard(
       reports: '/admin/intelligence/reports',
       learningQueue: '/admin/intelligence/learning-queue',
       dailyDifference: '/admin/intelligence/daily-difference',
+      investigatorWorkspace: '/admin/intelligence/investigator-workspace',
+      operationalHealth: '/admin/intelligence/operational-health',
     },
   };
 }

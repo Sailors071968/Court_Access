@@ -493,6 +493,87 @@ export async function registerInmateOperationsRoutes(app: FastifyInstance): Prom
     }
   });
 
+  /**
+   * Operational Health — V1.0 heartbeat (not CPU/RAM).
+   * Today's roster, reconciliation, precision/recall, certification, alerts.
+   */
+  app.get('/api/admin/intelligence/operational-health', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!requireAdministrator(request, reply)) return;
+    const query = request.query as { facility?: string; opsDate?: string };
+    const { getOperationalHealth } = await import('./operationalHealth.js');
+    return reply.send(await getOperationalHealth(
+      query.facility ?? 'sacramento',
+      query.opsDate ?? new Date().toISOString().slice(0, 10),
+    ));
+  });
+
+  /**
+   * Investigator Review Workspace — side-by-side yesterday/today + one-click decisions.
+   * Distinct from identity Review Queue. Feeds learning corpus.
+   */
+  app.get('/api/admin/intelligence/investigator-workspace', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!requireAdministrator(request, reply)) return;
+    const query = request.query as {
+      facility?: string;
+      opsDate?: string;
+      includeDecided?: string;
+      limit?: string;
+    };
+    try {
+      const { getInvestigatorWorkspace } = await import('./investigatorWorkspace.js');
+      return reply.send(await getInvestigatorWorkspace({
+        facility: query.facility ?? 'sacramento',
+        opsDate: query.opsDate,
+        includeDecided: query.includeDecided === '1' || query.includeDecided === 'true',
+        limit: query.limit ? Number(query.limit) : 200,
+      }));
+    } catch (err) {
+      const status = (err as { statusCode?: number }).statusCode ?? 500;
+      return reply.code(status).send({
+        error: status === 409 ? 'Not ready' : 'Investigator workspace failed',
+        message: err instanceof Error ? err.message : String(err),
+      });
+    }
+  });
+
+  app.post('/api/admin/intelligence/investigator-workspace/decide', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!requireAdministrator(request, reply)) return;
+    const body = request.body as {
+      opsDate?: string;
+      facility?: string;
+      candidateKey?: string;
+      inmateName?: string;
+      niisClassification?: string;
+      action?: string;
+      inmateId?: string | null;
+      bookingId?: string | null;
+    };
+    const allowed = new Set([
+      'confirm_new', 'confirm_existing', 'confirm_returning', 'send_to_review',
+      'mark_parser_error', 'mark_identity_error', 'mark_ocr_error', 'mark_comparison_error',
+    ]);
+    if (!body.opsDate || !body.candidateKey || !body.inmateName || !body.niisClassification || !body.action) {
+      return reply.code(400).send({ error: 'opsDate, candidateKey, inmateName, niisClassification, action required' });
+    }
+    if (!allowed.has(body.action)) {
+      return reply.code(400).send({ error: `Invalid action: ${body.action}` });
+    }
+    const { recordInvestigatorDecision } = await import('./investigatorWorkspace.js');
+    const result = await recordInvestigatorDecision({
+      facility: body.facility ?? 'sacramento',
+      opsDate: body.opsDate,
+      candidateKey: body.candidateKey,
+      inmateName: body.inmateName,
+      niisClassification: body.niisClassification,
+      action: body.action as import('./investigatorWorkspace.js').InvestigatorAction,
+      inmateId: body.inmateId,
+      bookingId: body.bookingId,
+      investigatorId: request.user?.userId ?? null,
+      investigatorName: request.user?.email ?? null,
+    });
+    return reply.send({ ok: true, ...result });
+  });
+
   // -------------------------------------------------------------------------
   // Batch lifecycle
   // -------------------------------------------------------------------------

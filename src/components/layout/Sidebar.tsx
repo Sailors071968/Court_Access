@@ -91,6 +91,8 @@ const navItems: NavItem[] = [
         permission: 'canViewAdmin',
         children: [
           { id: 'niis-ops', label: 'Morning Operations', path: '/admin/intelligence', icon: <Gauge size={14} /> },
+          { id: 'niis-health', label: 'Operational Health', path: '/admin/intelligence/operational-health', icon: <Activity size={14} /> },
+          { id: 'niis-workspace', label: 'Investigator Workspace', path: '/admin/intelligence/investigator-workspace', icon: <Columns2 size={14} /> },
           { id: 'niis-diff', label: 'Daily Difference', path: '/admin/intelligence/daily-difference', icon: <Columns2 size={14} /> },
           { id: 'niis-console', label: 'Operations Console', path: '/admin/intelligence/console', icon: <Activity size={14} /> },
           { id: 'niis-learning', label: 'Learning Queue', path: '/admin/intelligence/learning-queue', icon: <ClipboardList size={14} /> },

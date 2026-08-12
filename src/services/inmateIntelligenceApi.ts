@@ -559,7 +559,87 @@ export interface MorningOperationsBoard {
     reports: string;
     learningQueue: string;
     dailyDifference: string;
+    investigatorWorkspace?: string;
+    operationalHealth?: string;
   };
+}
+
+export type InvestigatorAction =
+  | 'confirm_new'
+  | 'confirm_existing'
+  | 'confirm_returning'
+  | 'send_to_review'
+  | 'mark_parser_error'
+  | 'mark_identity_error'
+  | 'mark_ocr_error'
+  | 'mark_comparison_error';
+
+export interface InvestigatorCandidate {
+  key: string;
+  name: string;
+  niisClassification: string;
+  whyHere: string;
+  truthCategory: string;
+  prior: DailyDifferenceRow['prior'];
+  current: DailyDifferenceRow['current'];
+  evidence: DailyDifferenceRow['evidence'];
+  why: DailyDifferenceRow['why'];
+  inmateId: string | null;
+  bookingId: string | null;
+  historicalBookings: {
+    bookingId: string;
+    bookedAt: string;
+    facility: string;
+    externalBookingId: string | null;
+    housingLocation: string | null;
+  }[];
+  decided: boolean;
+  lastDecision: string | null;
+}
+
+export interface InvestigatorWorkspaceView {
+  facility: string;
+  opsDate: string;
+  priorDate: string;
+  reportCertification: string;
+  reconcileOk: boolean;
+  queue: { pending: number; decided: number; total: number };
+  candidates: InvestigatorCandidate[];
+  actions: InvestigatorAction[];
+}
+
+export interface OperationalHealthBoard {
+  northStar: string;
+  facility: string;
+  opsDate: string;
+  priorDate: string;
+  todayRosterCount: number | null;
+  yesterdayRosterCount: number | null;
+  newCount: number | null;
+  existingCount: number | null;
+  returningCount: number | null;
+  reviewCount: number | null;
+  reconciliation: 'PASS' | 'FAIL' | 'UNKNOWN';
+  precision: number | null;
+  recall: number | null;
+  certification: 'PASS' | 'FAIL' | 'PROVISIONAL' | 'MISSING' | 'BLOCKED';
+  processingTimeMs: number | null;
+  potentialClients: number | null;
+  potentialClientsMissed: number | null;
+  silentFailureCount: number;
+  alerts: {
+    id: string;
+    severity: 'critical' | 'warning' | 'info';
+    message: string;
+    href?: string;
+  }[];
+  readiness: {
+    consecutivePassStreak: number;
+    required: number;
+    productionReady: boolean;
+  };
+  evidencePackagePath: string | null;
+  generatedAt: string;
 }
 
 export type DifferenceColor = 'green' | 'blue' | 'yellow' | 'gray' | 'red';
@@ -964,6 +1044,37 @@ export const intelligenceApi = {
     currentBatchId?: string;
   } = {}) =>
     call<DailyDifferenceView>(`/daily-difference${query(params)}`),
+
+  operationalHealth: (facility = 'sacramento', opsDate?: string) =>
+    call<OperationalHealthBoard>(`/operational-health${query({ facility, opsDate })}`),
+
+  investigatorWorkspace: (params: {
+    facility?: string;
+    opsDate?: string;
+    includeDecided?: boolean;
+    limit?: number;
+  } = {}) =>
+    call<InvestigatorWorkspaceView>(`/investigator-workspace${query({
+      facility: params.facility,
+      opsDate: params.opsDate,
+      includeDecided: params.includeDecided ? '1' : undefined,
+      limit: params.limit,
+    })}`),
+
+  investigatorDecide: (body: {
+    opsDate: string;
+    facility?: string;
+    candidateKey: string;
+    inmateName: string;
+    niisClassification: string;
+    action: InvestigatorAction;
+    inmateId?: string | null;
+    bookingId?: string | null;
+  }) =>
+    call<{ ok: boolean; decisionId: string; learningQueueItemId: string | null }>(
+      '/investigator-workspace/decide',
+      { method: 'POST', body: JSON.stringify(body) },
+    ),
 
   learningQueue: (params: { facility?: string; status?: string; limit?: number; offset?: number } = {}) =>
     call<{ total: number; items: LearningQueueItem[] }>(`/learning-queue${query(params)}`),

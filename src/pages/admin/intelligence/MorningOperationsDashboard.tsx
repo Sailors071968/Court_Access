@@ -280,6 +280,20 @@ export function MorningOperationsDashboard() {
           tone={q.comparisonCompleted.answer ? 'good' : 'neutral'}
           to={links.dailyDifference ?? '/admin/intelligence/daily-difference'}
         />
+        <StatusCard
+          label="Investigator Workspace"
+          value={q.comparisonCompleted.answer ? 'Ready' : 'Waiting'}
+          hint="One-click confirm / defect marks — feeds the corpus"
+          tone={q.comparisonCompleted.answer ? 'good' : 'neutral'}
+          to={links.investigatorWorkspace ?? '/admin/intelligence/investigator-workspace'}
+        />
+        <StatusCard
+          label="Operational Health"
+          value="Heartbeat"
+          hint="Roster counts, reconciliation, precision/recall, certification"
+          tone="neutral"
+          to={links.operationalHealth ?? '/admin/intelligence/operational-health'}
+        />
       </div>
 
       <p className="text-xs text-gray-500">

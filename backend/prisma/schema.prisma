@@ -4690,6 +4690,40 @@ model InmateLearningQueueItem {
 }
 
 /**
+ * Investigator Review Workspace decisions — one-click morning classifications.
+ *
+ * Distinct from identity Review Queue. Every click feeds the learning corpus
+ * (Permanent Regression Rule). Append-only; never overwrite.
+ */
+model InmateInvestigatorDecision {
+  decisionId              String   @id @default(uuid())
+  facility                String
+  opsDate                 DateTime
+  candidateKey            String
+  inmateName              String
+  niisClassification      String
+  /**
+   * confirm_new | confirm_existing | confirm_returning | send_to_review |
+   * mark_parser_error | mark_identity_error | mark_ocr_error | mark_comparison_error
+   */
+  action                  String
+  confirmedClassification String?
+  defectCategory          String?
+  disagreesWithNiis       Boolean  @default(false)
+  inmateId                String?
+  bookingId               String?
+  investigatorId          String?
+  investigatorName        String?
+  decidedAt               DateTime @default(now())
+  note                    String?
+
+  @@index([facility, opsDate, decidedAt])
+  @@index([candidateKey, opsDate])
+  @@index([disagreesWithNiis, opsDate])
+  @@map("inmate_investigator_decisions")
+}
+
+/**
  * Evidence Ledger — immutable append-only record of the evidence lifecycle
  * for one facility + ops day.
  *

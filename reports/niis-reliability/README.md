@@ -4,7 +4,10 @@
 > Everything else is secondary.
 
 **Supreme law:** [ENGINEERING_LAW_0.md](./ENGINEERING_LAW_0.md) — The System Must Never Lie.  
-**Daily discipline (prefer over new architecture):** [DAILY_OPERATIONAL_LOOP.md](./DAILY_OPERATIONAL_LOOP.md).
+**V1.0 contract:** [NIIS_V1_ENGINEERING_CONTRACT.md](./NIIS_V1_ENGINEERING_CONTRACT.md).  
+**Daily discipline (prefer over new architecture):** [DAILY_OPERATIONAL_LOOP.md](./DAILY_OPERATIONAL_LOOP.md).  
+**Investigator Workspace:** `/admin/intelligence/investigator-workspace`  
+**Operational Health:** `/admin/intelligence/operational-health`
 
 **One job:** the exact list of every newly booked Sacramento inmate, every morning.  
 **Architecture mature.** Grow the certification corpus through daily operational agreement — not more design.

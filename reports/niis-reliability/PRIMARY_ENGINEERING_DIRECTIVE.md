@@ -4,7 +4,8 @@
 > Everything else is secondary.
 
 **Supreme law:** [ENGINEERING_LAW_0.md](./ENGINEERING_LAW_0.md) — *The System Must Never Lie.*  
-That document supersedes this one and every other engineering directive.
+**Version 1.0 contract:** [NIIS_V1_ENGINEERING_CONTRACT.md](./NIIS_V1_ENGINEERING_CONTRACT.md) — Definition of Done + subsystem contracts.  
+Those documents supersede this one and every other engineering directive.
 
 > CourtAccess NIIS is an evidence-governed criminal intelligence system. It does not guess. It does not fabricate. It does not infer facts without evidence. Every conclusion must be traceable to preserved evidence and reproducible by independent verification. The only acceptable measure of success is sustained agreement with verified investigator ground truth.
 

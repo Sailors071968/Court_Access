@@ -1,7 +1,8 @@
 # CourtAccess NIIS Version 1.0 Engineering Contract
 
 > **Every morning NIIS must tell the truth about who is newly booked into the Sacramento County Jail.**  
-> Supreme law: [ENGINEERING_LAW_0.md](./ENGINEERING_LAW_0.md).
+> Supreme law: [ENGINEERING_LAW_0.md](./ENGINEERING_LAW_0.md).  
+> **Design status:** FROZEN under [OPERATIONAL_LOCK.md](./OPERATIONAL_LOCK.md).
 
 ## Mission Statement
 

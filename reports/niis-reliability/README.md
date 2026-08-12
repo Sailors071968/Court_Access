@@ -3,12 +3,14 @@
 > **Every morning NIIS must tell the truth about who is newly booked into the Sacramento County Jail.**  
 > Everything else is secondary.
 
+**OPERATIONAL LOCK — Architecture COMPLETE · V1.0 Design FROZEN**  
+→ [OPERATIONAL_LOCK.md](./OPERATIONAL_LOCK.md) — success = operational performance only; no new architecture unless fixing a verified defect.
+
 **Supreme law:** [ENGINEERING_LAW_0.md](./ENGINEERING_LAW_0.md) — The System Must Never Lie.  
 **V1.0 contract:** [NIIS_V1_ENGINEERING_CONTRACT.md](./NIIS_V1_ENGINEERING_CONTRACT.md).  
-**Final objective:** [REDUCE_HUMAN_REVIEW.md](./REDUCE_HUMAN_REVIEW.md) — Automatic Classification Rate + uncertainty-first review.  
-**Daily discipline:** [DAILY_OPERATIONAL_LOOP.md](./DAILY_OPERATIONAL_LOOP.md).  
-**Investigator Workspace:** `/admin/intelligence/investigator-workspace`  
-**Operational Health:** `/admin/intelligence/operational-health`
+**Reduce human review:** [REDUCE_HUMAN_REVIEW.md](./REDUCE_HUMAN_REVIEW.md).  
+**Daily loop:** [DAILY_OPERATIONAL_LOOP.md](./DAILY_OPERATIONAL_LOOP.md).  
+**Surfaces:** Investigator Workspace · Operational Health · Morning Operations
 
 **One job:** the exact list of every newly booked Sacramento inmate, every morning.  
 **Architecture mature.** Grow the certification corpus through daily operational agreement — not more design.

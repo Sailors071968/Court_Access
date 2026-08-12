@@ -1,0 +1,35 @@
+{
+  "id": "2026-08-09__2026-08-10",
+  "jurisdiction": "Sacramento County",
+  "priorDate": "2026-08-09",
+  "currentDate": "2026-08-10",
+  "status": "pending_pdfs",
+  "artifacts": {
+    "yesterdayPdf": "yesterday.pdf",
+    "todayPdf": "today.pdf",
+    "canonicalRoster": "canonical-roster.json",
+    "manualClassification": "manual-classification.md",
+    "niisOutput": "niis-output.json",
+    "discrepancies": "discrepancies.json",
+    "rootCause": "root-cause.md",
+    "resolution": "resolution.json"
+  },
+  "manualSummary": {
+    "newCount": 67,
+    "existingCount": null,
+    "returningCount": null,
+    "reviewCount": null,
+    "partial": true,
+    "note": "Counts are consequences of the classification \u2014 never the gold standard itself. 67 is this day only."
+  },
+  "niisSummary": {
+    "newCount": null,
+    "existingCount": null,
+    "returningCount": null,
+    "reviewCount": null,
+    "missedInmates": null,
+    "falseNew": null
+  },
+  "certifiedAt": null,
+  "certifiedBy": null
+}

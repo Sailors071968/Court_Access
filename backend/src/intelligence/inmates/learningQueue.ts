@@ -7,9 +7,15 @@
 // ============================================================================
 
 import prisma from '../../lib/prisma.js';
+import {
+  inferDefectCategory,
+  normalizeDefectCategory,
+  type DefectCategory,
+} from './defectCategories.js';
 
 export type LearningErrorType = 'missed_new' | 'false_new' | 'reconcile_failure';
-export type LearningRootCause =
+/** @deprecated Prefer DefectCategory — kept as alias for API stability. */
+export type LearningRootCause = DefectCategory
   | 'parser'
   | 'normalization'
   | 'identity'
@@ -20,16 +26,6 @@ export type LearningStatus = 'open' | 'in_progress' | 'fixed' | 'verified_regres
 
 function dayStart(isoDate: string): Date {
   return new Date(`${isoDate.slice(0, 10)}T00:00:00.000Z`);
-}
-
-function inferRootCause(stage?: string | null, rule?: string | null): LearningRootCause {
-  const blob = `${stage ?? ''} ${rule ?? ''}`.toLowerCase();
-  if (blob.includes('parse') || blob.includes('jail_scan') || blob.includes('pdf')) return 'parser';
-  if (blob.includes('normal')) return 'normalization';
-  if (blob.includes('identity') || blob.includes('resolve')) return 'identity';
-  if (blob.includes('classif') || blob.includes('presence')) return 'classification';
-  if (blob.includes('report')) return 'report';
-  return 'unknown';
 }
 
 export async function enqueueDiscrepancy(args: {
@@ -46,7 +42,16 @@ export async function enqueueDiscrepancy(args: {
   note?: string;
 }) {
   const opsDate = dayStart(args.opsDate);
-  const rootCause = args.rootCause ?? inferRootCause(args.stage, args.rule);
+  const rootCause = normalizeDefectCategory(
+    args.rootCause
+      ?? inferDefectCategory({
+        stage: args.stage,
+        rule: args.rule,
+        evidence: args.evidence,
+        why: args.why,
+        errorType: args.errorType,
+      }),
+  );
   const name = args.inmateName.toUpperCase().replace(/\s+/g, ' ').trim();
 
   return prisma.inmateLearningQueueItem.upsert({
@@ -113,7 +118,8 @@ export async function listLearningQueue(args: {
       facility: r.facility,
       inmate: r.inmateName,
       errorType: r.errorType,
-      rootCause: r.rootCause,
+      rootCause: normalizeDefectCategory(r.rootCause),
+      defectCategory: normalizeDefectCategory(r.rootCause),
       status: r.status,
       stage: r.stage,
       rule: r.rule,
@@ -144,7 +150,7 @@ export async function updateLearningQueueItem(args: {
       data.fixedAt = data.fixedAt ?? new Date();
     }
   }
-  if (args.rootCause) data.rootCause = args.rootCause;
+  if (args.rootCause) data.rootCause = normalizeDefectCategory(args.rootCause);
   if (args.note !== undefined) data.note = args.note;
   if (args.regressionPath !== undefined) data.regressionPath = args.regressionPath;
 

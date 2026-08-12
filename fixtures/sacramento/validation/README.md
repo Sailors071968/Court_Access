@@ -19,7 +19,16 @@ Expected SHA256 (from production Import Inspection):
 
 ## Ground truth
 
-`ground-truth-67-names.md` — administrator’s manually verified 67 newly booked names (08/10 vs 08/09).
+**The gold standard is not “67.”**
+
+The gold standard is the investigator’s verified classification for that roster date
+(NEW / EXISTING / RETURNING / REVIEW). The historical file
+`ground-truth-67-names.md` records the NEW section for **2026-08-10 only** — that
+count is a consequence of that day’s evidence, not a permanent target.
+
+Prefer full classifications under:
+
+`fixtures/sacramento/certification-corpus/YYYY-MM-DD__YYYY-MM-DD/manual-classification.md`
 
 ## Run
 
@@ -27,18 +36,23 @@ Expected SHA256 (from production Import Inspection):
 cd backend
 npx tsx scripts/seed-sacramento.ts
 SAC_WIPE=1 npx tsx scripts/sacramento-validation-suite.ts
+
+# Release gate — replays every verified corpus pair
+npm run cert:release -- --version 1.2.0
 ```
 
 The harness fails unless:
 
-- Precision and recall are 100% vs the 67  
+- Precision and recall are 100% vs the investigator classification for that day  
 - `New + Existing + Returning + Review = N`  
-- Every miss/extra is explained with stage, rule, and evidence  
+- Every miss/extra is explained with stage, rule, evidence, and defect category  
 
 ## Multi-day
 
-See `multi-day-chain.md`. After 08/09→08/10 is green, continue 08/10→08/11, etc.
+See `multi-day-chain.md` and `../certification-corpus/`. After each verified day,
+the corpus grows. Releases must pass the entire corpus.
 
 ## Policy
 
 Every future NIIS change affecting Sacramento ingest must keep this suite green before it is considered acceptable. CI job: `sacramento-accuracy-certification`.
+NIIS certifies **evidence**, not software.

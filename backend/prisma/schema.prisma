@@ -4642,8 +4642,12 @@ model InmateLearningQueueItem {
   /** missed_new | false_new | reconcile_failure */
   errorType       String
   /**
-   * parser | normalization | identity | classification | report | unknown
-   * Set when diagnosed; may start as unknown.
+   * Defect category (Evidence Certification Directive):
+   * parser_defect | ocr_defect | identity_defect | comparison_defect |
+   * source_defect | manual_review | unknown
+   *
+   * Legacy values (parser, normalization, identity, classification, report)
+   * are normalized at read/write time via defectCategories.ts.
    */
   rootCause       String   @default("unknown")
   /** open | in_progress | fixed | verified_regression */
@@ -4666,4 +4670,46 @@ model InmateLearningQueueItem {
   @@index([facility, status])
   @@index([errorType, status])
   @@map("inmate_learning_queue")
+}
+
+/**
+ * Evidence Ledger — immutable append-only record of the evidence lifecycle
+ * for one facility + ops day.
+ *
+ * Stages: evidence_received → evidence_processed → evidence_preserved →
+ * evidence_certified → intelligence_produced → manual_verification →
+ * final_certification.
+ *
+ * Rows are never updated or deleted. Algorithms are temporary; evidence is permanent.
+ */
+model InmateEvidenceLedger {
+  entryId          String   @id @default(uuid())
+  facility         String
+  opsDate          DateTime
+  /** Monotonic per facility+opsDate. */
+  sequence         Int
+  /**
+   * evidence_received | evidence_processed | evidence_preserved |
+   * evidence_certified | intelligence_produced | manual_verification |
+   * final_certification
+   */
+  stage            String
+  summary          String
+  detail           Json     @default("{}")
+  dailyCaseId      String?
+  uploadId         String?
+  batchId          String?
+  snapshotId       String?
+  certificationId  String?
+  /** Sacramento Certification Corpus entry id (e.g. 2026-08-09__2026-08-10). */
+  corpusEntryId    String?
+  actorId          String?
+  actorName        String?
+  recordedAt       DateTime @default(now())
+
+  @@unique([facility, opsDate, sequence])
+  @@index([facility, opsDate, stage])
+  @@index([stage, recordedAt])
+  @@index([dailyCaseId])
+  @@map("inmate_evidence_ledger")
 }

@@ -26,6 +26,10 @@ The answer must be identical to what an experienced investigator would determine
 **The investigator is always the gold standard.**  
 Whenever the software disagrees with the investigator, the software is wrong until proven otherwise.
 
+The gold standard is the investigator’s **full verified classification** for that day
+(NEW / EXISTING / RETURNING / REVIEW) — not a historical NEW count. NIIS certifies
+**evidence**, not software. See [EVIDENCE_CERTIFICATION_DIRECTIVE.md](./EVIDENCE_CERTIFICATION_DIRECTIVE.md).
+
 ## Processing pipeline (never varies)
 
 ```
@@ -103,4 +107,9 @@ Accuracy always takes precedence. Once accuracy is achieved: entire morning work
 | Comparison | `backend/src/intelligence/inmates/rosterComparison.ts` |
 | Learning Queue | `backend/src/intelligence/inmates/learningQueue.ts` |
 
-Related (subordinate): `ACCURACY_FIRST.md`, `DAILY_INTELLIGENCE_OPERATIONS_DIRECTIVE.md`, `OPERATIONAL_EXCELLENCE_DIRECTIVE_V1.md`.
+| Sacramento Certification Corpus | `fixtures/sacramento/certification-corpus/` |
+| Release certification | `backend/scripts/release-certification.ts` (`npm run cert:release`) |
+| Evidence ledger | `backend/src/intelligence/inmates/evidenceLedger.ts` |
+| Defect categories | `backend/src/intelligence/inmates/defectCategories.ts` |
+
+Related (subordinate): `EVIDENCE_CERTIFICATION_DIRECTIVE.md`, `ZERO_ASSUMPTION_ENGINEERING_DIRECTIVE.md`, `ACCURACY_FIRST.md`, `DAILY_INTELLIGENCE_OPERATIONS_DIRECTIVE.md`, `OPERATIONAL_EXCELLENCE_DIRECTIVE_V1.md`.

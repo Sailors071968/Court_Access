@@ -2,13 +2,20 @@
 
 Every verified morning becomes a production validation dataset and, once green, a permanent regression case.
 
-**Do not wait** for the historical 08/09→08/10 PDFs. Record today’s manual ground truth with:
+**Do not wait** for historical PDFs. Record today’s investigator classification with:
 
 ```bash
-cd backend && npm run cert:daily-truth -- --date YYYY-MM-DD --gold /path/to/manual-list.md
+cd backend && npm run cert:daily-truth -- \
+  --date YYYY-MM-DD \
+  --classification /path/to/manual-classification.md \
+  --prior /path/to/yesterday.pdf \
+  --current /path/to/today.pdf
 ```
 
-Discrepancies enter the Learning Queue automatically.
+Legacy `--gold` (NEW names only) still works but is marked **partial**.
+
+Discrepancies enter the Learning Queue with defect categories
+(parser / ocr / identity / comparison / source / manual_review).
 
 ## Layout
 
@@ -17,34 +24,28 @@ days/
   YYYY-MM-DD/                 ← current (today) roster date
     prior.pdf                 ← yesterday SACJAILSCAN
     current.pdf               ← today SACJAILSCAN
-    ground-truth-new.md       ← investigator’s manual new-inmate list
-    niis-certification.json   ← copied from DAILY_CERTIFICATION_SUMMARY.json after a PASS
-    README.md                 ← optional notes (page counts, spacing, anomalies)
+    manual-classification.md  ← gold standard (NEW/EXISTING/RETURNING/REVIEW)
+    ground-truth-new.md       ← NEW section only (legacy / derived)
+    niis-certification.json
+    README.md
 ```
+
+Canonical permanent corpus (preferred):
+
+`fixtures/sacramento/certification-corpus/PRIOR__CURRENT/`
 
 ## How to add a day
 
 1. Run the morning PDF comparison (manual + NIIS).  
-2. When the investigator verifies the new-inmate list, save it as `ground-truth-new.md`.  
-3. Place both PDFs in the day folder (or symlink).  
-4. Re-run:
+2. Record the investigator’s full classification (not just a NEW count).  
+3. Preserve both PDFs.  
+4. Run `npm run cert:daily-truth` (writes corpus + ledger + certification).  
+5. Release gate: `npm run cert:release -- --version X.Y.Z`
 
-```bash
-cd backend
-SAC_PRIOR_PDF=../fixtures/sacramento/validation/days/YYYY-MM-DD/prior.pdf \
-SAC_CURRENT_PDF=../fixtures/sacramento/validation/days/YYYY-MM-DD/current.pdf \
-SAC_GOLD_LIST=../fixtures/sacramento/validation/days/YYYY-MM-DD/ground-truth-new.md \
-SAC_PRIOR_DATE=YYYY-MM-DD-1 \
-SAC_CURRENT_DATE=YYYY-MM-DD \
-SAC_EXPECTED_NEW=<count> \
-SAC_WIPE=1 \
-npx tsx scripts/sacramento-validation-suite.ts
-```
+## Gold standard reminder
 
-5. On PASS, copy `reports/niis-reliability/DAILY_CERTIFICATION_SUMMARY.json` into the day folder.
+If tomorrow there are 41 new inmates, the gold standard is 41.
+If tomorrow there are 112, the gold standard is 112.
+Never optimize for a historical constant.
 
-## Anchor dataset
-
-`../` (parent) holds the permanent 08/09 → 08/10 pair with **67** ground-truth names.
-
-If any future code change disagrees with a previously verified day, CI / the suite must fail.
+If any future code change disagrees with a previously verified day, release certification fails.

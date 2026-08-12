@@ -1,6 +1,9 @@
 # Ground truth: newly booked inmates found by human comparison of
 # SACJAILSCAN08-09-2026.pdf vs SACJAILSCAN08-10-2026.pdf
 # Provided by administrator 2026-08-10. Count = 67.
+# IMPORTANT: 67 is the NEW count for 2026-08-10 only — a consequence of investigator evidence.
+# It is NOT a permanent gold-standard target. Future days may have 41, 112, or any other count.
+# Prefer full manual-classification.md (NEW/EXISTING/RETURNING/REVIEW) in certification-corpus/.
 ALDANA, CARLOS JAMES
 ANDERSON, JAMES EARL
 ANDREWS, ANGELO L

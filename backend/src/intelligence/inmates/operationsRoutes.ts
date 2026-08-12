@@ -345,6 +345,23 @@ export async function registerInmateOperationsRoutes(app: FastifyInstance): Prom
     }));
   });
 
+  /**
+   * Evidence Ledger — immutable daily evidence lifecycle
+   * (received → processed → preserved → certified → intelligence → manual → final).
+   */
+  app.get('/api/admin/intelligence/evidence-ledger', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!requireAdministrator(request, reply)) return;
+    const query = request.query as { facility?: string; opsDate?: string };
+    const facility = query.facility ?? 'sacramento';
+    const opsDate = query.opsDate ?? new Date().toISOString().slice(0, 10);
+    const { listEvidenceLedger, evidenceLedgerChecklist } = await import('./evidenceLedger.js');
+    const [entries, checklist] = await Promise.all([
+      listEvidenceLedger({ facility, opsDate }),
+      evidenceLedgerChecklist({ facility, opsDate }),
+    ]);
+    return reply.send({ facility, opsDate, checklist, entries });
+  });
+
   /** Self-verification — attempt to disprove today's output. */
   app.get('/api/admin/intelligence/self-verification', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     if (!requireAdministrator(request, reply)) return;

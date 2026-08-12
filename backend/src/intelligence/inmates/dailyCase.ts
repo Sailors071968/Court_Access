@@ -177,6 +177,33 @@ export async function attachUploadToDailyCase(args: {
       status: daily.priorPdfBatchId ? 'current_ready' : 'current_ready',
       newInmateCount: args.counts?.newInmates ?? daily.newInmateCount,
     });
+    try {
+      const { appendEvidenceLedger } = await import('./evidenceLedger.js');
+      await appendEvidenceLedger({
+        facility: args.facility,
+        opsDate,
+        stage: 'evidence_received',
+        summary: `Current roster PDF received: upload ${args.uploadId}`,
+        detail: { role: 'current', uploadId: args.uploadId, batchId: args.batchId, rosterDate },
+        dailyCaseId: daily.caseId,
+        uploadId: args.uploadId,
+        batchId: args.batchId,
+        actorId: args.userId ?? null,
+      });
+      await appendEvidenceLedger({
+        facility: args.facility,
+        opsDate,
+        stage: 'evidence_preserved',
+        summary: `Current roster PDF preserved as permanent evidence (upload ${args.uploadId})`,
+        detail: { role: 'current', uploadId: args.uploadId },
+        dailyCaseId: daily.caseId,
+        uploadId: args.uploadId,
+        batchId: args.batchId,
+        actorId: args.userId ?? null,
+      });
+    } catch {
+      /* ledger must not block ingest */
+    }
   } else if (rosterDate === casePrior) {
     await appendAudit(daily.caseId, entry, {
       priorPdfUploadId: args.uploadId,
@@ -366,6 +393,59 @@ export async function finalizePdfComparison(args: {
       + selfCheck.checks.map((c) => `${c.id}:${c.verdict}`).join(', '),
     actorId: args.userId ?? null,
   });
+
+  // Evidence Ledger — immutable lifecycle (algorithms temporary; evidence permanent).
+  try {
+    const { appendEvidenceLedger } = await import('./evidenceLedger.js');
+    await appendEvidenceLedger({
+      facility: daily.facility,
+      opsDate: ops,
+      stage: 'evidence_processed',
+      summary:
+        `Roster set-diff complete: new=${comparison.counts.new} `
+        + `returning=${comparison.counts.returning} existing=${comparison.counts.existing} `
+        + `review=${comparison.counts.review} baseline=${comparison.baselineSource}`,
+      detail: {
+        comparisonId: comparisonRow.comparisonId,
+        priorSnapshotId: comparison.priorSnapshotId,
+        counts: comparison.counts,
+        reconcileOk: comparison.reconcileOk,
+        selfVerification: {
+          provisional: selfCheck.provisional,
+          passed: selfCheck.passedCount,
+          failed: selfCheck.failedCount,
+          unknown: selfCheck.unknownCount,
+        },
+      },
+      dailyCaseId: daily.caseId,
+      batchId: daily.currentPdfBatchId,
+      snapshotId: comparison.priorSnapshotId,
+      actorId: args.userId ?? null,
+    });
+    await appendEvidenceLedger({
+      facility: daily.facility,
+      opsDate: ops,
+      stage: 'intelligence_produced',
+      summary:
+        `Operational new-inmate candidates: ${reportable} `
+        + `(new=${comparison.counts.new} + returning=${comparison.counts.returning})`,
+      detail: {
+        reportable,
+        newInmateNames: comparison.newInmateNames?.slice?.(0, 200) ?? comparison.newInmateNames,
+      },
+      dailyCaseId: daily.caseId,
+      batchId: daily.currentPdfBatchId,
+      actorId: args.userId ?? null,
+    });
+  } catch (err) {
+    // Ledger must never block morning operations; surface via audit instead.
+    await appendAudit(daily.caseId, {
+      at: new Date().toISOString(),
+      kind: 'evidence_ledger_error',
+      detail: err instanceof Error ? err.message : String(err),
+      actorId: args.userId ?? null,
+    });
+  }
 
   if (args.autoReport !== false && !daily.initialReportId) {
     const next = (() => {

@@ -1,6 +1,7 @@
 # NIIS V1.1 — Immediate Engineering Posture
 
 **Sealed with:** `NIIS_V1_1_CONTINUOUS_INTELLIGENCE_DIRECTIVE.md`  
+**Superseded by:** `NIIS_MASTER_ENGINEERING_DIRECTIVE_V2.md` (governing) — sequencing below still applies  
 **Date:** 2026-08-14  
 
 ## What changed

@@ -99,17 +99,20 @@ Process lifetime **predates** the fix commit → either never deployed, never re
 **BLOCKED** — this agent has no SSH (`Permission denied (publickey)`).  
 INC-001A remains open until someone with host access records the PM2 table above.
 
-## Provisional answers
+## Pipeline investigation (2026-08-14) — verified
 
-| Question | Provisional answer | Confidence |
+Full write-up: `INC001A_PIPELINE_INVESTIGATION.md`
+
+| Question | Answer | Confidence |
 |---|---|---|
-| Why still on `b52e9aad`? | No release path applied PR #167 to the API process | High |
-| Did deployment fail? | No evidence of a failed attempt; none started for this PR | Medium-High |
-| Did deployment never run? | **Yes** for PR #167 | High |
-| PM2 wrong directory? | Unknown — needs host | Blocked |
-| Wrong nginx upstream? | Unknown — needs host | Blocked |
-| Stale artifact? | API commit self-report is authoritative for running code; tree at that commit lacks fix | High for “stale/wrong revision” |
-| Multiple installs? | Scripts define ≥3 roots; host must enumerate | Suspected |
+| Can existing GH workflow deploy PR #167 API fix? | **No** — website-only → `/opt/courtaccess` | High |
+| Merged into deploy branch `dev`? | **No** — PR OPEN, base ≠ `dev`, fix only on feature branch | High |
+| Did deploy workflow trigger for this PR? | **No** — 0 runs since 2026-08-01 | High |
+| Last website deploy runs succeed? | **No** — 2026-07-05 failed `missing server host` (empty secrets) | High |
+| Why still on `b52e9aad`? | Fix never on `dev`; no API deploy job; website path irrelevant to API commit | High |
+| PM2 wrong directory / wrong upstream / multiple installs? | Still needs host shell | Blocked |
+
+**Issue classes:** Git workflow + CI/CD configuration (+ historical website deploy execution failure).
 
 ## Exit criteria for INC-001A
 

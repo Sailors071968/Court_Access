@@ -1,0 +1,48 @@
+{
+  "document": "INC-001A pipeline investigation",
+  "measuredAt": "2026-08-14T12:50:37Z",
+  "verdict": {
+    "canDeployPr167ViaExistingGithubWorkflowForApiFix": false,
+    "directHostProcedureRequiredForApiFix": true,
+    "issueClasses": [
+      "git_workflow",
+      "cicd_configuration",
+      "historical_website_deploy_execution_failure"
+    ]
+  },
+  "pr167": {
+    "state": "OPEN",
+    "mergedAt": null,
+    "baseRefName": "cursor/gold-standard-upload-portal-9f94",
+    "headRefName": "cursor/prod-pipeline-first-fail-54dc",
+    "headRefOid": "731e841a4952c2c5a7b912b54084249e1f5cadf1",
+    "fixCommit": "cdaa823e09eecf52c2099589ff5523fff0aecb83",
+    "fixOnOriginDev": false,
+    "fixOnGoldStandardBase": false,
+    "remotesContainingFix": ["origin/cursor/prod-pipeline-first-fail-54dc"]
+  },
+  "deployBranch": "dev",
+  "workflow": {
+    "name": "Deploy Production Website",
+    "file": ".github/workflows/deploy-production.yml",
+    "triggers": ["push to dev (path-filtered)", "workflow_dispatch"],
+    "deployJobRequiresRef": "refs/heads/dev",
+    "pathFiltersIncludeBackend": false,
+    "deploysApiPm2": false,
+    "artifact": "frontend dist to /opt/courtaccess + nginx reload",
+    "runsSince2026-08-01": 0,
+    "lastRuns": [
+      {
+        "id": 28748544732,
+        "createdAt": "2026-07-05T17:12:39Z",
+        "conclusion": "failure",
+        "deployError": "missing server host (empty DEPLOY_HOST/KEY)"
+      }
+    ]
+  },
+  "productionHealthAtMeasure": {
+    "commit": "b52e9aadfa35c3547327985bd13e411f217ae0e9",
+    "uptimeSeconds": 330538,
+    "version": "1.1.0"
+  }
+}

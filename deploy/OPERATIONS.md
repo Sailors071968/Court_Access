@@ -19,11 +19,29 @@ PostgreSQL via Prisma — 116 tables, 30 migrations.
 
 **Three facts that will save you an hour each.**
 
-**The application does not read `.env`.** There is no `dotenv` anywhere in the
-bundle. Environment variables reach it only from the process PM2 starts. Editing
-`.env` and restarting is not enough if you use `pm2 reload` without
-`--update-env`, and `--update-env` takes the environment from *your current
-shell*, not from the file. Always `set -a; . .env; set +a` first.
+**Node reads `.env`, and nothing else may.** There is no `dotenv` in the bundle;
+the environment arrives because PM2 starts the process with
+`--env-file=/var/www/courtaccess/.env`, which Node applies itself at every
+spawn. Editing `.env` and restarting is therefore enough, and is the only
+supported way to change configuration.
+
+What breaks this is putting the same variables in your shell. Node's
+`--env-file` does **not** replace a variable that is already set — the inherited
+value wins — so anything PM2 snapshotted from a shell outranks the file
+permanently, including after `pm2 save` and a reboot. That is what caused a
+578-restart crash loop here. Do not `set -a; . .env; set +a` before a PM2
+command, and do not use `--update-env`. If you need `DATABASE_URL` for `psql`,
+read it in a subshell so it never reaches the PM2 client:
+
+```bash
+export PGURL="$(set -a; . /var/www/courtaccess/.env; set +a; echo "${DATABASE_URL%%\?*}")"
+```
+
+**Secrets do not appear in `/proc/<pid>/environ`, and that is correct.**
+`--env-file` values are loaded inside the process; `/proc` shows only what was
+handed to it at exec. Absence there is the evidence that PM2 is not holding a
+copy. `ps` is no better: PM2 rewrites `process.title`, so even `--env-file`
+itself disappears from the command line. Use `pm2 jlist` for the arguments.
 
 **`psql` cannot use `DATABASE_URL` directly.** Prisma's URL ends in
 `?schema=public`, which psql and pg_dump reject with
@@ -133,28 +151,44 @@ Always start with:
 
 ```bash
 export APP=/var/www/courtaccess
-set -a; . "$APP/.env"; set +a
-export PGURL="${DATABASE_URL%%\?*}"
 export PM2_NAME=<name from `pm2 list`>
+
+# In a subshell: these variables must not be in the environment when you run a
+# PM2 command, or PM2 snapshots them and they outrank .env from then on.
+export PGURL="$(set -a; . "$APP/.env"; set +a; echo "${DATABASE_URL%%\?*}")"
 ```
 
 ### Start, stop, restart
 
 ```bash
 pm2 list                                    # what is running
-pm2 start "$APP/dist/index.js" --name "$PM2_NAME" --cwd "$APP" --update-env
+pm2 start "$APP/dist/index.js" --name "$PM2_NAME" --cwd "$APP" \
+  --interpreter "$NODE22" --node-args="--env-file=$APP/.env"
 pm2 stop "$PM2_NAME"
-pm2 reload "$PM2_NAME" --update-env         # drains in-flight requests, ~2.2 s
-pm2 restart "$PM2_NAME" --update-env        # harder; use if reload does not pick up changes
+pm2 reload "$PM2_NAME"                      # drains in-flight requests, ~2.2 s
+pm2 restart "$PM2_NAME"                     # harder; use if reload does not pick up changes
 pm2 save                                    # persist the process list for reboot
 pm2 logs "$PM2_NAME" --lines 100 --nostream
 ```
 
 Logs: `~/.pm2/logs/<name>-out.log` and `-error.log`.
 
-**Always `--update-env` after an `.env` change, and always source `.env` into
-your shell first.** Without the source, reload copies your shell's environment
-over the process's and silently drops anything missing.
+**Never `--update-env`.** It copies your current shell's environment over the
+process's, which is how the environment stops being a function of `.env`. A
+plain `pm2 restart` is enough: Node re-reads the file on the new spawn. After
+an `.env` change, restart and then confirm the new value took:
+
+```bash
+pm2 restart "$PM2_NAME"
+(env -i "$NODE22" --env-file="$APP/.env" -p 'process.env.PORT')   # what the next spawn sees
+```
+
+To confirm PM2 is not holding a copy of anything, and that the deployment would
+survive a reboot:
+
+```bash
+bash deploy/stages/verify-restart-survival.sh
+```
 
 ### Verify a deployment took
 

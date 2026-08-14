@@ -2,7 +2,9 @@
 // Manages corpus ingestion state, audit logs, and legal document storage.
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  // Amazon Linux 2023 on courtaccess.net needs the RHEL engine; local agents use Debian.
+  binaryTargets = ["native", "debian-openssl-3.0.x", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
@@ -3092,4 +3094,1673 @@ model CaseStageEvent {
 
   @@index([caseId, occurredAt])
   @@map("case_stage_events")
+}
+
+// ============================================================================
+// New Inmate Intelligence System
+//
+// One row per person in `Inmate`, one per booking in `InmateBooking`. Every
+// resolution decision carries the evidence that produced it, because a wrong
+// merge conflates two people's arrest histories and that has to be reviewable
+// and reversible rather than merely correctable.
+//
+// See docs/NEW_INMATE_INTELLIGENCE_SYSTEM_PLAN.md
+// ============================================================================
+
+/**
+ * A file that was ingested. Nothing enters the repository without one, so any
+ * fact can be traced to a document and any bad import can be undone.
+ */
+model InmateIngestionBatch {
+  batchId          String    @id @default(uuid())
+  /**
+   * csv | pdf_text | pdf_ocr
+   */
+  sourceType       String
+  sourceFilename   String
+  /**
+   * SHA-256 of the file as received. Re-ingesting the identical file is a no-op.
+   */
+  sourceSha256     String
+  /**
+   * Facility identifier, which selects the column map.
+   */
+  facility         String
+  /**
+   * The date the roster represents, not the date it was processed.
+   */
+  rosterDate       DateTime?
+  /**
+   * pending | parsing | resolving | completed | failed
+   */
+  status           String    @default("pending")
+  document InmateSourceDocument? @relation(fields: [documentId], references: [documentId])
+  recordsTotal     Int       @default(0)
+  recordsNew       Int       @default(0)
+  recordsMatched   Int       @default(0)
+  recordsDuplicate Int       @default(0)
+  recordsFailed    Int       @default(0)
+  recordsForReview Int       @default(0)
+  /**
+   * Per-page character counts for OCR runs. A page yielding nothing is
+   * indistinguishable from a genuinely blank page unless it is recorded.
+   */
+  extractionStats  Json?
+  /**
+   * How the run was triggered: manual | cli | timer | queue. Recorded so the
+   * engine stays independent of its scheduler and the origin is still known.
+   */
+  triggeredBy      String    @default("cli")
+  ingestedById     String?
+  /** The document this run processed. */
+  documentId       String?
+  /** full_population | incremental — departures can only be inferred from a
+   *  source that lists everyone in custody. */
+  rosterKind       String    @default("full_population")
+  /** Last line committed, so a large import can resume where it stopped. */
+  /**
+   * The deterministic lifecycle state.
+   *
+   * Separate from `status`, which is the coarse three-value field the earlier code
+   * wrote and every existing query filters on. Renaming that would have rewritten
+   * history; this is additive, and `status` continues to mean what it always did.
+   */
+  lifecycleState String   @default("uploaded")
+  cancelledById  String?
+  cancelledAt    DateTime?
+  cancelReason   String?
+  /** Set when an operator closes a batch, which is the end of the daily workflow. */
+  closedById     String?
+  closedAt       DateTime?
+
+  resumeCursor     Int?
+  startedAt        DateTime  @default(now())
+  finishedAt       DateTime?
+  failureReason    String?
+  notes            String?
+
+  records  InmateIngestionRecord[]
+  issues   InmateIngestionIssue[]
+  bookings InmateBooking[]
+  aliases  InmateAlias[]
+
+  @@index([facility, rosterDate])
+  @@index([sourceSha256])
+  @@index([status, startedAt])
+  /** Which versioned parser profile parsed this document, so historical data
+   *  can be reprocessed with the parser that was correct at the time. */
+  parserProfileId String?
+  parserVersion   Int?
+  normalizationVersion String?
+  ocrVersion      String?
+  /**
+   * The parser validation report for this import.
+   *
+   * Recognised, unknown, missing, duplicated and ignored columns; the profile version
+   * used; parser confidence; every warning and error. Stored with the batch rather
+   * than logged, because the question "why did this import produce so few records"
+   * arrives weeks later and a log line will be gone.
+   *
+   * Nothing silently succeeds: an import with warnings carries them here even when it
+   * completed.
+   */
+  validationReport Json?
+  /** Denormalised from the report so a list of imports can be sorted by it. */
+  parserConfidence Int?
+  @@map("inmate_ingestion_batches")
+}
+
+/**
+ * One parsed row, kept after resolution so a matching decision can be
+ * re-examined without re-reading the source document.
+ */
+model InmateIngestionRecord {
+  recordId          String   @id @default(uuid())
+  batchId           String
+  lineNumber        Int
+  /**
+   * Exactly what the parser saw, before normalization.
+   */
+  rawPayload        Json
+  /**
+   * After the normalization engine.
+   */
+  normalizedPayload Json
+  /**
+   * new_inmate | matched | duplicate | needs_review | failed
+   */
+  resolution        String
+  resolvedInmateId  String?
+  bookingId         String?
+  /**
+   * 0-100. See MatchEvidence in the intelligence types.
+   */
+  confidence        Int?
+  /**
+   * Which tier resolved it: exact_booking | exact_identity | near_name |
+   * near_dob | none
+   */
+  matchTier         String?
+  /**
+   * The confidence model, serialized: reasons, conflicts, candidates.
+   */
+  matchEvidence     Json?
+  createdAt         DateTime @default(now())
+
+  batch InmateIngestionBatch @relation(fields: [batchId], references: [batchId], onDelete: Cascade)
+
+  /** Where in the source document this row came from. */
+  sourcePage Int?
+  /** text_layer | ocr | csv */
+  extractionMethod String?
+  /** Trust in the extraction itself, distinct from match confidence. */
+  extractionConfidence Int?
+  @@index([batchId, resolution])
+  @@index([resolvedInmateId])
+  @@index([bookingId])
+  @@map("inmate_ingestion_records")
+}
+
+/**
+ * A per-record problem that does not stop the batch.
+ */
+model InmateIngestionIssue {
+  issueId    String   @id @default(uuid())
+  batchId    String
+  lineNumber Int?
+  /**
+   * info | warning | error
+   */
+  severity   String
+  code       String
+  message    String
+  createdAt  DateTime @default(now())
+
+  batch InmateIngestionBatch @relation(fields: [batchId], references: [batchId], onDelete: Cascade)
+
+  @@index([batchId, severity])
+  @@map("inmate_ingestion_issues")
+}
+
+/**
+ * A person. Identity is resolved across rosters, so this is what an arrest
+ * history hangs from.
+ */
+model Inmate {
+  inmateId           String    @id @default(uuid())
+  canonicalFirst     String
+  canonicalLast      String
+  canonicalMiddle    String?
+  /**
+   * The name as it should be shown and printed, when it differs from the canonical
+   * matching form. GARCIA-LOPEZ rather than GARCIALOPEZ, O'BRIEN rather than OBRIEN.
+   *
+   * Display only. Nothing matches on these and no blocking key derives from them —
+   * the canonical columns remain the single basis for identity, so adding these
+   * cannot change a merge decision.
+   */
+  displayFirst       String?
+  displayLast        String?
+  displayMiddle      String?
+  suffix             String?
+  dateOfBirth        DateTime?
+  sex                String?
+  race               String?
+  /**
+   * When this person first and last appeared in any ingested roster.
+   */
+  firstSeenAt        DateTime  @default(now())
+  lastSeenAt         DateTime  @default(now())
+  bookingCount       Int       @default(0)
+  /**
+   * Confidence in the identity itself, from the weakest match that built it.
+   */
+  identityConfidence Int       @default(100)
+  /**
+   * Set when two records were merged into this one, with the evidence.
+   */
+  mergeEvidence      Json?
+  /**
+   * Non-null when this row was merged into another. Merges are reversible and
+   * attributed, because a wrong merge is a serious error in this domain.
+   */
+  mergedIntoId       String?
+  mergedById         String?
+  mergedAt           DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  aliases          InmateAlias[]
+  bookings         InmateBooking[]
+  watchListEntries InmateWatchListEntry[]
+
+  @@index([canonicalLast, canonicalFirst, dateOfBirth])
+  @@index([dateOfBirth])
+  @@index([lastSeenAt])
+  @@index([mergedIntoId])
+  /** Blocking keys for candidate generation. Derived, never authoritative: the
+   *  canonical name is what the repository asserts; these only widen a search.
+   *  Computed by nameKeys.ts, so a change there requires a backfill — which is
+   *  what nameKeyVersion is for. */
+  phoneticLast   String?
+  collapsedLast  String?
+  nameKeyVersion String?
+  externalIds    InmateExternalId[]
+  @@index([phoneticLast])
+  @@index([collapsedLast])
+  @@map("inmates")
+}
+
+/**
+ * Every name and date of birth ever observed for a person. Rosters spell names
+ * inconsistently, and searching only canonical values loses people.
+ */
+model InmateAlias {
+  aliasId       String    @id @default(uuid())
+  inmateId      String
+  first         String
+  last          String
+  middle        String?
+  /** The spelling as the roster wrote it, when punctuation was folded away for
+   *  matching. An alias list is a record of what sources actually said, so showing
+   *  GARCIALOPEZ where the jail wrote GARCIA-LOPEZ would misreport the source. */
+  displayFirst  String?
+  displayLast   String?
+  displayMiddle String?
+  suffix        String?
+  dateOfBirth   DateTime?
+  sourceBatchId String?
+  occurrences   Int       @default(1)
+  createdAt     DateTime  @default(now())
+
+  inmate      Inmate                @relation(fields: [inmateId], references: [inmateId], onDelete: Cascade)
+  sourceBatch InmateIngestionBatch? @relation(fields: [sourceBatchId], references: [batchId])
+
+  @@unique([inmateId, last, first, middle, dateOfBirth])
+  @@index([last, first, dateOfBirth])
+  /** The same derived keys, so an alias is reachable by sound and shape and not
+   *  only by exact spelling. */
+  phoneticLast   String?
+  collapsedLast  String?
+  nameKeyVersion String?
+  @@index([phoneticLast])
+  @@index([collapsedLast])
+  @@map("inmate_aliases")
+}
+
+/**
+ * One arrest or booking event. The arrest timeline is these, ordered.
+ */
+model InmateBooking {
+  bookingId         String    @id @default(uuid())
+  inmateId          String
+  facility          String
+  /**
+   * The facility's own booking number, when the roster provides one.
+   */
+  externalBookingId String?
+  bookedAt          DateTime
+  releasedAt        DateTime?
+  arrestingAgency   String?
+  bailAmountCents   BigInt?
+  housingLocation   String?
+  /**
+   * Identity of the booking itself: facility, external id, booked-at and the
+   * normalized person. Re-ingesting the same roster must not duplicate it.
+   */
+  contentHash       String    @unique
+  sourceBatchId     String
+  sourceRecordId    String?
+  /**
+   * True when this booking was the one that introduced the person to the
+   * repository. Recorded at ingestion, never recomputed: a moving baseline
+   * would change historical reports every time older data was backfilled.
+   */
+  isFirstAppearance Boolean   @default(false)
+  /** Current best understanding, updated from observations. */
+  custodyStatus     String    @default("unknown")
+  courtDate         DateTime?
+  /** When any source last described this booking. */
+  lastObservedAt    DateTime?
+  /** Set when a full-population roster stopped listing them. */
+  departedRosterAt  DateTime?
+  createdAt         DateTime  @default(now())
+
+  inmate      Inmate                @relation(fields: [inmateId], references: [inmateId], onDelete: Cascade)
+  sourceBatch InmateIngestionBatch  @relation(fields: [sourceBatchId], references: [batchId])
+  charges     InmateBookingCharge[]
+
+  observations InmateBookingObservation[]
+  /**
+   * The jail's forecast, revised as a case moves. Deliberately not `releasedAt`:
+   * one is a prediction and the other is a fact, and a forecast that read as a
+   * release would put a person at liberty on paper who is still in custody.
+   */
+  projectedReleaseAt DateTime?
+  /** As the roster words it — warrant, on-view, citation, remand. */
+  arrestType      String?
+  /** The court hearing the case. `courtDate` already exists above — this is the
+   *  name that goes with it, which the roster publishes and nothing recorded. */
+  courtName       String?
+  /** Null means the roster did not say, which is not the same as "none". */
+  outstandingWarrants Boolean?
+  /** Observed at booking. People's height is stable; weight is not, which is why
+   *  both live on the booking rather than on the person. */
+  heightInches    Int?
+  weightPounds    Int?
+
+  @@index([inmateId, bookedAt])
+  @@index([bookedAt])
+  @@index([facility, externalBookingId])
+  @@index([isFirstAppearance, bookedAt])
+  @@index([facility, releasedAt, departedRosterAt, bookedAt])
+  @@map("inmate_bookings")
+}
+
+/**
+ * Charges on a booking. Separate because a booking has many and they arrive as
+ * free text that needs parsing into a statute reference.
+ */
+model InmateBookingCharge {
+  chargeId        String  @id @default(uuid())
+  bookingId       String
+  /**
+   * e.g. PEN, HS, VC — the California code.
+   */
+  statuteCode     String?
+  /**
+   * e.g. 459 — joins the existing California law engine.
+   */
+  statuteSection  String?
+  description     String?
+  /**
+   * felony | misdemeanor | infraction | unknown
+   */
+  severity        String  @default("unknown")
+  counts          Int     @default(1)
+  bailAmountCents BigInt?
+  /**
+   * The charge exactly as the roster wrote it, for when parsing is wrong.
+   */
+  rawText         String
+
+  booking InmateBooking @relation(fields: [bookingId], references: [bookingId], onDelete: Cascade)
+
+  @@index([bookingId])
+  @@index([statuteCode, statuteSection])
+  @@map("inmate_booking_charges")
+}
+
+/**
+ * An inmate an administrator is watching.
+ */
+model InmateWatchListEntry {
+  entryId           String    @id @default(uuid())
+  inmateId          String
+  createdById       String
+  reason            String
+  active            Boolean   @default(true)
+  notifyOnRebooking Boolean   @default(true)
+  /** routine | elevated | urgent. Decides how a match is presented, not whether
+   *  it is recorded — every match is recorded regardless. */
+  priority          String    @default("routine")
+  /** Optional label, so a list of thirty entries is navigable. */
+  label             String?
+  /**
+   * After this the entry stops matching but is not deleted.
+   *
+   * An expired watch list still explains why a notification was sent last month,
+   * which deleting it would not.
+   */
+  expiresAt         DateTime?
+  /** Set when an entry is disabled by hand rather than by expiry. */
+  disabledById      String?
+  disabledReason    String?
+  updatedAt         DateTime  @updatedAt
+
+  createdAt         DateTime  @default(now())
+  deactivatedAt     DateTime?
+
+  inmate Inmate @relation(fields: [inmateId], references: [inmateId], onDelete: Cascade)
+
+  matches InmateWatchListMatch[]
+  @@unique([inmateId, createdById])
+  @@map("inmate_watch_list_entries")
+}
+
+/**
+ * Who looked at whose record, and who printed what. This is personal data
+ * about people who have not been convicted of anything, so access is a
+ * recorded event and a report is a disclosure.
+ */
+model InmateAccessLog {
+  logId       String   @id @default(uuid())
+  userId      String
+  /**
+   * view_inmate | search | generate_report | merge | unmerge | ingest
+   */
+  action      String
+  inmateId    String?
+  batchId     String?
+  /**
+   * Query parameters or report filters, so a printed list is reproducible.
+   */
+  parameters  Json?
+  resultCount Int?
+  ipAddress   String?
+  createdAt   DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([action, createdAt])
+  @@index([inmateId])
+  @@map("inmate_access_logs")
+}
+
+// ============================================================================
+// New Inmate Intelligence System — Phase 1 extension
+//
+// Adds the entities the operational objective needs and the first pass did not
+// have: a facility of its own, the source document as a thing separate from the
+// run that processed it, the confidence analysis as a row rather than a JSON
+// blob, and the three mechanisms the primary deliverable depends on —
+// observations, conflicts and change events.
+//
+// The design rule that produced these three: CSV and PDF are both authoritative
+// and neither replaces the other. So a source does not overwrite a booking. It
+// records what it said (BookingObservation), disagreements between sources are
+// kept (SourceConflict), and differences from the previously known state are
+// kept (ChangeEvent). The booking row holds the current best understanding; the
+// observations are why it says that.
+// ============================================================================
+
+/** A jail. Was a bare string; it owns the column map and the population rules. */
+model InmateFacility {
+  facilityId    String   @id @default(uuid())
+  /** Stable handle used on the command line and in column maps. */
+  code          String   @unique
+  name          String
+  county        String?
+  /** Whether this facility's rosters are a full population snapshot. Departures
+   *  can only be inferred from a source that lists everyone in custody. */
+  rostersAreFullPopulation Boolean @default(true)
+  active        Boolean  @default(true)
+  notes         String?
+  createdAt     DateTime @default(now())
+
+  documents     InmateSourceDocument[]
+
+  @@map("inmate_facilities")
+}
+
+/** The file, as received. Immutable, and separate from the runs that process it:
+ *  a large PDF may be processed more than once, and a resumed import must know
+ *  it is the same document. */
+model InmateSourceDocument {
+  documentId     String   @id @default(uuid())
+  /** SHA-256 of the bytes. The identity of the document. */
+  sha256         String   @unique
+  filename       String
+  byteSize       BigInt
+  /** csv | pdf */
+  mediaType      String
+  facilityCode   String
+  /** The date the roster represents. */
+  rosterDate     DateTime?
+  /** Where the original is kept. Outside the release directory. */
+  storagePath    String?
+  pageCount      Int?
+  /** Per-page character counts. An empty OCR page and a blank page are
+   *  indistinguishable without them. */
+  pageStats      Json?
+  receivedAt     DateTime @default(now())
+  receivedById   String?
+
+  facility       InmateFacility? @relation(fields: [facilityCode], references: [code])
+  batches        InmateIngestionBatch[]
+
+  @@index([facilityCode, rosterDate])
+  @@map("inmate_source_documents")
+}
+
+/** The confidence analysis behind one identity decision, as a row.
+ *
+ *  It was a JSON column on the import record, which is fine to write and useless
+ *  to query: "show me every automatic merge that rested on a date-of-birth typo"
+ *  is a question this system will be asked. */
+model InmateIdentityMatch {
+  matchId          String   @id @default(uuid())
+  importRecordId   String
+  /** The person the row was attached to, or the candidate under review. */
+  inmateId         String?
+  /** exact_booking | exact_identity | near_name | near_dob | none */
+  tier             String
+  confidence       Int
+  /** new_inmate | matched | duplicate | needs_review | failed */
+  outcome          String
+  humanReviewRequired Boolean
+  reviewRationale  String
+  resolverVersion  String
+  /** Weighted signals that contributed. */
+  reasons          Json
+  /** Anything that disagreed, with blocking flags. */
+  conflicts        Json
+  /** Candidates considered and why they lost. */
+  rejectedCandidates Json
+  /** Documents and rows the decision rests on. */
+  sourceDocuments  Json
+  decidedAt        DateTime @default(now())
+
+  @@index([outcome, tier])
+  @@index([inmateId])
+  @@index([importRecordId])
+  @@index([humanReviewRequired, decidedAt])
+  @@map("inmate_identity_matches")
+}
+
+/** A decision a person has to make before the repository changes. */
+model InmateReviewQueueItem {
+  reviewId       String   @id @default(uuid())
+  importRecordId String   @unique
+  matchId        String?
+  batchId        String
+  /** pending | merged | rejected | new_person | dismissed */
+  status         String   @default("pending")
+  /** Why it is here, in a sentence the reviewer reads first. */
+  reason         String
+  confidence     Int
+  candidateInmateId String?
+  resolvedById   String?
+  resolvedAt     DateTime?
+  /** What the reviewer decided and why, in their words. */
+  resolutionNote String?
+  /** Who is working it. Null is unassigned, which is a different state from
+   *  pending-and-assigned when a queue has more than one reviewer. */
+  assignedToId      String?
+  assignedAt        DateTime?
+  assignedById      String?
+  /** routine | elevated | urgent — set by the policy, adjustable by a reviewer. */
+  priority          String    @default("routine")
+  /**
+   * A reviewer can decline to decide and say what would let them.
+   *
+   * Deciding on insufficient evidence is worse than leaving an item open, and
+   * without somewhere to record the request the reviewer's only options are a guess
+   * or silence.
+   */
+  evidenceRequested String?
+  evidenceRequestedById String?
+  evidenceRequestedAt DateTime?
+  /** The algorithm versions in force when the item was raised, so a decision stays
+   *  interpretable after the resolver changes. */
+  resolverVersion   String?
+  mergePolicyVersion String?
+  /** Set when a reviewer overrode what the engine recommended, with their reason. */
+  overrodeRecommendation Boolean @default(false)
+  overrideReason    String?
+
+  createdAt      DateTime @default(now())
+
+  @@index([status, createdAt])
+  @@index([batchId])
+  @@map("inmate_review_queue")
+}
+
+/** What one source said about one booking, at one time.
+ *
+ *  The unit of evidence for cross-source comparison. Two sources describing the
+ *  same booking produce two observations; neither is discarded. */
+model InmateBookingObservation {
+  observationId  String   @id @default(uuid())
+  bookingId      String
+  batchId        String
+  documentId     String?
+  /** csv | pdf_text | pdf_ocr */
+  sourceType     String
+  /** Where in the document, for evidence. */
+  sourcePage     Int?
+  sourceRow      Int?
+  observedAt     DateTime @default(now())
+  /** The roster date this observation describes, not when it was processed. */
+  rosterDate     DateTime?
+
+  /** The observed attributes. Null means the source did not say, which is not
+   *  the same as the value being absent — hence nullable throughout. */
+  housingLocation String?
+  bailAmountCents BigInt?
+  releasedAt      DateTime?
+  courtDate       DateTime?
+  custodyStatus   String?
+  /** Hash over the normalized charge list, so a charge change is detectable
+   *  without comparing every row. */
+  chargeSetHash   String?
+  chargeCount     Int?
+
+  /** Observed values for the fields a roster revises between snapshots. */
+  projectedReleaseAt DateTime?
+  courtName       String?
+  outstandingWarrants Boolean?
+  arrestType      String?
+
+  booking        InmateBooking @relation(fields: [bookingId], references: [bookingId], onDelete: Cascade)
+
+  @@index([bookingId, observedAt])
+  @@index([batchId])
+  @@map("inmate_booking_observations")
+}
+
+/** Two authoritative sources disagreeing about the same fact.
+ *
+ *  Recorded rather than resolved. Where there is no basis for preferring one,
+ *  the resolution is UNKNOWN and stays that way until a human says otherwise. */
+model InmateSourceConflict {
+  conflictId     String   @id @default(uuid())
+  bookingId      String?
+  inmateId       String?
+  /** housing | bail | release_date | court_date | charges | custody_status | identity */
+  field          String
+  /** What each source said. */
+  valueA         String?
+  sourceA        String
+  observationAId String?
+  valueB         String?
+  sourceB        String
+  observationBId String?
+  rosterDate     DateTime?
+  /** unknown | source_a | source_b | resolved_manually */
+  resolution     String   @default("unknown")
+  resolvedById   String?
+  resolvedAt     DateTime?
+  resolutionNote String?
+  detectedAt     DateTime @default(now())
+  batchId        String?
+
+  @@index([resolution, detectedAt])
+  @@index([bookingId])
+  @@map("inmate_source_conflicts")
+}
+
+/** Something materially different from the previously known state.
+ *
+ *  The operational output alongside new inmates: what changed since last time. */
+model InmateChangeEvent {
+  eventId     String   @id @default(uuid())
+  inmateId    String?
+  bookingId   String?
+  batchId     String
+  /** new_inmate | returning_inmate | known_inmate | released | departed_roster |
+   *  housing_change | bail_change | charge_added | charge_removed |
+   *  court_date_change | custody_status_change */
+  changeType  String
+  /** The field that moved, when the change is an attribute change. */
+  field       String?
+  previousValue String?
+  newValue      String?
+  /** Whether this is worth an operator's attention. Not every change is. */
+  material    Boolean  @default(true)
+  /** The observation that revealed it, for evidence. */
+  observationId String?
+  rosterDate  DateTime?
+  detectedAt  DateTime @default(now())
+
+  @@index([batchId, changeType])
+  @@index([inmateId, detectedAt])
+  @@index([changeType, rosterDate])
+  @@index([material, detectedAt])
+  @@map("inmate_change_events")
+}
+
+/** A watched person appearing in a roster. */
+model InmateWatchListMatch {
+  matchId      String   @id @default(uuid())
+  entryId      String
+  inmateId     String
+  bookingId    String?
+  batchId      String
+  /** new_booking | still_in_custody | released | charge_change */
+  matchType    String
+  rosterDate   DateTime?
+  detectedAt   DateTime @default(now())
+  acknowledgedById String?
+  acknowledgedAt   DateTime?
+
+  entry        InmateWatchListEntry @relation(fields: [entryId], references: [entryId], onDelete: Cascade)
+
+  @@index([entryId, detectedAt])
+  @@index([acknowledgedAt])
+  @@map("inmate_watch_list_matches")
+}
+
+/** Something an administrator should see. In-application only: the certified
+ *  configuration has no mail credentials, and a notification that silently fails
+ *  to send is worse than one that does not claim to. */
+model InmateNotification {
+  notificationId String   @id @default(uuid())
+  /** watch_list_hit | review_required | ingestion_failed | source_conflict */
+  kind           String
+  severity       String   @default("info")
+  title          String
+  body           String
+  inmateId       String?
+  batchId        String?
+  referenceId    String?
+  readById       String?
+  readAt         DateTime?
+  createdAt      DateTime @default(now())
+
+  @@index([kind, createdAt])
+  @@index([readAt])
+  @@map("inmate_notifications")
+}
+
+/** A generated intelligence report, kept so a printed list is reproducible
+ *  exactly — including after the underlying data has been corrected. */
+model InmateIntelligenceReport {
+  reportId     String   @id @default(uuid())
+  /** new_inmates | population | changes */
+  reportType   String
+  parameters   Json
+  rowCount     Int
+  /** The rendered report, retained verbatim. */
+  renderedHtml String?
+  /**
+   * draft | reviewed | approved | printed | archived
+   *
+   * A report is a permanent historical record, so the state moves forward and the
+   * document itself never changes. "Printed" matters operationally: it is the moment a
+   * conclusion left the building on paper, and after that the report cannot be quietly
+   * superseded — a correction is a new report that says what it replaces.
+   */
+  approvalState  String   @default("draft")
+  reviewedById   String?
+  reviewedAt     DateTime?
+  approvedById   String?
+  approvedAt     DateTime?
+  approvalNote   String?
+  printedById    String?
+  printedAt      DateTime?
+  printCount     Int      @default(0)
+  archivedAt     DateTime?
+  /** Set when this report supersedes an earlier one, with the reason. */
+  supersedesReportId String?
+  supersedeReason    String?
+  /** The batches this report drew on, so it can be traced to its sources. */
+  batchIds       String[]
+
+  generatedById String
+  generatedAt  DateTime @default(now())
+
+  @@index([reportType, generatedAt])
+  @@map("inmate_intelligence_reports")
+}
+
+/**
+ * A facility's own identifier for a person — an SO number, inmate number, or
+ * booking-system person id.
+ *
+ * The strongest identity evidence available, and stronger than name and date of
+ * birth together: it is assigned by the jail and is stable across bookings. Its
+ * absence is why name matching has to carry as much weight as it does, and its
+ * presence is what the date-of-birth policy means by "a stable unique identifier".
+ *
+ * Scoped to a facility, because two counties' numbering schemes are unrelated.
+ */
+model InmateExternalId {
+  externalIdRow    String   @id @default(uuid())
+  inmateId         String
+  facility         String
+  /** As the roster wrote it, trimmed and upper-cased. */
+  externalId       String
+  /** so_number | inmate_number | person_id | unknown */
+  idKind           String   @default("unknown")
+  firstSeenBatchId String?
+  occurrences      Int      @default(1)
+  createdAt        DateTime @default(now())
+
+  inmate           Inmate   @relation(fields: [inmateId], references: [inmateId], onDelete: Cascade)
+
+  /** One identifier belongs to one person at one facility. A collision here is a
+   *  data problem worth failing on rather than merging through. */
+  @@unique([facility, externalId])
+  @@index([inmateId])
+  @@map("inmate_external_ids")
+}
+
+// ============================================================================
+// NIIS — the intelligence layer
+//
+//   Source document → Source record → Observation → Evidence → Intelligence
+//                                                                   ↓
+//                                                    Person / Booking / Charge
+//
+// The chain is one-directional. Observations state what a source said and never
+// conclude. Intelligence draws conclusions and never invents observations.
+// Reports read intelligence and never create facts.
+//
+// The governance question this layer answers is not "what happened" — the typed
+// tables already record that — it is "what did an engine conclude, from which
+// evidence, under which rules, and has a human accepted it". That is why an
+// intelligence item is separate from the conflict or change it describes: the
+// finding is durable, the disposition changes, and an algorithm upgrade
+// supersedes a conclusion without destroying the one it replaced.
+// ============================================================================
+
+/**
+ * One conclusion drawn by one engine from evidence.
+ *
+ * Deliberately type-agnostic. `type` is an open string and `payload` is free
+ * JSON, so an engine that does not exist yet needs no migration — which is the
+ * requirement that shapes this table. Engines with a typed detail table point at
+ * it through `detailTable`/`detailId` rather than duplicating it here; engines
+ * without one carry their finding in `payload`.
+ */
+model InmateIntelligenceItem {
+  itemId       String   @id @default(uuid())
+
+  /** Which engine produced this, and the version of its rules. Both recorded so
+   *  a conclusion stays interpretable after the engine changes. */
+  engine       String
+  engineVersion String
+  /** identity_candidate | source_conflict | change | watch_list_hit |
+   *  repeat_offender | facility_movement | bail_anomaly | … open vocabulary. */
+  type         String
+  /** info | notable | significant | critical — how much attention it warrants,
+   *  which is not the same as how confident the engine is. */
+  severity     String   @default("info")
+
+  /** What the conclusion is about. Polymorphic on purpose: a finding may concern
+   *  a person, a booking, an observation, a whole roster, or a pair of records. */
+  subjectKind  String
+  subjectId    String?
+  /** A second subject, for findings that relate two things — a merge candidate,
+   *  a conflict between two observations. */
+  relatedKind  String?
+  relatedId    String?
+
+  /** 0-100. Describes the conclusion; it does not authorise it. The engine's own
+   *  rules decide disposition. */
+  confidence   Int
+  /** The named rule that produced this, so a finding traces to one line of code
+   *  rather than to a score. */
+  rule         String?
+  /** In plain language, for a reviewer. Never a code. */
+  explanation  String
+
+  /** proposed | auto_applied | accepted | rejected | deferred | superseded |
+   *  expired. `proposed` never changed the repository; `auto_applied` did. */
+  disposition  String   @default("proposed")
+  /** True when the engine's rules require a person before anything is applied. */
+  reviewRequired Boolean @default(false)
+
+  /** The observations this rests on. Ids, so the evidence can be re-read rather
+   *  than trusted. */
+  evidenceObservationIds String[]
+  /** Import records, documents, and anything else consumed. */
+  inputs       Json?
+  /** The finding itself, for engines with no typed detail table. */
+  payload      Json?
+
+  /** The typed row carrying the detail, when one exists. */
+  detailTable  String?
+  detailId     String?
+
+  /** The version bundle. Every component that could change the conclusion, so a
+   *  reprocessing run can identify exactly what moved. */
+  ruleVersion         String?
+  confidenceVersion   String?
+  parserProfileId     String?
+  parserVersion       String?
+  normalizationVersion String?
+  nameKeyVersion      String?
+
+  /** The generation run that produced this. Null for live ingestion. */
+  runId        String?
+  /** The item this one replaces, set when an upgraded algorithm supersedes it. */
+  supersedesId String?
+  /** The item that replaced this one. */
+  supersededById String?
+
+  reviewedById String?
+  reviewedAt   DateTime?
+  reviewNote   String?
+
+  batchId      String?
+  createdAt    DateTime @default(now())
+
+  run          InmateIntelligenceRun? @relation(fields: [runId], references: [runId])
+  events       InmateIntelligenceEvent[]
+
+  /** The queue a reviewer works from: what needs attention, newest first. */
+  @@index([disposition, reviewRequired, createdAt])
+  /** Everything one engine version concluded — the unit of a reprocessing diff. */
+  @@index([engine, engineVersion, createdAt])
+  @@index([type, createdAt])
+  @@index([subjectKind, subjectId])
+  @@index([runId])
+  @@index([supersededById])
+  @@index([batchId])
+  @@map("inmate_intelligence_items")
+}
+
+/**
+ * The history of one intelligence item.
+ *
+ * Separate from the item because the item holds current state and this holds how
+ * it got there. A disposition that changed three times is three rows, and an
+ * algorithm upgrade that superseded a finding is an event on both.
+ */
+model InmateIntelligenceEvent {
+  eventId     String   @id @default(uuid())
+  itemId      String
+  /** created | modified | reviewed | accepted | rejected | deferred |
+   *  superseded | algorithm_upgrade | auto_applied | reverted */
+  action      String
+  /** Disposition before and after, when the action changed it. */
+  fromDisposition String?
+  toDisposition   String?
+  /** Who. Null for an engine acting on its own rules. */
+  actorId     String?
+  /** The engine version acting, when the actor is an engine. */
+  actorEngineVersion String?
+  note        String?
+  createdAt   DateTime @default(now())
+
+  item        InmateIntelligenceItem @relation(fields: [itemId], references: [itemId], onDelete: Cascade)
+
+  @@index([itemId, createdAt])
+  @@index([action, createdAt])
+  @@map("inmate_intelligence_events")
+}
+
+/**
+ * One execution of one engine over a scope of evidence.
+ *
+ * Live ingestion runs engines inline and records no run. A reprocessing run is
+ * explicit: it replays observations under a new algorithm version into a shadow
+ * generation, which is compared against the current one and promoted only when
+ * approved. Nothing is destructively updated.
+ */
+model InmateIntelligenceRun {
+  runId        String   @id @default(uuid())
+  engine       String
+  engineVersion String
+  /** live | reprocess | backfill | dry_run */
+  mode         String   @default("reprocess")
+  /** pending | running | completed | failed | promoted | discarded */
+  status       String   @default("pending")
+
+  /** What was replayed: a facility, a date range, a batch, or everything. */
+  scope        Json?
+  /** The run this one is compared against. */
+  baselineRunId String?
+
+  itemsCreated    Int   @default(0)
+  itemsUnchanged  Int   @default(0)
+  itemsChanged    Int   @default(0)
+  itemsNew        Int   @default(0)
+  itemsWithdrawn  Int   @default(0)
+
+  /** The comparison, once computed, so a reviewer sees the diff before promoting. */
+  comparison   Json?
+  startedAt    DateTime @default(now())
+  finishedAt   DateTime?
+  failureReason String?
+  triggeredById String?
+  promotedById  String?
+  promotedAt    DateTime?
+
+  items        InmateIntelligenceItem[]
+
+  @@index([engine, status, startedAt])
+  @@index([mode, status])
+  @@map("inmate_intelligence_runs")
+}
+
+/**
+ * A versioned parser profile for one source.
+ *
+ * A county changes its CSV layout without notice. Recording which profile version
+ * parsed a document means historical data can be reprocessed with the parser that
+ * was correct at the time, or re-parsed with a corrected one — and either way the
+ * provenance says which.
+ *
+ * The active profile for a facility is the one with the highest version whose
+ * effective window contains the roster date, so a layout change is a new version
+ * rather than an edit to the old one.
+ */
+model InmateParserProfile {
+  profileId    String   @id @default(uuid())
+  facility     String
+  /** csv | pdf_text | pdf_ocr */
+  sourceType   String
+  /** Monotonic per facility and source type. */
+  version      Int
+  label        String
+
+  /** The column map, as data rather than code, so a layout change is a row. */
+  columnMap    Json
+  /** Date formats, name order, charge separator, and anything else the parser
+   *  needs that differs per source. */
+  parseOptions Json?
+  /** Version of the normalization rules this profile expects. */
+  normalizationVersion String?
+  /** OCR engine and model version, when the source is scanned. */
+  ocrVersion   String?
+
+  /**
+   * The header row this version was written against.
+   *
+   * Stored so a document's headers can be compared to what the profile expects.
+   * Header order changes constantly and means nothing, but a header the profile has
+   * never seen is the earliest sign that a new version will be needed.
+   */
+  expectedHeaders  String[]
+  /** The normalization rules in force, as prose, for a reader years from now. */
+  normalizationRules String[]
+  /**
+   * What the profile promises about the document: required fields, expected
+   * coverage, minimum rows, tolerable row failure. Checked after parsing and before
+   * anything is written, so a changed export fails loudly instead of importing a
+   * roster of nulls that reads as a quiet day at the jail.
+   */
+  validationRules  Json?
+
+  effectiveFrom DateTime?
+  effectiveTo   DateTime?
+  active        Boolean  @default(true)
+  /** Why this version exists — the layout change it responds to. */
+  changeNote    String?
+  createdById   String?
+  createdAt     DateTime @default(now())
+
+  @@unique([facility, sourceType, version])
+  @@index([facility, sourceType, active])
+  @@map("inmate_parser_profiles")
+}
+
+/**
+ * A roster file an administrator uploaded through the dashboard.
+ *
+ * Separate from the ingestion batch on purpose. An upload exists the moment the
+ * bytes land and before anything has been parsed, so the operator can see the file
+ * arrived even if processing has not started or has failed. A batch only exists
+ * once a document has been parsed successfully — tying the two together would mean
+ * a failed parse left no record that a file was ever uploaded, which is the state an
+ * operator most needs to see.
+ *
+ * One upload maps to at most one batch. Re-processing an upload produces a second
+ * batch and the pointer moves, with the previous batch still readable by its own id.
+ */
+model InmateRosterUpload {
+  uploadId      String   @id @default(uuid())
+  facility      String
+  originalName  String
+  /** Where the bytes are on disk. Kept, because reprocessing needs the original. */
+  storedPath    String
+  sizeBytes     Int
+  sha256        String
+  /** csv | pdf, derived from the extension rather than trusted from the browser. */
+  fileKind      String
+  rosterDate    DateTime?
+  rosterKind    String   @default("full_population")
+
+  uploadedById  String
+  /** Denormalised for display: the operator's name at upload time, which is what a
+   *  later reader wants even if the account is renamed or removed. */
+  uploadedByName String?
+  uploadedAt    DateTime @default(now())
+
+  /** uploaded | queued | processing | completed | failed */
+  status        String   @default("uploaded")
+  /** The stage an operator sees: parsing | normalizing | matching | saving |
+   *  concluding | complete. Null until processing starts. */
+  stage         String?
+  /** Rows handled and rows expected, for a progress indicator. */
+  progressDone  Int?
+  progressTotal Int?
+
+  batchId       String?
+  processingStartedAt DateTime?
+  processedAt   DateTime?
+  durationMs    Int?
+  failureReason String?
+
+  /** The import's own numbers, copied here so the upload row alone answers "what
+   *  did processing this file do" without joining. */
+  resultCounts  Json?
+
+  /** Optional link to a bulk Import Job (historical / multi-file imports). */
+  jobId         String?
+  jobFileId     String?
+
+  @@index([facility, uploadedAt])
+  @@index([status, uploadedAt])
+  @@index([batchId])
+  @@index([jobId])
+  @@map("inmate_roster_uploads")
+}
+
+/**
+ * A bulk Import Job: one operator action that may cover hundreds or thousands of
+ * roster files. Survives browser close; the client resumes by re-selecting the
+ * folder and matching sha256 fingerprints to pending job files.
+ */
+model InmateImportJob {
+  jobId                   String   @id @default(uuid())
+  facility                String
+  rosterDate              DateTime?
+  label                   String?
+  /** pending | uploading | queued | processing | completed | failed | cancelled */
+  status                  String   @default("pending")
+  autoProcess             Boolean  @default(true)
+
+  createdById             String
+  createdByName           String?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  uploadStartedAt         DateTime?
+  uploadFinishedAt        DateTime?
+  processStartedAt        DateTime?
+  processFinishedAt       DateTime?
+  cancelledAt             DateTime?
+  cancelReason            String?
+
+  totalFiles              Int      @default(0)
+  filesPending            Int      @default(0)
+  filesUploading          Int      @default(0)
+  filesUploaded           Int      @default(0)
+  filesSkippedDuplicate   Int      @default(0)
+  filesFailedUpload       Int      @default(0)
+  filesQueued             Int      @default(0)
+  filesProcessing         Int      @default(0)
+  filesCompleted          Int      @default(0)
+  filesFailedProcessing   Int      @default(0)
+
+  totalBytes              BigInt   @default(0)
+  uploadedBytes           BigInt   @default(0)
+  currentFilename         String?
+  failureReason           String?
+
+  /** Operational metrics snapshot (durations, throughput, queue depth). */
+  metrics                 Json?
+
+  files                   InmateImportJobFile[]
+
+  @@index([status, createdAt])
+  @@index([facility, createdAt])
+  @@index([createdById, createdAt])
+  @@map("inmate_import_jobs")
+}
+
+model InmateImportJobFile {
+  jobFileId             String   @id @default(uuid())
+  jobId                 String
+  job                   InmateImportJob @relation(fields: [jobId], references: [jobId], onDelete: Cascade)
+
+  originalName          String
+  sizeBytes             Int
+  sha256                String
+  fileKind              String
+
+  /** pending | uploading | uploaded | skipped_duplicate | failed_upload | queued | processing | completed | failed_processing | cancelled */
+  status                String   @default("pending")
+  uploadId              String?
+  batchIndex            Int?
+  error                 String?
+  duplicateOfUploadId   String?
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  uploadStartedAt       DateTime?
+  uploadFinishedAt      DateTime?
+  processStartedAt      DateTime?
+  processFinishedAt     DateTime?
+  uploadDurationMs      Int?
+  processDurationMs     Int?
+  rowsRead              Int?
+
+  @@unique([jobId, sha256])
+  @@index([jobId, status])
+  @@index([sha256])
+  @@index([uploadId])
+  @@map("inmate_import_job_files")
+}
+
+/**
+ * An Import Inspection: what a file looked like before anyone decided what to do
+ * with it.
+ *
+ * Inspection analyses a document and writes nothing to the repository — no batch, no
+ * observation, no person. This row is the exception, and it is kept because it is the
+ * record of a file's structure at the moment it arrived. When a mapping later turns out
+ * to have been wrong, the question is what the file actually contained, and an
+ * inspection answers it without re-reading a file that may no longer exist.
+ *
+ * Deliberately not linked to an ingestion batch. Most inspections never become
+ * imports — that is the point of the mode — and a foreign key would imply otherwise.
+ * The sha256 is how an inspection is matched to the import that eventually followed.
+ */
+model InmateImportInspection {
+  inspectionId    String   @id @default(uuid())
+  facility        String
+  filename        String
+  sha256          String
+  sizeBytes       Int
+  /** csv | pdf | unknown */
+  fileKind        String
+
+  /** The profile the file would have been read with, as it stood at inspection time. */
+  profileId       String?
+  profileVersion  Int?
+
+  /** would_import | would_import_with_warnings | would_be_refused */
+  verdict         String
+  /** 0–100. How much of the document the profile understands. */
+  parserConfidence Int
+
+  /** The full report: columns, inferred types, samples, suggestions. */
+  report          Json
+
+  inspectedById   String?
+  inspectedAt     DateTime @default(now())
+
+  @@index([facility, inspectedAt])
+  @@index([sha256])
+  @@index([verdict, inspectedAt])
+  @@map("inmate_import_inspections")
+}
+
+/**
+ * One transition in a batch's lifecycle.
+ *
+ * The batch row carries its current state; this carries how it got there. A batch that
+ * failed at identity analysis and a batch that failed at parsing are the same row with
+ * the same status, and the difference is the whole diagnosis — so every transition is
+ * recorded with when, who, and the algorithm versions in force at that moment.
+ *
+ * Append-only. A transition is never updated or deleted, because the sequence is the
+ * audit trail: "this import spent four minutes in identity analysis and then failed"
+ * is only answerable if both transitions survive.
+ */
+model InmateBatchTransition {
+  transitionId String   @id @default(uuid())
+  batchId      String
+
+  /** The state left. Null for the first transition into the lifecycle. */
+  fromState    String?
+  toState      String
+  /** Why, when a transition needs explaining — a failure, a cancellation, a retry. */
+  reason       String?
+
+  /** Who caused it. Null when the pipeline advanced on its own. */
+  actorId      String?
+  /** manual | cli | timer | queue | system */
+  actor        String   @default("system")
+
+  /** The versions in force at this moment, so a decision stays interpretable after
+   *  the algorithms change. Copied rather than referenced for the same reason. */
+  parserProfileId      String?
+  parserVersion        Int?
+  normalizationVersion String?
+  resolverVersion      String?
+  mergePolicyVersion   String?
+
+  /** Milliseconds spent in the state being left. Null for the first transition. */
+  durationMs   Int?
+  /** Counters as they stood at this transition, for a progress display and for metrics. */
+  metrics      Json?
+
+  occurredAt   DateTime @default(now())
+
+  @@index([batchId, occurredAt])
+  @@index([toState, occurredAt])
+  @@map("inmate_batch_transitions")
+}
+
+/**
+ * A comparison of two consecutive imports.
+ *
+ * Recorded rather than computed on demand, because the comparison is intelligence in its
+ * own right: "these eleven people were released between Tuesday and Wednesday" is a
+ * conclusion drawn from two documents, and it should be as durable and as auditable as
+ * any other. Recomputing it later against a repository that has since been corrected
+ * would silently change what Wednesday looked like.
+ */
+model InmateBatchComparison {
+  comparisonId String   @id @default(uuid())
+  facility     String
+  /** The earlier batch. */
+  baselineBatchId String
+  /** The later one. */
+  currentBatchId  String
+  baselineRosterDate DateTime?
+  currentRosterDate  DateTime?
+
+  newInmates      Int @default(0)
+  releases        Int @default(0)
+  returns         Int @default(0)
+  housingMoves    Int @default(0)
+  bailChanges     Int @default(0)
+  chargeChanges   Int @default(0)
+  courtChanges    Int @default(0)
+  departures      Int @default(0)
+
+  /** The detail: who, and what changed. Bounded when the roster is large. */
+  detail       Json
+  /** True when the detail was capped and the counts above are the complete figures. */
+  detailTruncated Boolean @default(false)
+
+  generatedById String?
+  generatedAt   DateTime @default(now())
+
+  @@unique([baselineBatchId, currentBatchId])
+  @@index([facility, generatedAt])
+  @@map("inmate_batch_comparisons")
+}
+
+/**
+ * One operational day at a facility — the unit operators review.
+ *
+ * PDF comparison is the primary revenue path (yesterday PDF vs today PDF → new
+ * inmate report). The optional CSV is enrichment only: it may update fields on
+ * bookings already discovered from the PDF, and must not silently create new
+ * inmates for rows the PDF did not contain.
+ *
+ * Status moves forward; the audit log (JSON) is append-only by convention.
+ */
+model InmateDailyCase {
+  caseId              String   @id @default(uuid())
+  facility            String
+  /** The "today" roster date this case operates on (ops day). */
+  opsDate             DateTime
+  /** pending | prior_ready | current_ready | compared | report_ready | enriching | enriched | closed */
+  status              String   @default("pending")
+
+  priorRosterDate     DateTime?
+  currentRosterDate   DateTime?
+
+  priorPdfUploadId    String?
+  priorPdfBatchId     String?
+  currentPdfUploadId  String?
+  currentPdfBatchId   String?
+  csvUploadId         String?
+  csvBatchId          String?
+
+  /** New-inmate report produced immediately after PDF comparison (before CSV). */
+  initialReportId     String?
+  /** Optional enriched report after CSV updates existing bookings. */
+  enrichedReportId    String?
+  comparisonId        String?
+
+  newInmateCount      Int      @default(0)
+  returningInmateCount Int     @default(0)
+  existingInmateCount Int      @default(0)
+  exceptionCount      Int      @default(0)
+  reviewCount         Int      @default(0)
+
+  /** Append-only operational notes: attachments, comparisons, enrichment, exceptions. */
+  auditLog            Json     @default("[]")
+
+  createdById         String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  closedAt            DateTime?
+
+  @@unique([facility, opsDate])
+  @@index([facility, status, opsDate])
+  @@index([opsDate])
+  @@map("inmate_daily_cases")
+}
+
+/**
+ * Engineering certification snapshot for one ops day.
+ *
+ * Operational report (new inmates for staff) is separate. This row is how NIIS
+ * earns trust: reconcile, precision/recall, clients found/missed, PASS/FAIL.
+ * Production readiness requires sustained consecutive PASSes — not one day.
+ *
+ * Immutable Operational Truth: rows are NEVER overwritten.
+ * Corrections create a new revision that supersedes the prior (isCurrent flips).
+ * Chain: original → correction → reason → reviewer → timestamp → superseding cert.
+ */
+model InmateDailyCertification {
+  certificationId          String   @id @default(uuid())
+  facility                 String
+  opsDate                  DateTime
+  priorRosterDate          DateTime?
+  /** Monotonic revision per facility+opsDate. Starts at 1. */
+  revision                 Int      @default(1)
+  /** Exactly one current certification per facility+opsDate. */
+  isCurrent                Boolean  @default(true)
+  /** Prior certification this revision supersedes (null = original). */
+  supersedesId             String?
+  correctionReason         String?
+  reviewerId               String?
+  reviewerName             String?
+  /** pass | fail | blocked | pending_manual_truth */
+  status                   String
+  priorInmateCount         Int?
+  currentInmateCount       Int?
+  newInmateCount           Int?
+  existingInmateCount      Int?
+  returningInmateCount     Int?
+  reviewCount              Int?
+  reconcileOk              Boolean?
+  precision                Float?
+  recall                   Float?
+  potentialClientsFound    Int?
+  potentialClientsMissed   Int?
+  processingTimeMs         Int?
+  /** Full engineering payload: misses, extras, root causes, stage ledger. */
+  summary                  Json     @default("{}")
+  dailyCaseId              String?
+  operationalReportId      String?
+  /** Path to sealed Daily Evidence Package for this day (if sealed). */
+  evidencePackagePath      String?
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+
+  @@unique([facility, opsDate, revision])
+  @@index([facility, opsDate, isCurrent])
+  @@index([facility, status, opsDate])
+  @@index([opsDate])
+  @@index([supersedesId])
+  @@map("inmate_daily_certifications")
+}
+
+/**
+ * Immutable canonical roster snapshot for one facility + roster date.
+ *
+ * Per Primary Engineering Directive: never compare against raw prior PDFs.
+ * Compare today's extracted roster against yesterday's certified snapshot.
+ * Snapshots are append-only for a given content hash; certification freezes them.
+ */
+model InmateRosterSnapshot {
+  snapshotId         String   @id @default(uuid())
+  facility           String
+  /** The date the Active Inmate Roster represents. */
+  rosterDate         DateTime
+  county             String   @default("sacramento")
+  /**
+   * extracted | validated | certified
+   * validated = parse validation passed (safe as tomorrow's baseline)
+   * certified = engineering daily cert PASS for that day
+   */
+  status             String   @default("extracted")
+  sourceUploadId     String?
+  sourceBatchId      String?
+  sourceDocumentSha256 String?
+  originalFilename   String?
+  pageCount          Int?
+  inmateCount        Int      @default(0)
+  /** SHA-256 over the canonical member set (sorted XREF|name|DOB). */
+  contentHash        String
+  parserVersion      String?
+  processingVersion  String?
+  validationOk       Boolean  @default(false)
+  validationErrors   Json     @default("[]")
+  uploadedById       String?
+  uploadedByName     String?
+  extractedAt        DateTime @default(now())
+  validatedAt        DateTime?
+  certifiedAt        DateTime?
+  createdAt          DateTime @default(now())
+
+  members InmateRosterSnapshotMember[]
+
+  @@unique([facility, rosterDate, contentHash])
+  @@index([facility, rosterDate, status])
+  @@index([status, rosterDate])
+  @@map("inmate_roster_snapshots")
+}
+
+/** One inmate row inside an immutable roster snapshot. */
+model InmateRosterSnapshotMember {
+  memberId           String   @id @default(uuid())
+  snapshotId         String
+  /** 0-based order in alphabetical roster. */
+  ordinal            Int
+  name               String
+  normalizedName     String
+  xref               String?
+  housing            String?
+  classification     String?
+  gender             String?
+  dateOfBirth        String?
+  releaseDate        String?
+  sourcePage         Int?
+  sourceRow          Int?
+  extractionConfidence Int?
+  /** Bounding box / evidence pointer JSON when available. */
+  evidence           Json?
+  inmateId           String?
+  bookingId          String?
+  ingestionRecordId  String?
+
+  snapshot InmateRosterSnapshot @relation(fields: [snapshotId], references: [snapshotId], onDelete: Cascade)
+
+  @@index([snapshotId, normalizedName])
+  @@index([snapshotId, xref])
+  @@index([xref])
+  @@map("inmate_roster_snapshot_members")
+}
+
+/**
+ * Learning Queue — every discrepancy is remembered until fixed and regress-tested.
+ *
+ * Manual investigator comparison is ground truth. NIIS disagreements become
+ * engineering defects here. Fixed items become permanent regression cases.
+ */
+model InmateLearningQueueItem {
+  itemId          String   @id @default(uuid())
+  facility        String
+  opsDate         DateTime
+  inmateName      String
+  /** missed_new | false_new | reconcile_failure */
+  errorType       String
+  /**
+   * Defect category (Evidence Certification Directive):
+   * parser_defect | ocr_defect | identity_defect | comparison_defect |
+   * source_defect | manual_review | unknown
+   *
+   * Legacy values (parser, normalization, identity, classification, report)
+   * are normalized at read/write time via defectCategories.ts.
+   */
+  rootCause       String   @default("unknown")
+  /** open | in_progress | fixed | verified_regression */
+  status          String   @default("open")
+  stage           String?
+  rule            String?
+  evidence        String?
+  why             String?
+  /** Path under fixtures/sacramento/validation/days/… once promoted to regression. */
+  regressionPath  String?
+  certificationId String?
+  openedAt        DateTime @default(now())
+  fixedAt         DateTime?
+  verifiedAt      DateTime?
+  updatedAt       DateTime @updatedAt
+  note            String?
+
+  @@unique([facility, opsDate, inmateName, errorType])
+  @@index([status, opsDate])
+  @@index([facility, status])
+  @@index([errorType, status])
+  @@map("inmate_learning_queue")
+}
+
+/**
+ * Investigator Review Workspace decisions — one-click morning classifications.
+ *
+ * Distinct from identity Review Queue. Every click feeds the learning corpus
+ * (Permanent Regression Rule). Append-only; never overwrite.
+ */
+model InmateInvestigatorDecision {
+  decisionId              String   @id @default(uuid())
+  facility                String
+  opsDate                 DateTime
+  candidateKey            String
+  inmateName              String
+  niisClassification      String
+  /**
+   * confirm_new | confirm_existing | confirm_returning | send_to_review |
+   * mark_parser_error | mark_identity_error | mark_ocr_error | mark_comparison_error
+   */
+  action                  String
+  confirmedClassification String?
+  defectCategory          String?
+  disagreesWithNiis       Boolean  @default(false)
+  inmateId                String?
+  bookingId               String?
+  investigatorId          String?
+  investigatorName        String?
+  decidedAt               DateTime @default(now())
+  note                    String?
+
+  @@index([facility, opsDate, decidedAt])
+  @@index([candidateKey, opsDate])
+  @@index([disagreesWithNiis, opsDate])
+  @@map("inmate_investigator_decisions")
+}
+
+/**
+ * Evidence Ledger — immutable append-only record of the evidence lifecycle
+ * for one facility + ops day.
+ *
+ * Stages: evidence_received → evidence_processed → evidence_preserved →
+ * evidence_certified → intelligence_produced → manual_verification →
+ * final_certification.
+ *
+ * Rows are never updated or deleted. Algorithms are temporary; evidence is permanent.
+ */
+model InmateEvidenceLedger {
+  entryId          String   @id @default(uuid())
+  facility         String
+  opsDate          DateTime
+  /** Monotonic per facility+opsDate. */
+  sequence         Int
+  /**
+   * evidence_received | evidence_processed | evidence_preserved |
+   * evidence_certified | intelligence_produced | manual_verification |
+   * final_certification
+   */
+  stage            String
+  summary          String
+  detail           Json     @default("{}")
+  dailyCaseId      String?
+  uploadId         String?
+  batchId          String?
+  snapshotId       String?
+  certificationId  String?
+  /** Sacramento Certification Corpus entry id (e.g. 2026-08-09__2026-08-10). */
+  corpusEntryId    String?
+  actorId          String?
+  actorName        String?
+  recordedAt       DateTime @default(now())
+
+  @@unique([facility, opsDate, sequence])
+  @@index([facility, opsDate, stage])
+  @@index([stage, recordedAt])
+  @@index([dailyCaseId])
+  @@map("inmate_evidence_ledger")
 }

@@ -59,6 +59,105 @@ jobs:
             tests/universal-membership.test.ts \
             tests/resource-permissions.test.ts
 
+  sacramento-accuracy-certification:
+    name: Sacramento Accuracy Certification
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: courtaccess
+          POSTGRES_PASSWORD: courtaccess
+          POSTGRES_DB: courtaccess_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U courtaccess -d courtaccess_ci"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://courtaccess:courtaccess@localhost:5432/courtaccess_ci
+      NIIS_UPLOAD_DIR: /tmp/niis-uploads-ci
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install backend
+        run: cd backend && npm ci && npx prisma generate
+
+      - name: Unit tests — Sacramento validation policies
+        run: |
+          cd backend && node --import tsx --test \
+            tests/sacramentoJailScan.test.ts \
+            tests/csvEnrichmentPolicy.test.ts \
+            tests/learningQueuePolicy.test.ts
+
+      - name: Prepare upload dir + schema
+        run: |
+          mkdir -p "$NIIS_UPLOAD_DIR"
+          cd backend && npx prisma db push --accept-data-loss
+
+      - name: Seed Sacramento profiles
+        run: cd backend && npx tsx scripts/seed-sacramento.ts
+
+      - name: Run Sacramento Validation Suite (mandatory)
+        id: suite
+        continue-on-error: true
+        run: |
+          cd backend
+          set +e
+          SAC_WIPE=1 npx tsx scripts/sacramento-validation-suite.ts
+          code=$?
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          if [ -f ../reports/niis-reliability/SACRAMENTO_VALIDATION_RESULT.md ]; then
+            echo "--- certification result (head) ---"
+            head -40 ../reports/niis-reliability/SACRAMENTO_VALIDATION_RESULT.md
+          fi
+          exit 0
+
+      - name: Upload certification artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sacramento-validation-${{ github.sha }}
+          path: |
+            reports/niis-reliability/SACRAMENTO_VALIDATION_RESULT.md
+            reports/niis-reliability/SACRAMENTO_VALIDATION_RESULT.json
+            reports/niis-reliability/DAILY_CERTIFICATION_SUMMARY.md
+            reports/niis-reliability/DAILY_CERTIFICATION_SUMMARY.json
+            reports/niis-reliability/ENGINEERING_CERTIFICATION_REPORT.md
+            reports/niis-reliability/ENGINEERING_CERTIFICATION_REPORT.json
+            reports/niis-reliability/NIIS_ACCURACY_CERTIFICATION.md
+            reports/niis-reliability/OPERATIONAL_VALIDATION_MODE.md
+            reports/niis-reliability/CONTINUOUS_OPERATIONAL_VALIDATION.md
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: Enforce certification gate
+        run: |
+          code="${{ steps.suite.outputs.exit_code }}"
+          echo "Sacramento Validation Suite exit code: $code"
+          if [ "$code" = "0" ]; then
+            echo "PASS — 100% precision / 100% recall / full disposition reconcile"
+            exit 0
+          fi
+          if [ "$code" = "2" ]; then
+            if [ "${{ secrets.SAC_CERT_PDFS_REQUIRED }}" = "1" ] || [ -n "${{ secrets.SAC_PRIOR_PDF_B64 }}" ]; then
+              echo "::error::Certification PDFs configured as required but suite is BLOCKED (exit 2)."
+              exit 1
+            fi
+            echo "::warning::Certification BLOCKED — durable 08/09+08/10 PDFs not in the workspace. Parser unit tests still ran. Attach fixtures/sacramento/validation/SACJAILSCAN*.pdf to enable the full gate."
+            exit 0
+          fi
+          echo "::error::Sacramento Accuracy Certification FAILED (exit $code). Manual ground truth is the gold standard — fix root causes, do not paper over the report."
+          exit 1
+
   executive-dashboard:
     name: Generate Executive Dashboard
     runs-on: ubuntu-latest

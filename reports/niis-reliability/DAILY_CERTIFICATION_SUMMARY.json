@@ -1,0 +1,18 @@
+{
+  "status": "BLOCKED",
+  "priorDate": "2026-08-09",
+  "currentDate": "2026-08-10",
+  "priorInmateCount": null,
+  "currentInmateCount": null,
+  "newInmates": null,
+  "existingInmates": null,
+  "returningInmates": null,
+  "reviewRequired": null,
+  "reconciliationOk": null,
+  "processingTimeMs": 0,
+  "potentialClientsFound": null,
+  "potentialClientsMissed": null,
+  "precision": null,
+  "recall": null,
+  "note": "Durable prior/current PDFs not available. Architecture frozen pending certification inputs."
+}

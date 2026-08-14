@@ -1,0 +1,29 @@
+{
+  "test": "NIIS Operational Acceptance",
+  "opsDate": "2026-08-12",
+  "facility": "sacramento",
+  "overall": "BLOCKED_NO_PDF",
+  "generatedAt": "2026-08-12T18:05:54.024Z",
+  "totalExecutionTimeMs": 64,
+  "database": "postgresql://courtaccess:***@127.0.0.1:5432/courtaccess_verify?schema=public",
+  "summary": {},
+  "stages": [
+    {
+      "stage": 1,
+      "name": "PDF received",
+      "verdict": "FAIL",
+      "timestamp": null,
+      "databaseWrites": [],
+      "recordCounts": {
+        "uploads": 0
+      },
+      "executionTimeMs": 64,
+      "evidence": [
+        "No InmateRosterUpload for 2026-08-12",
+        "Local path missing: ../fixtures/sacramento/real/SACJAILSCAN08-12-2026.pdf",
+        "OPERATIONAL BLOCKER: attach durable SACJAILSCAN08-12-2026.pdf and re-run"
+      ]
+    }
+  ],
+  "blockedAt": "PDF received"
+}

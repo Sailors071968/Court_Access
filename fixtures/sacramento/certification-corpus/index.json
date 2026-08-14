@@ -1,0 +1,32 @@
+{
+  "corpus": "Sacramento Certification Corpus",
+  "jurisdiction": "Sacramento County",
+  "philosophy": "NIIS certifies evidence, not software. Gold standard = investigator verified classification for each roster date — not a fixed number.",
+  "goldStandardIsNotAConstant": true,
+  "entries": [
+    {
+      "id": "2026-08-09__2026-08-10",
+      "priorDate": "2026-08-09",
+      "currentDate": "2026-08-10",
+      "status": "pending_pdfs",
+      "dir": "2026-08-09__2026-08-10",
+      "notes": "Historical operational day. Investigator NEW count was 67 for this pair — that number is a consequence of the evidence for that day only, not a permanent target. Full NEW/EXISTING/RETURNING/REVIEW classification preferred when available. Durable full PDFs not yet preserved in this environment."
+    },
+    {
+      "id": "2026-08-10__2026-08-11",
+      "priorDate": "2026-08-10",
+      "currentDate": "2026-08-11",
+      "status": "pending_pdfs",
+      "dir": "2026-08-10__2026-08-11",
+      "notes": "Next roster pair. Gold standard = investigator classification for 2026-08-11 vs 2026-08-10, whatever the NEW count is that day."
+    },
+    {
+      "id": "2026-08-11__2026-08-12",
+      "priorDate": "2026-08-11",
+      "currentDate": "2026-08-12",
+      "status": "pending_pdfs",
+      "dir": "2026-08-11__2026-08-12",
+      "notes": "Continuing daily chain. Status remains pending until PDFs + manual classification are preserved."
+    }
+  ]
+}
